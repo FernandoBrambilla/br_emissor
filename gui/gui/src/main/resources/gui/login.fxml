@@ -5,57 +5,38 @@
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="334.0" prefWidth="566.0" spacing="20.0" style="-fx-background-color: #2484BF;" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LoginController">
+<Pane prefHeight="800.0" prefWidth="1600.0" style="-fx-background-color: #2484BF;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LoginController">
    <children>
-      <Label layoutX="100.0" layoutY="100.0" prefHeight="18.0" prefWidth="138.0" text="BR Geranciador" textFill="WHITE">
+      <Label alignment="CENTER" layoutX="718.0" layoutY="106.0" prefHeight="31.0" prefWidth="163.0" text="BR Geranciador" textFill="WHITE">
          <font>
             <Font size="20.0" />
          </font>
-         <VBox.margin>
-            <Insets bottom="20.0" top="50.0" />
-         </VBox.margin>
       </Label>
-      <Label alignment="TOP_LEFT" contentDisplay="RIGHT" text="Usuário" textFill="WHITE">
-         <font>
-            <Font size="15.0" />
-         </font>
-         <graphic>
-            <TextField fx:id="userName" prefHeight="30.0" prefWidth="320.0">
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </TextField>
-         </graphic>
-      </Label>
-      <Label alignment="TOP_CENTER" contentDisplay="RIGHT" layoutX="112.0" layoutY="190.0" text=" Senha  " textFill="WHITE">
-         <font>
-            <Font size="15.0" />
-         </font>
-         <graphic>
-            <TextField fx:id="password" accessibleRole="PASSWORD_FIELD" prefHeight="30.0" prefWidth="320.0">
-               <font>
-                  <Font size="15.0" />
-               </font></TextField>
-         </graphic>
-         <VBox.margin>
+      <TextField fx:id="userName" focusTraversable="false" layoutX="575.0" layoutY="252.0" prefHeight="31.0" prefWidth="450.0" promptText="Usuário">
+         <opaqueInsets>
             <Insets />
-         </VBox.margin>
-      </Label>
-      <Button defaultButton="true" onAction="#login" prefHeight="40.0" prefWidth="170.0" text="Entrar">
+         </opaqueInsets>
+         <font>
+            <Font size="15.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="password" accessibleRole="PASSWORD_FIELD" focusTraversable="false" layoutX="574.0" layoutY="334.0" prefHeight="30.0" prefWidth="450.0" promptText="Senha">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </TextField>
+      <Button contentDisplay="TOP" defaultButton="true" layoutX="715.0" layoutY="446.0" onAction="#login" prefHeight="40.0" prefWidth="170.0" style="-fx-background-color: white;" text="Entrar">
          <font>
             <Font size="18.0" />
          </font>
       </Button>
-      <Hyperlink alignment="CENTER" contentDisplay="CENTER" prefHeight="26.0" prefWidth="163.0" text="Recuperar Senha" textAlignment="CENTER" textFill="WHITE">
+      <Hyperlink alignment="CENTER" contentDisplay="CENTER" layoutX="732.0" layoutY="527.0" prefHeight="26.0" prefWidth="135.0" text="Recuperar Senha" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font size="14.0" />
          </font>
       </Hyperlink>
    </children>
-</VBox>
+</Pane>

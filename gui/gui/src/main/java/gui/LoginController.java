@@ -8,14 +8,22 @@ import java.net.http.HttpResponse;
 
 import org.json.JSONObject;
 
+import gui.Services.Login;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.text.Text;
 
 
 public class LoginController {
     
+	@FXML
+	private void initialize(){
+	}
+	
    @FXML 
    private TextField userName;
    
@@ -23,38 +31,37 @@ public class LoginController {
    private TextField password;
 
    
-    
-    public TextField getUserName() {
+	public TextField getUserName() {
         return userName;
     }
 
-    public void setUserName(TextField userName) {
-        this.userName = userName;
-    }
-
-    public TextField getPassword() {
+	public TextField getPassword() {
         return password;
     }
+	
 
-    public void setPassword(TextField password) {
-        this.password = password;
+	Login logado = new Login();
+    
+    public Login getLogin() {
+    	return this.logado;
     }
 
-    
-
-     
-    @FXML
-    private void login(ActionEvent action) throws IOException, ClassNotFoundException {
+    /*
+     * @MÉTODO RESPONSÁVEL POR CAPTURAR A ENTRADA DIGITADO NA TELA DE LOGIN E BUSCAR NO BANCO SE HÁ CADASTRO
+     */
+    @SuppressWarnings("exports")
+	@FXML
+    public Login login(ActionEvent action) throws IOException, ClassNotFoundException {
         try {
-            if(this.getUserName().getText().isEmpty() || this.getPassword().getText().isEmpty()){
+            if(getUserName().getText().isEmpty() || getPassword().getText().isEmpty()){
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
                 alert.setHeaderText(null);
                 alert.setContentText("Os dados informados estão incorretos. Verifique e tente novamente.");
                 alert.showAndWait(); 
             }
             else {
-            	String username = this.getUserName().getText();
-            	String password = this.getPassword().getText();
+            	String username = getUserName().getText();
+            	String password = getPassword().getText();
             
             	//FAZER LOGIN
             	String urlLogin = "http://localhost:8080/auth/signin";
@@ -70,15 +77,20 @@ public class LoginController {
 				  .build();
             	HttpResponse<String> response = client.send(request,HttpResponse.BodyHandlers.ofString());
             	JSONObject responseJson = new JSONObject(response.body());
-            	//String userName = responseJson.getString("userName");
-            	boolean authenticated = responseJson.getBoolean("authenticated");
-            	//String create = responseJson.getString("create");
-            	//String expiration = responseJson.getString("expiration");
-            	String accessToken = responseJson.getString("accessToken");
+            	
+            	//CRIA UM OBJETO LOGIN
+            	logado.setUserName(responseJson.getString("userName"));
+            	logado.setAuthenticated(responseJson.getBoolean("authenticated"));
+            	logado.setCreate(responseJson.getString("create"));
+            	logado.setExpiration(responseJson.getString("expiration"));
+            	logado.setAccessToken(responseJson.getString("accessToken"));
+            	logado.setRefleshToken(responseJson.getString("refleshToken"));
+            	
+            
+            	if(logado.isAuthenticated()) {
+            		PrincipalController principal = new PrincipalController();
+            		principal.loadTelaPrincipal(logado);
         
-            	if(authenticated) {
-            		App.setRoot("principal");
-                   
             	}
             }
         } 
@@ -88,5 +100,6 @@ public class LoginController {
             alert.setContentText("Usuário "+ userName.getText() + " não cadastrado! " + e.getMessage());
             alert.showAndWait(); 
         }
+		return logado;
     }   
 }

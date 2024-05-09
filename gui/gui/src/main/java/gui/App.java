@@ -14,21 +14,25 @@ import javafx.stage.Stage;
 public class App extends Application {
 
     private static Scene scene;
+    Parent root;
+    Stage stage;
+    
 
     @Override
-    public void start(@SuppressWarnings("exports") Stage stage) throws IOException {
-        scene = new Scene(loadFXML("login"));
+    public void start(@SuppressWarnings("exports") Stage primaryStage) throws IOException {
+        root = loadFXML("Login");
+    	stage = primaryStage;
+    	stage.setTitle("BR Emissor");
+    	
+    	scene = new Scene(root);
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.show();
-        
     }
-
+    
+ 
     public static void setRoot(String fxml) throws IOException {
         scene.setRoot(loadFXML(fxml));
-        
-        
-        
     }
 
     public static Parent loadFXML(String fxml) throws IOException {
@@ -37,7 +41,10 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        launch();
+        launch();   
+       
+       
+        		
     }
 
 }
