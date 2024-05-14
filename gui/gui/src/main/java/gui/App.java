@@ -17,13 +17,12 @@ public class App extends Application {
     Parent root;
     Stage stage;
     
-
+   
     @Override
     public void start(@SuppressWarnings("exports") Stage primaryStage) throws IOException {
-        root = loadFXML("Login");
+        root = loadFXML("Login");///MUDAR PARA INICIAR A TELA LOGIN AO FINALIZAR O PROG
     	stage = primaryStage;
     	stage.setTitle("BR Emissor");
-    	
     	scene = new Scene(root);
         stage.setScene(scene);
         stage.setMaximized(true);

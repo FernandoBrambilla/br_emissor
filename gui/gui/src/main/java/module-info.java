@@ -13,6 +13,7 @@ module gui {
 	requires java.net.http;
 	requires org.apache.httpcomponents.core5.httpcore5;
 	requires org.json;
+	requires java.desktop;
    
     
 }

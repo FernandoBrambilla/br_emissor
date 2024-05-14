@@ -14,6 +14,16 @@ public class Login {
 	
 	private String refleshToken;
 	
+	
+	public Login() {
+
+	}
+
+	public Login(Login login) {
+		
+	}
+	
+	
 	public String getUserName() {
 		return userName;
 	}
@@ -50,9 +60,4 @@ public class Login {
 	public void setRefleshToken(String refleshToken) {
 		this.refleshToken = refleshToken;
 	}
-	
-	
-	
-	
-
 }

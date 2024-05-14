@@ -8,14 +8,14 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane prefHeight="800.0" prefWidth="1600.0" style="-fx-background-color: #2484BF;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LoginController">
+<Pane focusTraversable="true" prefHeight="800.0" prefWidth="1600.0" style="-fx-background-color: #2484BF;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LoginController">
    <children>
       <Label alignment="CENTER" layoutX="718.0" layoutY="106.0" prefHeight="31.0" prefWidth="163.0" text="BR Geranciador" textFill="WHITE">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <TextField fx:id="userName" focusTraversable="false" layoutX="575.0" layoutY="252.0" prefHeight="31.0" prefWidth="450.0" promptText="Usuário">
+      <TextField fx:id="userName" layoutX="575.0" layoutY="252.0" prefHeight="31.0" prefWidth="450.0" promptText="Usuário">
          <opaqueInsets>
             <Insets />
          </opaqueInsets>
@@ -23,7 +23,7 @@
             <Font size="15.0" />
          </font>
       </TextField>
-      <TextField fx:id="password" accessibleRole="PASSWORD_FIELD" focusTraversable="false" layoutX="574.0" layoutY="334.0" prefHeight="30.0" prefWidth="450.0" promptText="Senha">
+      <TextField fx:id="password" accessibleRole="PASSWORD_FIELD" layoutX="574.0" layoutY="334.0" prefHeight="30.0" prefWidth="450.0" promptText="Senha">
          <font>
             <Font size="15.0" />
          </font>

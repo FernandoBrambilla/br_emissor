@@ -53,7 +53,11 @@ public class User extends RepresentationModel<Bank> implements UserDetails, Seri
 	
 	@Column (name = "enable")
 	private Boolean enabled;
-	
+        
+        
+        
+	 //CAMPOS COMENTADOS - HABILITAR QUANDO INSERIR CONTROLE DE PERMISSÕES DE USUÁRIOS
+        
 	@ManyToMany (fetch = FetchType.EAGER)
 	@JoinTable (name= "user_permission", joinColumns = {@JoinColumn (name="id_user")},
 	inverseJoinColumns = {@JoinColumn (name="id_permission")})
@@ -72,11 +76,12 @@ public class User extends RepresentationModel<Bank> implements UserDetails, Seri
 		
 	}
 
+        
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return this.permissions;
 	}
-
+        
 	@Override
 	public String getPassword() {
 		return this.password;
@@ -172,6 +177,7 @@ public class User extends RepresentationModel<Bank> implements UserDetails, Seri
 		this.enabled = enabled;
 	}
 
+        
 	public List<Permission> getPermissions() {
 		return permissions;
 	}
@@ -179,7 +185,7 @@ public class User extends RepresentationModel<Bank> implements UserDetails, Seri
 	public void setPermissions(List<Permission> permissions) {
 		this.permissions = permissions;
 	}
-
+       
 	public void setPassword(String password) {
 		this.password = password;
 	}

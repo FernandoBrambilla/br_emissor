@@ -41,6 +41,8 @@ public class UserService implements UserDetailsService {
 			throw new RequiredObjectIsNullException();
 		return repository.save(user);
 	}
+        
+        
 
 	// Update
 	public User update(User user) {

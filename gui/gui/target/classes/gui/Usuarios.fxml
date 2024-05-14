@@ -16,7 +16,7 @@
    <center>
       <Pane fx:id="telaUsuario" prefHeight="700.0" prefWidth="1000.0">
          <children>
-            <TableView fx:id="tabelaUsuarios" editable="true" fixedCellSize="0.0" layoutX="10.0" layoutY="80.0" prefHeight="605.0" prefWidth="981.0" style="-fx-border-color: aqua;" tableMenuButtonVisible="true">
+            <TableView fx:id="tabelaUsuarios" editable="true" fixedCellSize="0.0" layoutX="14.0" layoutY="81.0" prefHeight="605.0" prefWidth="981.0" style="-fx-border-color: aqua;" tableMenuButtonVisible="true">
               <columns>
                 <TableColumn style="-fx-font-size: 15;" text="ID" />
                   <TableColumn prefWidth="250.0" style="-fx-font-size: 15;" text="Ativo" />
@@ -54,7 +54,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button fx:id="btnEditar" alignment="CENTER" graphicTextGap="10.0" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: white;" text="Editar">
+                  <Button fx:id="btnEditar" alignment="CENTER" graphicTextGap="10.0" mnemonicParsing="false" onAction="#editar" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: white;" text="Editar">
                      <graphic>
                         <ImageView fitHeight="35.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                            <image>
@@ -72,7 +72,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button fx:id="btnDeletar" alignment="CENTER" graphicTextGap="10.0" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: white;" text="Deletar">
+                  <Button fx:id="btnInativar" alignment="CENTER" graphicTextGap="10.0" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: white;" text="Inativar Usuário">
                      <graphic>
                         <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                            <image>

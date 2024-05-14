@@ -3,22 +3,19 @@ package gui;
 import java.io.IOException;
 
 import gui.Services.Effects;
-import gui.Services.Login;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.effect.ColorAdjust;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 
 
 public class PrincipalController extends AnchorPane{
+	
+	static String accessToken = null;
 	
 	@FXML
 	BorderPane telaBase;
@@ -44,8 +41,8 @@ public class PrincipalController extends AnchorPane{
 	@FXML
 	private Button btnEstatisticas;
 	
-	
 
+	
 	public Button getBtnVendas() {
 		return btnVendas;
 	}
@@ -105,6 +102,8 @@ public class PrincipalController extends AnchorPane{
 	public void setBtnEstatisticas(Button btnEstatisticas) {
 		this.btnEstatisticas = btnEstatisticas;
 	}
+	
+	
 
 	public void aplicaEfeitos() {
 		Effects efeitos = new Effects();
@@ -117,18 +116,32 @@ public class PrincipalController extends AnchorPane{
 		efeitos.hover(getBtnEstatisticas());
 	}
 	
-	public void loadTelaPrincipal(Login login) throws IOException{
-	     App.setRoot("Principal");
-	        
 	
+	public void loadTelaPrincipal(String token) throws IOException{
+		App.setRoot("Principal");
+		this.accessToken = token;
+		
+		
 	}
 	
-	 @FXML
-	    public void btnUsuario(ActionEvent action) throws IOException{
-		 	Parent root = FXMLLoader.load(getClass().getResource("Usuarios.fxml"));
-	        telaBase.setCenter(root);
-
+	 private void loadTelaUsuario() throws IOException {
+		UsuariosController usuario = new UsuariosController();
+		Parent root = FXMLLoader.load(getClass().getResource("Usuarios.fxml"));
+		telaBase.setCenter(root);
+		
+	 }
+	 
+	 public void btnUsuario(ActionEvent action) throws IOException{
+		 loadTelaUsuario();
+		 
 	    }
+	 
+	 
+	 public String getAccessToken() {
+		return accessToken;
+	 }
+	 
+	 
 }
 
     
