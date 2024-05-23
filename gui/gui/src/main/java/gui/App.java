@@ -6,6 +6,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 /**
@@ -17,10 +18,12 @@ public class App extends Application {
     Parent root;
     Stage stage;
     
-   
-    @Override
+ 
+
+
+	@Override
     public void start(@SuppressWarnings("exports") Stage primaryStage) throws IOException {
-        root = loadFXML("Login");///MUDAR PARA INICIAR A TELA LOGIN AO FINALIZAR O PROG
+		root = loadFXML("LoginViews/login");
     	stage = primaryStage;
     	stage.setTitle("BR Emissor");
     	scene = new Scene(root);
@@ -38,6 +41,7 @@ public class App extends Application {
         FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
         return fxmlLoader.load();
     }
+    
 
     public static void main(String[] args) {
         launch();   

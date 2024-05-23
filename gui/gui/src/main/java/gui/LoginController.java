@@ -1,5 +1,6 @@
 package gui;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -7,32 +8,58 @@ import java.net.http.HttpResponse;
 
 import org.json.JSONObject;
 
+import gui.Services.Effects;
 import gui.Services.Login;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 
 
-public class LoginController {
+public class LoginController extends AnchorPane{
     
 	private Login login = new Login();
 	
+	@FXML
+	BorderPane telaBase;
+	
 	@FXML 
-   	TextField userName;
+   	private TextField userName;
    
 	@FXML
 	private TextField password;
-
+	
+	@FXML
+	private Label info;
+	
+	@FXML
+	private Button btnEntrar;
    
+	@SuppressWarnings("exports")
 	public TextField getUserName() {
         return userName;
     }
 
+	@SuppressWarnings("exports")
 	public TextField getPassword() {
         return password;
     }
-	
+
+	@SuppressWarnings("exports")
+	public Label getInfo() {
+		return info;
+	}
+
+	@SuppressWarnings("exports")
+	public void setInfo(Label info) {
+		this.info = info;
+	}
 
 	public Login getLogin() {
 		return login;
@@ -42,24 +69,31 @@ public class LoginController {
 		this.login = login;
 	}
 	
-	
-	
-	/*
-     * @MÉTODO RESPONSÁVEL POR CAPTURAR A ENTRADA DIGITADO NA TELA DE LOGIN E BUSCAR NO BANCO SE HÁ CADASTRO
-     */
-	
-    public void login(ActionEvent action) {
+    @SuppressWarnings("exports")
+	public Button getBtnEntrar() {
+		return btnEntrar;
+	}
+
+	@SuppressWarnings("exports")
+	public void setBtnEntrar(Button btnEntrar) {
+		this.btnEntrar = btnEntrar;
+	}
+
+	@SuppressWarnings("exports")
+	public void login(ActionEvent action) {
        fazerLogin();
     }  
     
     @FXML
     private Login fazerLogin() {
+    	Effects efeito = new Effects();
     	 try {
              if(getUserName().getText().isEmpty() || getPassword().getText().isEmpty()){
-                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                 alert.setHeaderText(null);
-                 alert.setContentText("Os dados informados estão incorretos. Verifique e tente novamente.");
-                 alert.showAndWait(); 
+            	 
+            	 efeito.campoObrigatorio(getUserName());
+            	 efeito.campoObrigatorio(getPassword());
+            	 getInfo().setText("*Campos Obrigatórios");
+            	 
              }
              else {
              	String username = getUserName().getText();
@@ -87,21 +121,43 @@ public class LoginController {
              	login.setExpiration(responseJson.getString("expiration"));
              	login.setAccessToken(responseJson.getString("accessToken"));
              	login.setRefleshToken(responseJson.getString("refleshToken"));
-                         
+                    
              	if(login.isAuthenticated()) {
-             		PrincipalController principal = new PrincipalController();
-             		principal.loadTelaPrincipal(login.getAccessToken());	
+             		PrincipalController principalController = new PrincipalController();
+             		principalController.getLogin(login);
+             		
              	}
              	return login;
              }
          } 
          catch (Exception e) {
-         	Alert alert = new Alert(Alert.AlertType.ERROR);
-             alert.setHeaderText(null);
-             alert.setContentText("Usuário "+ userName.getText() + " não cadastrado! " + e.getMessage());
-             alert.showAndWait(); 
-   
+        	 efeito.campoObrigatorio(getUserName());
+        	 efeito.campoObrigatorio(getPassword());
+        	 getInfo().setText("*Usuário ou Senha inválidos. Verifique os campos e tente novamente");
          }
          return null;
-    }   
+    } 
+
+    @FXML
+    private void initialize() throws IOException {
+    	
+    	getBtnEntrar().setOnAction((event) -> {
+    		
+    		PrincipalController principalController = new PrincipalController();
+            try {
+            	fazerLogin();
+          		
+          		if(login.isAuthenticated()) {
+          		principalController.getLogin(fazerLogin());
+                Parent telaPrincipal = FXMLLoader.load(PrincipalController.class.getResource("PrincipalViews/Principal.fxml"));
+                this.telaBase.setCenter(telaPrincipal);
+          		}
+          		else {
+          			return;
+          		}
+          		} catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
 }

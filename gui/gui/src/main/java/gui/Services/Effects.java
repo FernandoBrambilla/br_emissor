@@ -1,22 +1,18 @@
 package gui.Services;
 
-import java.awt.Color;
-
-import javax.swing.BorderFactory;
-
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderPane;
 
 
 
 
 public class Effects {
 	
+	@SuppressWarnings("exports")
 	public void hover(Button btn) {
 		ColorAdjust color = new ColorAdjust();
 		color.setBrightness(-0.13);
@@ -35,15 +31,22 @@ public class Effects {
 						btn.setEffect(null);
 				    }
 			});
-	}
+	} 
 	
+	@SuppressWarnings("exports")
 	public void campoObrigatorio(TextField campo) {
 		campo.setStyle("-fx-text-box-border: red ; -fx-focus-color: red ;");
 	}
 	
+	@SuppressWarnings("exports")
 	public void campoObrigatorioRemove(TextField campo) {
 		campo.setStyle(null);
 	}
-	
+	 
+	@SuppressWarnings("exports")
+	public void styleTable(@SuppressWarnings("rawtypes") TableView tabela) {
+		tabela.setStyle("-fx-font-size:16;"
+				+ "-fx-font-family: Calibri;");
+	}
 
 }

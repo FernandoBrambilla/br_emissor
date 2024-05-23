@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fernando.Entities.User;
 import com.fernando.services.UserService;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 
 @RestController
@@ -51,4 +53,12 @@ public class UserController {
 	public User update(@RequestBody User user) {
 		return service.update(user);
 	}
+        
+        //Delete Controller
+	@DeleteMapping(value = "/{id}")
+	public ResponseEntity<?> delete(@PathVariable (value = "id") Integer id) {
+		service.delete(id);
+		return ResponseEntity.noContent().build();
+	}
+	
 }

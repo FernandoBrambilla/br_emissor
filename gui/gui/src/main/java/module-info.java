@@ -1,9 +1,6 @@
 module gui {
     
-	opens gui to javafx.fxml;
-    exports gui;
-    
-    requires javafx.fxml;
+	requires javafx.fxml;
     requires javafx.baseEmpty;
     requires javafx.base;
     requires javafx.controls;
@@ -14,6 +11,11 @@ module gui {
 	requires org.apache.httpcomponents.core5.httpcore5;
 	requires org.json;
 	requires java.desktop;
+	
    
-    
+	
+	opens gui to javafx.base, javafx.fxml, application.model;
+    exports gui;
+    exports gui.Services;
+       
 }

@@ -3,22 +3,30 @@ package gui;
 import java.io.IOException;
 
 import gui.Services.Effects;
-import javafx.event.ActionEvent;
+import gui.Services.Login;
+import gui.Services.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.layout.AnchorPane;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 
 
-public class PrincipalController extends AnchorPane{
+public class PrincipalController{
+	
+	static Login usuarioLogado = null;
 	
 	static String accessToken = null;
 	
+	static UsuariosController usuariosController = null;
+	
+	static TableView<User> tabelaUsuarios = null;
+	
 	@FXML
-	BorderPane telaBase;
+	private BorderPane menu;
+	
+	@FXML
+	private BorderPane telaBase;
 
 	@FXML
 	private Button btnVendas;
@@ -41,69 +49,106 @@ public class PrincipalController extends AnchorPane{
 	@FXML
 	private Button btnEstatisticas;
 	
-
 	
+
+
+	public static String getAccessToken() {
+		return accessToken;
+	}
+	
+	@SuppressWarnings("exports")
+	public BorderPane getMenu() {
+		return menu;
+	}
+
+	@SuppressWarnings("exports")
+	public void setMenu(BorderPane menu) {
+		this.menu = menu;
+	}
+
+	@SuppressWarnings("exports")
+	public BorderPane getTelaBase() {
+		return telaBase;
+	}
+
+	@SuppressWarnings("exports")
 	public Button getBtnVendas() {
 		return btnVendas;
 	}
 
+	@SuppressWarnings("exports")
 	public Button getBtnOrcamento() {
 		return btnOrcamento;
 	}
 
+	@SuppressWarnings("exports")
 	public Button getBtnClientes() {
 		return btnClientes;
 	}
 
+	@SuppressWarnings("exports")
 	public Button getBtnProdutos() {
 		return btnProdutos;
 	}
 
+	@SuppressWarnings("exports")
 	public Button getBtnCaixa() {
 		return btnCaixa;
 	}
 
+	@SuppressWarnings("exports")
 	public Button getBtnUsuarios() {
 		return btnUsuarios;
 	}
 
+	@SuppressWarnings("exports")
 	public Button getBtnEstatisticas() {
 		return btnEstatisticas;
 	}
 
-	public Pane getTelaBase() {
-		return telaBase;
+	public static void setAccessToken(String accessToken) {
+		PrincipalController.accessToken = accessToken;
 	}
 
+	@SuppressWarnings("exports")
+	public void setTelaBase(BorderPane telaBase) {
+		this.telaBase = telaBase;
+	}
+
+	@SuppressWarnings("exports")
 	public void setBtnVendas(Button btnVendas) {
 		this.btnVendas = btnVendas;
 	}
 
+	@SuppressWarnings("exports")
 	public void setBtnOrcamento(Button btnOrcamento) {
 		this.btnOrcamento = btnOrcamento;
 	}
 
+	@SuppressWarnings("exports")
 	public void setBtnClientes(Button btnClientes) {
 		this.btnClientes = btnClientes;
 	}
 
+	@SuppressWarnings("exports")
 	public void setBtnProdutos(Button btnProdutos) {
 		this.btnProdutos = btnProdutos;
 	}
 
+	@SuppressWarnings("exports")
 	public void setBtnCaixa(Button btnCaixa) {
 		this.btnCaixa = btnCaixa;
 	}
 
+	@SuppressWarnings("exports")
 	public void setBtnUsuarios(Button btnUsuarios) {
 		this.btnUsuarios = btnUsuarios;
 	}
 
+	@SuppressWarnings("exports")
 	public void setBtnEstatisticas(Button btnEstatisticas) {
 		this.btnEstatisticas = btnEstatisticas;
 	}
-	
-	
 
 	public void aplicaEfeitos() {
 		Effects efeitos = new Effects();
@@ -116,32 +161,42 @@ public class PrincipalController extends AnchorPane{
 		efeitos.hover(getBtnEstatisticas());
 	}
 	
-	
-	public void loadTelaPrincipal(String token) throws IOException{
-		App.setRoot("Principal");
-		this.accessToken = token;
-		
+	public void getLogin(Login login) throws IOException{
+		usuarioLogado = login;
+		setAccessToken(login.getAccessToken());
 		
 	}
 	
-	 private void loadTelaUsuario() throws IOException {
-		UsuariosController usuario = new UsuariosController();
-		Parent root = FXMLLoader.load(getClass().getResource("Usuarios.fxml"));
-		telaBase.setCenter(root);
+	@FXML
+    private void initialize() throws IOException {
+		getBtnUsuarios().setOnAction((event) -> {
+            try {
+            	usuariosController = new UsuariosController();
+            	
+            	//CARREGA O MENU DE USUARIOS
+            	 FXMLLoader loader = new FXMLLoader();
+                 loader.setLocation(getClass().getResource("UsuarioViews/Usuarios.fxml"));
+                 getMenu().setCenter(loader.load());
+                 
+                 //CARREGA A TABELA DE USUARIOS
+                 tabelaUsuarios = usuariosController.construirTabela();
+                 getTelaBase().setCenter(tabelaUsuarios);
+                 usuariosController.setTelaBase(telaBase);
+                 usuariosController.setTabelaUsuarios(tabelaUsuarios);
+           
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+				e.printStackTrace();
+			}
+        });
 		
-	 }
-	 
-	 public void btnUsuario(ActionEvent action) throws IOException{
-		 loadTelaUsuario();
-		 
-	    }
-	 
-	 
-	 public String getAccessToken() {
-		return accessToken;
-	 }
-	 
-	 
+		getBtnVendas().setOnAction((event) -> {
+           System.out.println("vendas");
+			
+        });
+	}
+
 }
 
     

@@ -29,7 +29,7 @@ public class SecurityConfig {
 	private JwtTokenProvider jwtTokenProvider;
 
 	@Bean
-	PasswordEncoder passwordEncoder() {
+	public PasswordEncoder passwordEncoder() {
 		Map<String, PasswordEncoder> encoders = new HashMap<>();
 		Pbkdf2PasswordEncoder pbkdf2Encoder = new Pbkdf2PasswordEncoder("", 8, 185000,
 				SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA256);
