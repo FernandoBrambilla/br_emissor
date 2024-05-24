@@ -2,6 +2,7 @@ package gui.Services;
 
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.effect.ColorAdjust;
@@ -47,6 +48,13 @@ public class Effects {
 	public void styleTable(@SuppressWarnings("rawtypes") TableView tabela) {
 		tabela.setStyle("-fx-font-size:16;"
 				+ "-fx-font-family: Calibri;");
+				
+	}
+	
+	@SuppressWarnings({ "exports", "rawtypes" })
+	public void corLinhaTabela(TableColumn coluna) {
+		coluna.setStyle("-fx-color: #FFFFFF;");
+				
 	}
 
 }

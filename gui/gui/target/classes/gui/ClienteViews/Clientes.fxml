@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane prefHeight="72.0" prefWidth="766.0" style="-fx-background-color: #e7e7e7;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.UsuariosController">
+<Pane prefHeight="72.0" prefWidth="766.0" style="-fx-background-color: #e7e7e7;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ClientesController">
    <children>
       <Button fx:id="btnNovo" alignment="CENTER" graphicTextGap="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#novo" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: white;" text="Novo">
          <font>

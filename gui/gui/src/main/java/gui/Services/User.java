@@ -18,7 +18,7 @@ public class User {
 	
 	private Boolean credentialsNonExpired;
 	
-	private Boolean enabled;
+	private String enabled;
 
 
 	public Number getId() {
@@ -53,7 +53,7 @@ public class User {
 		return credentialsNonExpired;
 	}
 
-	public Boolean getEnabled() {
+	public String getEnabled() {
 		return enabled;
 	}
 
@@ -89,7 +89,7 @@ public class User {
 		this.credentialsNonExpired = credentialsNonExpired;
 	}
 
-	public void setEnabled(Boolean enabled) {
+	public void setEnabled(String enabled) {
 		this.enabled = enabled;
 	}
 	

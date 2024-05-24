@@ -54,6 +54,7 @@ public class UserController {
 		return service.update(user);
 	}
         
+        
         //Delete Controller
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<?> delete(@PathVariable (value = "id") Integer id) {

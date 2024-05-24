@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import gui.Services.Effects;
 import gui.Services.User;
 import javafx.application.Application;
+import javafx.beans.property.BooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -24,7 +25,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -56,7 +60,7 @@ public class UsuariosController extends Application {
 	private Button btnUsuario;
 
 	@FXML
-	private Button btnNovoUsuario;
+	private Button btnNovo;
 
 	@FXML
 	private Button btnEditar;
@@ -77,10 +81,10 @@ public class UsuariosController extends Application {
 	private TextField email;
 
 	@FXML
-	private TextField senha1;
+	private PasswordField senha1;
 
 	@FXML
-	private TextField senha2;
+	private PasswordField senha2;
 
 	@FXML
 	private Button btnCancelar;
@@ -99,6 +103,10 @@ public class UsuariosController extends Application {
 		return editar;
 	}
 
+	public static User getUser() {
+		return user;
+	}
+
 	public Effects getEffects() {
 		return effects;
 	}
@@ -111,62 +119,77 @@ public class UsuariosController extends Application {
 		return observableList;
 	}
 
+	@SuppressWarnings({ "exports", "rawtypes" })
 	public static TableView getTabelaUsuarios() {
 		return tabelaUsuarios;
 	}
 
+	@SuppressWarnings("exports")
 	public BorderPane getTelaBase() {
 		return telaBase;
 	}
 
+	@SuppressWarnings("exports")
 	public Button getBtnUsuario() {
 		return btnUsuario;
 	}
 
-	public Button getBtnNovoUsuario() {
-		return btnNovoUsuario;
+	@SuppressWarnings("exports")
+	public Button getBtnNovo() {
+		return btnNovo;
 	}
 
+	@SuppressWarnings("exports")
 	public Button getBtnEditar() {
 		return btnEditar;
 	}
 
+	@SuppressWarnings("exports")
 	public Button getBtnApagar() {
 		return btnApagar;
 	}
 
+	@SuppressWarnings("exports")
 	public Button getBtnInativar() {
 		return btnInativar;
 	}
 
+	@SuppressWarnings("exports")
 	public TextField getFullName() {
 		return fullName;
 	}
 
+	@SuppressWarnings("exports")
 	public TextField getUsername() {
 		return username;
 	}
 
+	@SuppressWarnings("exports")
 	public TextField getEmail() {
 		return email;
 	}
 
-	public TextField getSenha1() {
+	@SuppressWarnings("exports")
+	public PasswordField getSenha1() {
 		return senha1;
 	}
 
-	public TextField getSenha2() {
+	@SuppressWarnings("exports")
+	public PasswordField getSenha2() {
 		return senha2;
 	}
 
+	@SuppressWarnings("exports")
 	public Button getBtnCancelar() {
 		return btnCancelar;
 	}
 
+	@SuppressWarnings("exports")
 	public Button getBtnSalvar() {
 		return btnSalvar;
 	}
 
+	@SuppressWarnings("exports")
 	public Label getInfo() {
 		return info;
 	}
@@ -177,6 +200,10 @@ public class UsuariosController extends Application {
 
 	public static void setEditar(EditarUsuarioController editar) {
 		UsuariosController.editar = editar;
+	}
+
+	public static void setUser(User user) {
+		UsuariosController.user = user;
 	}
 
 	public void setEffects(Effects effects) {
@@ -191,69 +218,84 @@ public class UsuariosController extends Application {
 		UsuariosController.observableList = observableList;
 	}
 
-	public static void setTabelaUsuarios(TableView tabelaUsuarios) {
+	@SuppressWarnings("exports")
+	public static void setTabelaUsuarios(@SuppressWarnings("rawtypes") TableView tabelaUsuarios) {
 		UsuariosController.tabelaUsuarios = tabelaUsuarios;
 	}
 
+	@SuppressWarnings("exports")
 	public void setTelaBase(BorderPane telaBase) {
 		this.telaBase = telaBase;
 	}
 
+	@SuppressWarnings("exports")
 	public void setBtnUsuario(Button btnUsuario) {
 		this.btnUsuario = btnUsuario;
 	}
 
-	public void setBtnNovoUsuario(Button btnNovoUsuario) {
-		this.btnNovoUsuario = btnNovoUsuario;
+	@SuppressWarnings("exports")
+	public void setBtnNovo(Button btnNovo) {
+		this.btnNovo = btnNovo;
 	}
 
+	@SuppressWarnings("exports")
 	public void setBtnEditar(Button btnEditar) {
 		this.btnEditar = btnEditar;
 	}
 
+	@SuppressWarnings("exports")
 	public void setBtnApagar(Button btnApagar) {
 		this.btnApagar = btnApagar;
 	}
 
+	@SuppressWarnings("exports")
 	public void setBtnInativar(Button btnInativar) {
 		this.btnInativar = btnInativar;
 	}
 
+	@SuppressWarnings("exports")
 	public void setFullName(TextField fullName) {
 		this.fullName = fullName;
 	}
 
+	@SuppressWarnings("exports")
 	public void setUsername(TextField username) {
 		this.username = username;
 	}
 
+	@SuppressWarnings("exports")
 	public void setEmail(TextField email) {
 		this.email = email;
 	}
 
-	public void setSenha1(TextField senha1) {
+	@SuppressWarnings("exports")
+	public void setSenha1(PasswordField senha1) {
 		this.senha1 = senha1;
 	}
 
-	public void setSenha2(TextField senha2) {
+	@SuppressWarnings("exports")
+	public void setSenha2(PasswordField senha2) {
 		this.senha2 = senha2;
 	}
 
+	@SuppressWarnings("exports")
 	public void setBtnCancelar(Button btnCancelar) {
 		this.btnCancelar = btnCancelar;
 	}
 
+	@SuppressWarnings("exports")
 	public void setBtnSalvar(Button btnSalvar) {
 		this.btnSalvar = btnSalvar;
 	}
 
+	@SuppressWarnings("exports")
 	public void setInfo(Label info) {
 		this.info = info;
 	}
 
 	public void aplicaEfeitos() {
 		Effects efeitos = new Effects();
-		efeitos.hover(getBtnNovoUsuario());
+		efeitos.hover(getBtnNovo());
 		efeitos.hover(getBtnEditar());
 		efeitos.hover(getBtnApagar());
 		efeitos.hover(getBtnInativar());
@@ -262,41 +304,48 @@ public class UsuariosController extends Application {
 	@SuppressWarnings({ "unchecked" })
 	public TableView<User> construirTabela() throws Exception {
 		setTabelaUsuarios(new TableView<User>());
-		getTabelaUsuarios().setStyle("-fx-background-color: red;");
+		
+	
+		
 		Effects efeito = new Effects();
 		efeito.styleTable(getTabelaUsuarios());
-
+		
 		TableColumn<User, Integer> colunaID = new TableColumn<User, Integer>("ID");
 		colunaID.setCellValueFactory(new PropertyValueFactory<User, Integer>("id"));
 		colunaID.setPrefWidth(70);
-
+		efeito.corLinhaTabela(colunaID);
+		
 		TableColumn<User, String> colunaName = new TableColumn<User, String>("Nome");
 		colunaName.setCellValueFactory(new PropertyValueFactory<User, String>("fullName"));
 		colunaName.setPrefWidth(400);
+		efeito.corLinhaTabela(colunaName);
 
 		TableColumn<User, String> colunaEmail = new TableColumn<User, String>("Email");
 		colunaEmail.setCellValueFactory(new PropertyValueFactory<User, String>("email"));
 		colunaEmail.setPrefWidth(300);
+		efeito.corLinhaTabela(colunaEmail);
 
 		TableColumn<User, String> colunaUsername = new TableColumn<User, String>("Nome de Usuário");
 		colunaUsername.setCellValueFactory(new PropertyValueFactory<User, String>("userName"));
 		colunaUsername.setPrefWidth(300);
+		efeito.corLinhaTabela(colunaUsername);
 
 		TableColumn<User, Boolean> colunaStatus = new TableColumn<User, Boolean>("Status");
 		colunaStatus.setCellValueFactory(new PropertyValueFactory<User, Boolean>("enabled"));
 		colunaStatus.setPrefWidth(150);
-
+		efeito.corLinhaTabela(colunaStatus);
+		
 		// POPULA A TABELA
 		popularTabela();
-
+				
 		// ADICIONA AS COLUNAS
 		getTabelaUsuarios().getColumns().addAll(colunaID, colunaName, colunaEmail, colunaUsername, colunaStatus);
 
+		
 		if (getTabelaUsuarios() == null) {
 			getTabelaUsuarios().setPlaceholder(new Label("Nenhum usuário cadastrado."));
 
 		}
-
 		return getTabelaUsuarios();
 
 	}
@@ -306,7 +355,6 @@ public class UsuariosController extends Application {
 		List<User> users = getAllUsers();
 		setObservableList(FXCollections.observableArrayList(users));
 		getTabelaUsuarios().setItems(observableList);
-
 	}
 
 	public static List<User> getAllUsers() throws Exception {
@@ -314,12 +362,8 @@ public class UsuariosController extends Application {
 			// BUSCA TODOS USUARIOS
 			String url = "http://localhost:8080/users";
 			HttpClient client = HttpClient.newHttpClient();
-			HttpRequest request = HttpRequest.newBuilder()
-					.GET()
-					.uri(URI.create(url))
-					.header("Authorization", "Bearer " + token)
-					.header("Accept", "application/json")
-					.build();
+			HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(url))
+					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			JSONArray usuarios = new JSONArray(response.body());
 
@@ -333,7 +377,12 @@ public class UsuariosController extends Application {
 				user.setCredentialsNonExpired(jsonObj.getBoolean("credentialsNonExpired"));
 				user.setFullName(jsonObj.getString("fullName"));
 				user.setUserName(jsonObj.getString("userName"));
-				user.setEnabled(jsonObj.getBoolean("enabled"));
+				if(jsonObj.getBoolean("enabled") == true) {
+					user.setEnabled("Ativo");
+				}
+				else {
+					user.setEnabled("Inativo");
+				}
 				user.setPassword(jsonObj.getString("password"));
 				user.setAccountNonExpired(jsonObj.getBoolean("accountNonExpired"));
 				user.setId(jsonObj.getInt("id"));
@@ -352,44 +401,25 @@ public class UsuariosController extends Application {
 	@SuppressWarnings("exports")
 	@FXML
 	public void salvar(ActionEvent action) throws Exception {
-		// PADRÃO PARA NOVOS USUÁRIOS
-		boolean accountNonExpired = true;
-		boolean accountNonLocked = true;
-		boolean credentialsNonExpired = true;
-		boolean enabled = true;
-		String permissions[] = {};
-		String authorities[] = {};
-		String roles[] = {};
-
 		try {
-			// GERA O JSON
-			String fullName = getFullName().getText();
-			String username = getUsername().getText();
-			String email = getEmail().getText();
-			String password1 = getSenha1().getText();
-			String password2 = getSenha2().getText();
-
-			if (fullName.isEmpty()) {
+			//VERIFICA CAMPOS VAZIOS
+			if (getFullName().getText().isEmpty() || getUsername().getText().isEmpty() || getEmail().getText().isEmpty()
+					|| getSenha1().getText().isEmpty() || getSenha2().getText().isEmpty()) {
+				getInfo().setText("*Campos Obrigatórios!");
 				effects.campoObrigatorio(getFullName());
-				getInfo().setText("*Campos Obrigatórios!");
-			}
-
-			if (username.isEmpty()) {
 				effects.campoObrigatorio(getUsername());
-				getInfo().setText("*Campos Obrigatórios!");
-			}
-
-			if (email.isEmpty()) {
 				effects.campoObrigatorio(getEmail());
-				getInfo().setText("*Campos Obrigatórios!");
-			}
-			if (password1.isEmpty()) {
 				effects.campoObrigatorio(getSenha1());
-				getInfo().setText("*Campos Obrigatórios!");
-			}
-			if (password2.isEmpty()) {
 				effects.campoObrigatorio(getSenha2());
-				getInfo().setText("*Campos Obrigatórios!");
+				return;
+			}
+			//VERFICA SE SENHAS DIGITADAS SÃO DIFERENTES
+			if (!getSenha1().getText().equals(getSenha2().getText())) {
+				effects.campoObrigatorio(getSenha1());
+				effects.campoObrigatorio(getSenha2());
+				getInfo().setText("*Senhas digitada não conferem!");
+				return;
+				
 			} else {
 				effects.campoObrigatorioRemove(getFullName());
 				effects.campoObrigatorioRemove(getUsername());
@@ -397,6 +427,21 @@ public class UsuariosController extends Application {
 				effects.campoObrigatorioRemove(getSenha1());
 				effects.campoObrigatorioRemove(getSenha2());
 				getInfo().setText(null);
+				
+				String fullName = getFullName().getText();
+				String username = getUsername().getText();
+				String email = getEmail().getText();
+				String password2 = getSenha2().getText();
+
+
+				// PADRÃO PARA NOVOS USUÁRIOS
+				boolean accountNonExpired = true;
+				boolean accountNonLocked = true;
+				boolean credentialsNonExpired = true;
+				boolean enabled = true;
+				String permissions[] = {};
+				String authorities[] = {};
+				String roles[] = {};
 
 				JSONObject json = new JSONObject();
 				json.put("fullName", fullName);
@@ -414,12 +459,9 @@ public class UsuariosController extends Application {
 				// REQUIÇÃO
 				String urlLogin = "http://localhost:8080/users";
 				HttpClient client = HttpClient.newHttpClient();
-				HttpRequest request = HttpRequest.newBuilder()
-						.uri(URI.create(urlLogin))
-						.header("Authorization", "Bearer " + token)
-						.header("Content-Type", "application/json")
-						.POST(HttpRequest.BodyPublishers.ofString(json.toString()))
-						.build();
+				HttpRequest request = HttpRequest.newBuilder().uri(URI.create(urlLogin))
+						.header("Authorization", "Bearer " + token).header("Content-Type", "application/json")
+						.POST(HttpRequest.BodyPublishers.ofString(json.toString())).build();
 				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 				String message = response.body().substring(83, 152);
 				int status = response.statusCode();
@@ -450,9 +492,10 @@ public class UsuariosController extends Application {
 		} catch (Exception e) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setHeaderText(null);
-			alert.setContentText("Erro. " + e.getMessage());
+			alert.setContentText("Erro. " + e.getMessage() + e.getCause());
 			alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
 			alert.showAndWait();
+
 		}
 
 	}
@@ -465,7 +508,7 @@ public class UsuariosController extends Application {
 
 	// CHAMA TELA DE CADSTRAR USUÁRIO
 	@SuppressWarnings("exports")
-	public void cadastrar(ActionEvent action) throws IOException {
+	public void novo(ActionEvent action) throws IOException {
 		Stage stage = new Stage();
 		Parent painel = FXMLLoader.load(getClass().getResource("UsuarioViews/NovoUsuario.fxml"));
 		Scene scene = new Scene(painel, 600, 450);
@@ -558,9 +601,24 @@ public class UsuariosController extends Application {
 
 	@SuppressWarnings("exports")
 	public void inativar(ActionEvent action) throws IOException {
+		
+		//RECEBE O USUARIO SELECIONADO
+		user = PrincipalController.tabelaUsuarios.getSelectionModel().getSelectedItem();
+		
+		//VERIFICA SE USUÁRIO JÁ ESTA INATIVO
+		if(user.getEnabled() == "Inativo") {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setHeaderText(null);
+			alert.setContentText("Usuário \"" + user.getFullName() + "\" já está inativo!");
+			alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+			alert.showAndWait();
+			return;
+			
+		}
+		
 		// VERIFICA E NAO DEIXA INATIVAR TODOS USUÁRIOS
 		if (PrincipalController.tabelaUsuarios.getItems().size() == 1) {
-			Alert alert = new Alert(Alert.AlertType.WARNING);
+			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setHeaderText(null);
 			alert.setContentText("Não é permitido inativar todos os usuários!");
 			alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
@@ -576,18 +634,21 @@ public class UsuariosController extends Application {
 			alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
 			alert.showAndWait();
 		} else {
-			
+
 			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 			alert.setHeaderText(null);
 			alert.setContentText("Deseja inativar o usuário \""
 					+ PrincipalController.tabelaUsuarios.getSelectionModel().getSelectedItem().getUserName() + "\"?");
 			alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
 			alert.showAndWait();
-			
-		try {
+
+			try {
 				user = PrincipalController.tabelaUsuarios.getSelectionModel().getSelectedItem();
+				String permissions[] = {};
+				String authorities[] = {};
+				String roles[] = {};
 				boolean status = false;
-				
+
 				JSONObject json = new JSONObject();
 				json.put("id", user.getId());
 				json.put("fullName", user.getFullName());
@@ -598,28 +659,34 @@ public class UsuariosController extends Application {
 				json.put("accountNonLocked", user.getAccountNonLocked());
 				json.put("credentialsNonExpired", user.getCredentialsNonExpired());
 				json.put("enabled", status);
-				
+				json.put("permissions", permissions);
+				json.put("authorities", authorities);
+				json.put("roles", roles);
 
+				System.out.println(json);
+				
 				String urlUpdate = "http://localhost:8080/users";
 				HttpClient client = HttpClient.newHttpClient();
 				HttpRequest request = HttpRequest.newBuilder().uri(URI.create(urlUpdate))
 						.header("Authorization", "Bearer " + token).header("Content-Type", "application/json")
-						.PUT(HttpRequest.BodyPublishers.ofString(json.toString())).build();
+						.POST(HttpRequest.BodyPublishers.ofString(json.toString())).build();
 				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-				System.out.println(response.statusCode());
-				String message = response.body().substring(83, 152);
 				int statusCode = response.statusCode();
 
 				if (statusCode == 200) {
 					Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
 					alert1.setHeaderText(null);
-					alert1.setContentText("Usuário \"" + getUsername().getText() + "\" inativado com sucesso! ");
+					alert1.setContentText("Usuário \"" + user.getFullName() + "\" inativado com sucesso! ");
 					alert1.showAndWait();
 					popularTabela();
 				}
 
 			} catch (Exception e) {
-				// TODO: handle exception
+				Alert alert2 = new Alert(Alert.AlertType.ERROR);
+				alert2.setHeaderText(null);
+				alert2.setContentText("Erro. " + e.getMessage());
+				alert2.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+				alert2.showAndWait();
 			}
 		}
 

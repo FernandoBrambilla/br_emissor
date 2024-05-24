@@ -17,6 +17,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
@@ -33,7 +34,7 @@ public class LoginController extends AnchorPane{
    	private TextField userName;
    
 	@FXML
-	private TextField password;
+	private PasswordField password;
 	
 	@FXML
 	private Label info;

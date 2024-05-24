@@ -6,12 +6,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.fernando.Entities.ClientPF;
+import com.fernando.Entities.Clients;
 
 
-public interface ClientPFRepository extends JpaRepository<ClientPF, Long> {
+public interface ClientRepository extends JpaRepository<Clients, Long> {
 	
 	
-	 @Query("SELECT u from ClientPF u WHERE u.name like ?1%")
-	  List<ClientPF> findByName(@Param("name")String name);
+	 @Query("SELECT u from Clients u WHERE u.name like ?1%")
+	  List<Clients> findByName(@Param("name")String name);
 	}

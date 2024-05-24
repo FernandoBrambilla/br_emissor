@@ -4,11 +4,11 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
-
 
 <BorderPane fx:id="telaBase" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LoginController">
    <center>
@@ -19,22 +19,27 @@
                   <Font size="20.0" />
                </font>
             </Label>
+            <Label fx:id="info" alignment="CENTER" focusTraversable="false" layoutX="580.0" layoutY="217.0" prefHeight="17.0" prefWidth="440.0" textFill="#a60000">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
             <TextField fx:id="userName" layoutX="574.0" layoutY="255.0" prefHeight="31.0" prefWidth="450.0" promptText="Usuário">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
                <font>
-                  <Font size="15.0" />
+                  <Font name="Calibri" size="15.0" />
                </font>
             </TextField>
-            <TextField fx:id="password" accessibleRole="PASSWORD_FIELD" layoutX="574.0" layoutY="334.0" prefHeight="30.0" prefWidth="450.0" promptText="Senha">
+            <PasswordField fx:id="password" layoutX="575.0" layoutY="342.0" prefHeight="30.0" prefWidth="450.0" promptText="Senha">
                <font>
-                  <Font size="15.0" />
+                  <Font name="Calibri" size="15.0" />
                </font>
-            </TextField>
+            </PasswordField>
             <Button fx:id="btnEntrar" contentDisplay="TOP" defaultButton="true" layoutX="715.0" layoutY="449.0" onAction="#login" prefHeight="40.0" prefWidth="170.0" style="-fx-background-color: white;" text="Entrar">
                <font>
-                  <Font size="18.0" />
+                  <Font name="Calibri" size="18.0" />
                </font>
             </Button>
             <Hyperlink alignment="CENTER" contentDisplay="CENTER" layoutX="733.0" layoutY="537.0" prefHeight="26.0" prefWidth="135.0" text="Recuperar Senha" textAlignment="CENTER" textFill="WHITE">
@@ -42,11 +47,6 @@
                   <Font size="14.0" />
                </font>
             </Hyperlink>
-            <Label fx:id="info" alignment="CENTER" focusTraversable="false" layoutX="580.0" layoutY="217.0" prefHeight="17.0" prefWidth="440.0" textFill="#a60000">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
          </children>
       </Pane>
    </center>

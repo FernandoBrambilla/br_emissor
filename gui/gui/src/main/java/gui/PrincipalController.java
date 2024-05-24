@@ -2,12 +2,14 @@ package gui;
 
 import java.io.IOException;
 
+import gui.Services.Clients;
 import gui.Services.Effects;
 import gui.Services.Login;
 import gui.Services.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 
@@ -20,7 +22,11 @@ public class PrincipalController{
 	
 	static UsuariosController usuariosController = null;
 	
+	static ClientesController clientesController = null;
+	
 	static TableView<User> tabelaUsuarios = null;
+	
+	static TableView<Clients> tabelaClients = null;
 	
 	@FXML
 	private BorderPane menu;
@@ -49,8 +55,6 @@ public class PrincipalController{
 	@FXML
 	private Button btnEstatisticas;
 	
-	
-
 
 	public static String getAccessToken() {
 		return accessToken;
@@ -149,6 +153,8 @@ public class PrincipalController{
 	public void setBtnEstatisticas(Button btnEstatisticas) {
 		this.btnEstatisticas = btnEstatisticas;
 	}
+	
+	
 
 	public void aplicaEfeitos() {
 		Effects efeitos = new Effects();
@@ -167,6 +173,7 @@ public class PrincipalController{
 		
 	}
 	
+	@SuppressWarnings("static-access")
 	@FXML
     private void initialize() throws IOException {
 		getBtnUsuarios().setOnAction((event) -> {
@@ -182,8 +189,7 @@ public class PrincipalController{
                  tabelaUsuarios = usuariosController.construirTabela();
                  getTelaBase().setCenter(tabelaUsuarios);
                  usuariosController.setTelaBase(telaBase);
-                 usuariosController.setTabelaUsuarios(tabelaUsuarios);
-           
+                 UsuariosController.setTabelaUsuarios(tabelaUsuarios);
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (Exception e) {
@@ -191,12 +197,28 @@ public class PrincipalController{
 			}
         });
 		
-		getBtnVendas().setOnAction((event) -> {
-           System.out.println("vendas");
-			
-        });
-	}
-
+		getBtnClientes().setOnAction((event) -> {
+	            try {
+	            	clientesController = new ClientesController();
+	            	
+	            	//CARREGA O MENU DE USUARIOS
+	            	 FXMLLoader loader = new FXMLLoader();
+	                 loader.setLocation(getClass().getResource("ClienteViews/Clientes.fxml"));
+	                 getMenu().setCenter(loader.load());
+	                 
+	                 //CARREGA A TABELA DE CLIENTES
+	                 tabelaClients = clientesController.construirTabela();
+	                 getTelaBase().setCenter(tabelaClients);
+	                 clientesController.setTelaBase(telaBase);
+	                 clientesController.setTabelaClientes(tabelaClients);
+	                 
+	            } catch (IOException e) {
+	                e.printStackTrace();
+	            } catch (Exception e) {
+					e.printStackTrace();
+				}
+	        });
+		}
 }
 
     
