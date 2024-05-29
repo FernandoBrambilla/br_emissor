@@ -13,6 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
@@ -37,10 +38,10 @@ public class EditarUsuarioController {
 	private TextField email;
 
 	@FXML
-	private PasswordField password1;
+	private TextField password1;
 
 	@FXML
-	private PasswordField password2;
+	private TextField password2;
 
 	@FXML
 	private Button btnSalvar;
@@ -50,7 +51,7 @@ public class EditarUsuarioController {
 
 	@FXML
 	private Label info;
-
+	
 	@SuppressWarnings("exports")
 	public TextField getFullName() {
 		return fullName;
@@ -92,12 +93,12 @@ public class EditarUsuarioController {
 	}
 
 	@SuppressWarnings("exports")
-	public void setPassword1(PasswordField password1) {
+	public void setPassword1(TextField password1) {
 		this.password1 = password1;
 	}
 
 	@SuppressWarnings("exports")
-	public void setPassword2(PasswordField password2) {
+	public void setPassword2(TextField password2) {
 		this.password2 = password2;
 	}
 

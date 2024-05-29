@@ -14,7 +14,6 @@ import org.json.JSONObject;
 import gui.Services.Effects;
 import gui.Services.User;
 import javafx.application.Application;
-import javafx.beans.property.BooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -25,10 +24,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -81,10 +77,10 @@ public class UsuariosController extends Application {
 	private TextField email;
 
 	@FXML
-	private PasswordField senha1;
+	private TextField password1;
 
 	@FXML
-	private PasswordField senha2;
+	private TextField password2;
 
 	@FXML
 	private Button btnCancelar;
@@ -94,7 +90,8 @@ public class UsuariosController extends Application {
 
 	@FXML
 	private Label info;
-
+	
+	
 	public PrincipalController getPrincipalController() {
 		return principalController;
 	}
@@ -170,13 +167,13 @@ public class UsuariosController extends Application {
 	}
 
 	@SuppressWarnings("exports")
-	public PasswordField getSenha1() {
-		return senha1;
+	public TextField getPassword1() {
+		return password1;
 	}
 
 	@SuppressWarnings("exports")
-	public PasswordField getSenha2() {
-		return senha2;
+	public TextField getPassword2() {
+		return password2;
 	}
 
 	@SuppressWarnings("exports")
@@ -218,8 +215,8 @@ public class UsuariosController extends Application {
 		UsuariosController.observableList = observableList;
 	}
 
-	@SuppressWarnings("exports")
-	public static void setTabelaUsuarios(@SuppressWarnings("rawtypes") TableView tabelaUsuarios) {
+	@SuppressWarnings({ "exports", "rawtypes" })
+	public static void setTabelaUsuarios(TableView tabelaUsuarios) {
 		UsuariosController.tabelaUsuarios = tabelaUsuarios;
 	}
 
@@ -269,13 +266,13 @@ public class UsuariosController extends Application {
 	}
 
 	@SuppressWarnings("exports")
-	public void setSenha1(PasswordField senha1) {
-		this.senha1 = senha1;
+	public void setPassword1(TextField password1) {
+		this.password1 = password1;
 	}
 
 	@SuppressWarnings("exports")
-	public void setSenha2(PasswordField senha2) {
-		this.senha2 = senha2;
+	public void setPassword2(TextField password2) {
+		this.password2 = password2;
 	}
 
 	@SuppressWarnings("exports")
@@ -300,6 +297,7 @@ public class UsuariosController extends Application {
 		efeitos.hover(getBtnApagar());
 		efeitos.hover(getBtnInativar());
 	}
+	
 
 	@SuppressWarnings({ "unchecked" })
 	public TableView<User> construirTabela() throws Exception {
@@ -404,19 +402,19 @@ public class UsuariosController extends Application {
 		try {
 			//VERIFICA CAMPOS VAZIOS
 			if (getFullName().getText().isEmpty() || getUsername().getText().isEmpty() || getEmail().getText().isEmpty()
-					|| getSenha1().getText().isEmpty() || getSenha2().getText().isEmpty()) {
+					|| getPassword1().getText().isEmpty() || getPassword2().getText().isEmpty()) {
 				getInfo().setText("*Campos Obrigatórios!");
 				effects.campoObrigatorio(getFullName());
 				effects.campoObrigatorio(getUsername());
 				effects.campoObrigatorio(getEmail());
-				effects.campoObrigatorio(getSenha1());
-				effects.campoObrigatorio(getSenha2());
+				effects.campoObrigatorio(getPassword1());
+				effects.campoObrigatorio(getPassword2());
 				return;
 			}
 			//VERFICA SE SENHAS DIGITADAS SÃO DIFERENTES
-			if (!getSenha1().getText().equals(getSenha2().getText())) {
-				effects.campoObrigatorio(getSenha1());
-				effects.campoObrigatorio(getSenha2());
+			if (!getPassword1().getText().equals(getPassword2().getText())) {
+				effects.campoObrigatorio(getPassword1());
+				effects.campoObrigatorio(getPassword2());
 				getInfo().setText("*Senhas digitada não conferem!");
 				return;
 				
@@ -424,14 +422,14 @@ public class UsuariosController extends Application {
 				effects.campoObrigatorioRemove(getFullName());
 				effects.campoObrigatorioRemove(getUsername());
 				effects.campoObrigatorioRemove(getEmail());
-				effects.campoObrigatorioRemove(getSenha1());
-				effects.campoObrigatorioRemove(getSenha2());
+				effects.campoObrigatorioRemove(getPassword1());
+				effects.campoObrigatorioRemove(getPassword2());
 				getInfo().setText(null);
 				
 				String fullName = getFullName().getText();
 				String username = getUsername().getText();
 				String email = getEmail().getText();
-				String password2 = getSenha2().getText();
+				String password2 = getPassword2().getText();
 
 
 				// PADRÃO PARA NOVOS USUÁRIOS
@@ -518,7 +516,7 @@ public class UsuariosController extends Application {
 	}
 
 	// CHAMA TELA DE EDITAR USUÁRIO
-	@SuppressWarnings({ "exports", "unused" })
+	@SuppressWarnings({ "exports"})
 	@FXML
 	public void editar(ActionEvent action) throws Exception {
 		editar = new EditarUsuarioController();

@@ -14,6 +14,7 @@ import org.json.JSONObject;
 import gui.Services.Clients;
 import gui.Services.Effects;
 import gui.Services.Uf_Enum;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -55,6 +56,12 @@ public class ClientesController {
 
 	@FXML
 	private Button btnInativar;
+	
+	@FXML
+	private Button btnSalvar;
+	
+	@FXML
+	private Button btnCancelar;
 
 	@FXML
 	private RadioButton pf;
@@ -98,6 +105,7 @@ public class ClientesController {
 	@FXML
 	private ChoiceBox<Uf_Enum> uf;
 
+
 	public static String getToken() {
 		return token;
 	}
@@ -110,7 +118,6 @@ public class ClientesController {
 		return observableList;
 	}
 
-	@SuppressWarnings("exports")
 	public BorderPane getTelaBase() {
 		return telaBase;
 	}
@@ -131,6 +138,86 @@ public class ClientesController {
 		return btnInativar;
 	}
 
+	public Button getBtnSalvar() {
+		return btnSalvar;
+	}
+
+	public Button getBtnCancelar() {
+		return btnCancelar;
+	}
+
+	public RadioButton getPf() {
+		return pf;
+	}
+
+	public RadioButton getPj() {
+		return pj;
+	}
+
+	public TextField getName() {
+		return name;
+	}
+
+	public TextField getCpf_cnpj() {
+		return cpf_cnpj;
+	}
+
+	public TextField getEmail() {
+		return email;
+	}
+
+	public TextField getRg_ie() {
+		return rg_ie;
+	}
+
+	public TextField getPhone() {
+		return phone;
+	}
+
+	public DatePicker getDataNasc_Const() {
+		return dataNasc_Const;
+	}
+
+	public TextField getAdress() {
+		return adress;
+	}
+
+	public DatePicker getDataEmis() {
+		return dataEmis;
+	}
+
+	public TextField getNum() {
+		return num;
+	}
+
+	public TextField getCompl() {
+		return compl;
+	}
+
+	public TextField getCity() {
+		return city;
+	}
+
+	public ChoiceBox<Uf_Enum> getUf() {
+		return uf;
+	}
+
+	public static void setToken(String token) {
+		ClientesController.token = token;
+	}
+
+	public static void setTabelaClientes(TableView<Clients> tabelaClientes) {
+		ClientesController.tabelaClientes = tabelaClientes;
+	}
+
+	public static void setObservableList(ObservableList<Clients> observableList) {
+		ClientesController.observableList = observableList;
+	}
+
+	public void setTelaBase(BorderPane telaBase) {
+		this.telaBase = telaBase;
+	}
+
 	public void setBtnNovo(Button btnNovo) {
 		this.btnNovo = btnNovo;
 	}
@@ -147,21 +234,72 @@ public class ClientesController {
 		this.btnInativar = btnInativar;
 	}
 
-	public static void setToken(String token) {
-		ClientesController.token = token;
+	public void setBtnSalvar(Button btnSalvar) {
+		this.btnSalvar = btnSalvar;
 	}
 
-	public static void setTabelaClientes(TableView<Clients> tabelaClientes) {
-		ClientesController.tabelaClientes = tabelaClientes;
+	public void setBtnCancelar(Button btnCancelar) {
+		this.btnCancelar = btnCancelar;
 	}
 
-	public static void setObservableList(ObservableList<Clients> observableList) {
-		ClientesController.observableList = observableList;
+	public void setPf(RadioButton pf) {
+		this.pf = pf;
 	}
 
-	@SuppressWarnings("exports")
-	public void setTelaBase(BorderPane telaBase) {
-		this.telaBase = telaBase;
+	public void setPj(RadioButton pj) {
+		this.pj = pj;
+	}
+
+	public void setName(TextField name) {
+		this.name = name;
+	}
+
+	public void setCpf_cnpj(TextField cpf_cnpj) {
+		this.cpf_cnpj = cpf_cnpj;
+	}
+
+	public void setEmail(TextField email) {
+		this.email = email;
+	}
+
+	public void setRg_ie(TextField rg_ie) {
+		this.rg_ie = rg_ie;
+	}
+
+	public void setPhone(TextField phone) {
+		this.phone = phone;
+	}
+
+	public void setDataNasc_Const(DatePicker dataNasc_Const) {
+		this.dataNasc_Const = dataNasc_Const;
+	}
+
+	public void setAdress(TextField adress) {
+		this.adress = adress;
+	}
+
+	public void setDataEmis(DatePicker dataEmis) {
+		this.dataEmis = dataEmis;
+	}
+
+	public void setNum(TextField num) {
+		this.num = num;
+	}
+
+	public void setCompl(TextField compl) {
+		this.compl = compl;
+	}
+
+	public void setCity(TextField city) {
+		this.city = city;
+	}
+
+	public void setUf(ChoiceBox<Uf_Enum> uf) {
+		this.uf = uf;
+	}
+	
+	public void initialize() {
+		System.out.println("inicianto novo cliente");
 	}
 
 	public void aplicaEfeitos() {
@@ -332,7 +470,8 @@ public class ClientesController {
 	
 	@SuppressWarnings("exports")
 	public void cancelar(ActionEvent action) throws IOException {
-		
+		Stage stage = (Stage) getBtnCancelar().getScene().getWindow();
+		stage.close();
 	}
 	
 	

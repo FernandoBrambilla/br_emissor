@@ -144,7 +144,7 @@
          </font>
       </Label>
       <Separator layoutX="3.0" layoutY="134.0" prefHeight="8.0" prefWidth="792.0" />
-      <RadioButton fx:id="pf" layoutX="200.0" layoutY="106.0" mnemonicParsing="false" text="Pessoa Física">
+      <RadioButton fx:id="pf" layoutX="200.0" layoutY="106.0" mnemonicParsing="false" selected="true" text="Pessoa Física">
          <font>
             <Font name="Calibri" size="14.0" />
          </font>

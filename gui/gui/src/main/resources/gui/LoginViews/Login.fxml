@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
@@ -24,7 +27,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <TextField fx:id="userName" layoutX="574.0" layoutY="255.0" prefHeight="31.0" prefWidth="450.0" promptText="Usuário">
+            <TextField fx:id="userName" layoutX="575.0" layoutY="255.0" prefHeight="31.0" prefWidth="450.0" promptText="Usuário">
                <opaqueInsets>
                   <Insets />
                </opaqueInsets>
@@ -32,7 +35,7 @@
                   <Font name="Calibri" size="15.0" />
                </font>
             </TextField>
-            <PasswordField fx:id="password" layoutX="575.0" layoutY="342.0" prefHeight="30.0" prefWidth="450.0" promptText="Senha">
+            <PasswordField fx:id="password" layoutX="575.0" layoutY="340.0" prefHeight="30.0" prefWidth="450.0" promptText="Senha">
                <font>
                   <Font name="Calibri" size="15.0" />
                </font>
@@ -41,12 +44,36 @@
                <font>
                   <Font name="Calibri" size="18.0" />
                </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
             </Button>
             <Hyperlink alignment="CENTER" contentDisplay="CENTER" layoutX="733.0" layoutY="537.0" prefHeight="26.0" prefWidth="135.0" text="Recuperar Senha" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
             </Hyperlink>
+            <TextField fx:id="passwordText" layoutX="575.0" layoutY="340.0" prefHeight="30.0" prefWidth="450.0" promptText="Senha">
+               <font>
+                  <Font name="Calibri" size="15.0" />
+               </font>
+            </TextField>
+            <ImageView fx:id="showPassword" fitHeight="25.0" fitWidth="25.0" layoutX="980.0" layoutY="342.0" onMouseClicked="#show" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/olho-aberto.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
+            <ImageView fx:id="hiddenPassword" fitHeight="25.0" fitWidth="25.0" layoutX="980.0" layoutY="342.0" onMouseClicked="#hidden" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/olho.png" />
+               </image>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </ImageView>
          </children>
       </Pane>
    </center>
