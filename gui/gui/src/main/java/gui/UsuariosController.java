@@ -11,7 +11,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import gui.Services.Effects;
+import gui.Services.Style;
 import gui.Services.User;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -40,7 +40,7 @@ public class UsuariosController extends Application {
 
 	static User user;
 
-	Effects effects = new Effects();
+	Style effects = new Style();
 
 	private static String token = PrincipalController.getAccessToken();
 
@@ -104,7 +104,7 @@ public class UsuariosController extends Application {
 		return user;
 	}
 
-	public Effects getEffects() {
+	public Style getEffects() {
 		return effects;
 	}
 
@@ -203,7 +203,7 @@ public class UsuariosController extends Application {
 		UsuariosController.user = user;
 	}
 
-	public void setEffects(Effects effects) {
+	public void setEffects(Style effects) {
 		this.effects = effects;
 	}
 
@@ -291,7 +291,7 @@ public class UsuariosController extends Application {
 	}
 
 	public void aplicaEfeitos() {
-		Effects efeitos = new Effects();
+		Style efeitos = new Style();
 		efeitos.hover(getBtnNovo());
 		efeitos.hover(getBtnEditar());
 		efeitos.hover(getBtnApagar());
@@ -303,35 +303,29 @@ public class UsuariosController extends Application {
 	public TableView<User> construirTabela() throws Exception {
 		setTabelaUsuarios(new TableView<User>());
 		
-	
-		
-		Effects efeito = new Effects();
-		efeito.styleTable(getTabelaUsuarios());
-		
 		TableColumn<User, Integer> colunaID = new TableColumn<User, Integer>("ID");
 		colunaID.setCellValueFactory(new PropertyValueFactory<User, Integer>("id"));
 		colunaID.setPrefWidth(70);
-		efeito.corLinhaTabela(colunaID);
+		
 		
 		TableColumn<User, String> colunaName = new TableColumn<User, String>("Nome");
 		colunaName.setCellValueFactory(new PropertyValueFactory<User, String>("fullName"));
 		colunaName.setPrefWidth(400);
-		efeito.corLinhaTabela(colunaName);
+		
 
 		TableColumn<User, String> colunaEmail = new TableColumn<User, String>("Email");
 		colunaEmail.setCellValueFactory(new PropertyValueFactory<User, String>("email"));
-		colunaEmail.setPrefWidth(300);
-		efeito.corLinhaTabela(colunaEmail);
+		colunaEmail.setPrefWidth(400);
+		
 
 		TableColumn<User, String> colunaUsername = new TableColumn<User, String>("Nome de Usuário");
 		colunaUsername.setCellValueFactory(new PropertyValueFactory<User, String>("userName"));
-		colunaUsername.setPrefWidth(300);
-		efeito.corLinhaTabela(colunaUsername);
+		colunaUsername.setPrefWidth(310);
+	
 
 		TableColumn<User, Boolean> colunaStatus = new TableColumn<User, Boolean>("Status");
 		colunaStatus.setCellValueFactory(new PropertyValueFactory<User, Boolean>("enabled"));
 		colunaStatus.setPrefWidth(150);
-		efeito.corLinhaTabela(colunaStatus);
 		
 		// POPULA A TABELA
 		popularTabela();

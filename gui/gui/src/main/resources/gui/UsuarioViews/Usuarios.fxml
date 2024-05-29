@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane prefHeight="72.0" prefWidth="766.0" style="-fx-background-color: #e7e7e7;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.UsuariosController">
+<Pane prefHeight="72.0" prefWidth="766.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.UsuariosController">
    <children>
-      <Button fx:id="btnNovo" alignment="CENTER" graphicTextGap="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#novo" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: white;" text="Novo">
+      <Button fx:id="btnNovo" alignment="CENTER" graphicTextGap="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#novo" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: #F4F4F4;" text="Novo">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
@@ -28,7 +28,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button fx:id="btnInativar" alignment="CENTER" graphicTextGap="10.0" layoutX="570.0" layoutY="10.0" mnemonicParsing="false" onAction="#inativar" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: white;" text="Inativar">
+      <Button fx:id="btnInativar" alignment="CENTER" graphicTextGap="10.0" layoutX="570.0" layoutY="10.0" mnemonicParsing="false" onAction="#inativar" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: #F4F4F4;" text="Inativar">
          <graphic>
             <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -43,7 +43,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button fx:id="btnEditar" alignment="CENTER" graphicTextGap="10.0" layoutX="190.0" layoutY="10.0" mnemonicParsing="false" onAction="#editar" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: white;" text="Editar">
+      <Button fx:id="btnEditar" alignment="CENTER" graphicTextGap="10.0" layoutX="190.0" layoutY="10.0" mnemonicParsing="false" onAction="#editar" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: #F4F4F4;" text="Editar">
          <graphic>
             <ImageView fitHeight="35.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -58,7 +58,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button fx:id="btnApagar" alignment="CENTER" graphicTextGap="10.0" layoutX="380.0" layoutY="10.0" mnemonicParsing="false" onAction="#apagar" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: white;" text="Apagar">
+      <Button fx:id="btnApagar" alignment="CENTER" graphicTextGap="10.0" layoutX="380.0" layoutY="10.0" mnemonicParsing="false" onAction="#apagar" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: #F4F4F4;" text="Apagar">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>

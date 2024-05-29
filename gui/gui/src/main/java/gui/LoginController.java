@@ -9,7 +9,7 @@ import java.net.http.HttpResponse;
 
 import org.json.JSONObject;
 
-import gui.Services.Effects;
+import gui.Services.Style;
 import gui.Services.Login;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -151,7 +151,7 @@ public class LoginController extends AnchorPane {
 	 */
 	@FXML
 	private Login fazerLogin() {
-		Effects efeito = new Effects();
+		Style efeito = new Style();
 		try {
 			if (getUserName().getText().isEmpty() || getPassword().getText().isEmpty()) {
 
@@ -161,8 +161,14 @@ public class LoginController extends AnchorPane {
 
 			} else {
 				String username = getUserName().getText();
-				String password = getPassword().getText();
-
+				String password = null;
+				if(getPassword().isVisible()) {
+					password =  getPassword().getText();
+				}
+				if(getPasswordText().isVisible()) {
+					password =  getPasswordText().getText();
+				}
+				 
 				// FAZER LOGIN
 				String urlLogin = "http://localhost:8080/auth/signin";
 				HttpClient client = HttpClient.newHttpClient();
@@ -249,7 +255,7 @@ public class LoginController extends AnchorPane {
 	public void hidden(MouseEvent event) {
 		getPassword().setVisible(true);
 		getShowPassword().setVisible(true);
-		getPassword().setText(getPassword().getText());
+		getPassword().setText(getPasswordText().getText());
 		getPasswordText().setVisible(false);
 		getHiddenPassword().setVisible(false);
 	}

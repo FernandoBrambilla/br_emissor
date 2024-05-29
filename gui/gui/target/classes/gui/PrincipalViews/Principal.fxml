@@ -19,7 +19,7 @@
    <children>
       <Pane prefHeight="800.0" prefWidth="1300.0">
          <children>
-            <MenuBar maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="40.0" prefWidth="1530.0" style="-fx-background-color: #e7e7e7;">
+            <MenuBar maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="40.0" prefWidth="1530.0" style="-fx-background-color: white;">
               <menus>
                 <Menu mnemonicParsing="false" text="Arquivo">
                   <items>
@@ -40,9 +40,9 @@
                   <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                </padding>
             </MenuBar>
-            <FlowPane layoutY="40.0" prefHeight="750.0" prefWidth="170.0" style="-fx-background-color: #e7e7e7;">
+            <FlowPane layoutY="40.0" prefHeight="750.0" prefWidth="170.0" style="-fx-background-color: white;">
                <children>
-                  <Button fx:id="btnVendas" alignment="BOTTOM_CENTER" cacheShape="false" contentDisplay="TOP" depthTest="ENABLE" layoutX="40.0" layoutY="20.0" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="90.0" prefWidth="115.0" scaleShape="false" style="-fx-background-color: white; -fx-padding: 10;" text="Vendas">
+                  <Button fx:id="btnVendas" alignment="BOTTOM_CENTER" cacheShape="false" contentDisplay="TOP" depthTest="ENABLE" layoutX="40.0" layoutY="20.0" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="90.0" prefWidth="115.0" scaleShape="false" style="-fx-background-color: #F4F4F4; -fx-padding: 10;" text="Vendas">
                      <font>
                         <Font name="Calibri Bold" size="18.0" />
                      </font>
@@ -66,7 +66,7 @@
                         <Insets left="20.0" top="5.0" />
                      </FlowPane.margin>
                   </Button>
-                  <Button fx:id="btnOrcamento" alignment="BOTTOM_CENTER" contentDisplay="TOP" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="90.0" prefWidth="115.0" style="-fx-background-color: white; -fx-padding: 10;" text="Orçamentos">
+                  <Button fx:id="btnOrcamento" alignment="BOTTOM_CENTER" contentDisplay="TOP" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="90.0" prefWidth="115.0" style="-fx-background-color: #F4F4F4; -fx-padding: 10;" text="Orçamentos">
                      <font>
                         <Font name="Calibri Bold" size="18.0" />
                      </font>
@@ -87,7 +87,7 @@
                         <Insets left="20.0" top="5.0" />
                      </FlowPane.margin>
                   </Button>
-                  <Button fx:id="btnClientes" alignment="BOTTOM_CENTER" contentDisplay="TOP" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="0.0" prefWidth="115.0" style="-fx-background-color: white; -fx-padding: 10;" text="Clientes">
+                  <Button fx:id="btnClientes" alignment="BOTTOM_CENTER" contentDisplay="TOP" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="0.0" prefWidth="115.0" style="-fx-background-color: #F4F4F4; -fx-padding: 10;" text="Clientes">
                      <font>
                         <Font name="Calibri Bold" size="18.0" />
                      </font>
@@ -108,7 +108,7 @@
                         <Insets left="20.0" top="5.0" />
                      </FlowPane.margin>
                   </Button>
-                  <Button fx:id="btnProdutos" alignment="BOTTOM_CENTER" contentDisplay="TOP" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="90.0" prefWidth="115.0" style="-fx-background-color: white; -fx-padding: 10;" text="Produtos">
+                  <Button fx:id="btnProdutos" alignment="BOTTOM_CENTER" contentDisplay="TOP" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="90.0" prefWidth="115.0" style="-fx-background-color: #F4F4F4; -fx-padding: 10;" text="Produtos">
                      <font>
                         <Font name="Calibri Bold" size="18.0" />
                      </font>
@@ -129,7 +129,7 @@
                         <Insets left="20.0" top="5.0" />
                      </FlowPane.margin>
                   </Button>
-                  <Button fx:id="btnCaixa" alignment="BOTTOM_CENTER" contentDisplay="TOP" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="0.0" prefWidth="115.0" style="-fx-background-color: white; -fx-padding: 10;" text="Caixa">
+                  <Button fx:id="btnCaixa" alignment="BOTTOM_CENTER" contentDisplay="TOP" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="0.0" prefWidth="115.0" style="-fx-background-color: #F4F4F4; -fx-padding: 10;" text="Caixa">
                      <font>
                         <Font name="Calibri Bold" size="18.0" />
                      </font>
@@ -150,7 +150,7 @@
                         <Insets left="20.0" top="5.0" />
                      </FlowPane.margin>
                   </Button>
-                  <Button fx:id="btnUsuarios" alignment="BOTTOM_CENTER" contentDisplay="TOP" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="90.0" prefWidth="115.0" style="-fx-background-color: white; -fx-padding: 10;" text="Usuários">
+                  <Button fx:id="btnUsuarios" alignment="BOTTOM_CENTER" contentDisplay="TOP" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="90.0" prefWidth="115.0" style="-fx-background-color: #F4F4F4; -fx-padding: 10;" text="Usuários">
                      <font>
                         <Font name="Calibri Bold" size="18.0" />
                      </font>
@@ -171,7 +171,7 @@
                         <Insets left="20.0" top="5.0" />
                      </FlowPane.margin>
                   </Button>
-                  <Button fx:id="btnEstatisticas" alignment="BOTTOM_CENTER" contentDisplay="TOP" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="90.0" prefWidth="115.0" style="-fx-background-color: white; -fx-padding: 10;" text="Estatísticas">
+                  <Button fx:id="btnEstatisticas" alignment="BOTTOM_CENTER" contentDisplay="TOP" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="90.0" prefWidth="115.0" style="-fx-background-color: #F4F4F4; -fx-padding: 10;" text="Estatísticas">
                      <font>
                         <Font name="Calibri Bold" size="18.0" />
                      </font>
@@ -194,8 +194,8 @@
                   </Button>
                </children>
             </FlowPane>
-            <BorderPane fx:id="telaBase" layoutX="170.0" layoutY="130.0" prefHeight="651.0" prefWidth="1360.0" />
-            <BorderPane fx:id="menu" layoutX="170.0" layoutY="40.0" prefHeight="90.0" prefWidth="1360.0" />
+            <BorderPane fx:id="telaBase" layoutX="170.0" layoutY="130.0" maxWidth="1357.0" minWidth="1357.0" prefHeight="660.0" prefWidth="1357.0" style="-fx-background-color: white;" />
+            <BorderPane fx:id="menu" layoutX="170.0" layoutY="40.0" prefHeight="90.0" prefWidth="1360.0" style="-fx-background-color: white;" />
          </children>
       </Pane>
    </children>

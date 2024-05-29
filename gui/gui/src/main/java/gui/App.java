@@ -22,13 +22,17 @@ public class App extends Application {
 
 	@Override
     public void start(@SuppressWarnings("exports") Stage primaryStage) throws IOException {
+		
 		root = loadFXML("LoginViews/login");
     	stage = primaryStage;
     	stage.setTitle("BR Emissor");
     	scene = new Scene(root);
+    	scene.getStylesheets().add(getClass().getResource("Style/style.css").toExternalForm());
         stage.setScene(scene);
         stage.setMaximized(true);
         stage.show();
+        
+        
     }
     
  

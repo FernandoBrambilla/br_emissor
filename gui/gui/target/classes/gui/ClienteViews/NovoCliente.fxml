@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane cacheShape="false" prefHeight="525.0" prefWidth="800.0" style="-fx-background-color: #e7e7e7;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ClientesController">
+<Pane cacheShape="false" prefHeight="525.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ClientesController">
    <children>
       <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -83,62 +83,62 @@
          <font>
             <Font size="15.0" />
          </font></Button>
-      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="2.0" layoutY="150.0" prefHeight="30.0" prefWidth="60.0" style="-fx-background-color: #e7e7e7;" text="Nome">
+      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="2.0" layoutY="150.0" prefHeight="30.0" prefWidth="60.0" style="-fx-background-color: white;" text="Nome">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
       </Label>
-      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="2.0" layoutY="200.0" prefHeight="30.0" prefWidth="60.0" style="-fx-background-color: #e7e7e7;" text="Email">
+      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="2.0" layoutY="200.0" prefHeight="30.0" prefWidth="60.0" style="-fx-background-color: white;" text="Email">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
       </Label>
-      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="2.0" layoutY="250.0" prefHeight="30.0" prefWidth="60.0" style="-fx-background-color: #e7e7e7;" text="Telefone">
+      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="2.0" layoutY="250.0" prefHeight="30.0" prefWidth="60.0" style="-fx-background-color: white;" text="Telefone">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
       </Label>
-      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="545.0" layoutY="150.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #e7e7e7;" text="CPF">
+      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="545.0" layoutY="150.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: white;" text="CPF">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
       </Label>
-      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="545.0" layoutY="200.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: #e7e7e7;" text="RG">
+      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="545.0" layoutY="200.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: white;" text="RG">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
       </Label>
-      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="445.0" layoutY="250.0" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #e7e7e7;" text="Data de Nascimento">
+      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="445.0" layoutY="250.0" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: white;" text="Data de Nascimento">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
       </Label>
-      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="445.0" layoutY="300.0" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #e7e7e7;" text="Data de Emissão RG">
+      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="445.0" layoutY="300.0" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: white;" text="Data de Emissão RG">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
       </Label>
-      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="2.0" layoutY="300.0" prefHeight="30.0" prefWidth="60.0" style="-fx-background-color: #e7e7e7;" text="Endereço">
+      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="2.0" layoutY="300.0" prefHeight="30.0" prefWidth="60.0" style="-fx-background-color: white;" text="Endereço">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
       </Label>
-      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="2.0" layoutY="350.0" prefHeight="30.0" prefWidth="60.0" style="-fx-background-color: #e7e7e7;" text="Número">
+      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="2.0" layoutY="350.0" prefHeight="30.0" prefWidth="60.0" style="-fx-background-color: white;" text="Número">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
       </Label>
-      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="445.0" layoutY="350.0" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #e7e7e7;" text="Complemento">
+      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="445.0" layoutY="350.0" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: white;" text="Complemento">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
       </Label>
-      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="445.0" layoutY="400.0" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: #e7e7e7;" text="Estado">
+      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="445.0" layoutY="400.0" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: white;" text="Estado">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
       </Label>
-      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="2.0" layoutY="400.0" prefHeight="30.0" prefWidth="60.0" style="-fx-background-color: #e7e7e7;" text="Cidade">
+      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="2.0" layoutY="400.0" prefHeight="30.0" prefWidth="60.0" style="-fx-background-color: white;" text="Cidade">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>

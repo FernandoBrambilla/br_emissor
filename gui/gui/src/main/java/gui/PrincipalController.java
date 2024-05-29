@@ -3,13 +3,12 @@ package gui;
 import java.io.IOException;
 
 import gui.Services.Clients;
-import gui.Services.Effects;
 import gui.Services.Login;
+import gui.Services.Style;
 import gui.Services.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 
@@ -157,7 +156,7 @@ public class PrincipalController{
 	
 
 	public void aplicaEfeitos() {
-		Effects efeitos = new Effects();
+		Style efeitos = new Style();
 		efeitos.hover(getBtnVendas());
 		efeitos.hover(getBtnOrcamento());
 		efeitos.hover(getBtnClientes());
@@ -172,7 +171,7 @@ public class PrincipalController{
 		setAccessToken(login.getAccessToken());
 		
 	}
-	
+	Style style = new Style();
 	@SuppressWarnings("static-access")
 	@FXML
     private void initialize() throws IOException {
@@ -189,7 +188,7 @@ public class PrincipalController{
                  tabelaUsuarios = usuariosController.construirTabela();
                  getTelaBase().setCenter(tabelaUsuarios);
                  usuariosController.setTelaBase(telaBase);
-                 UsuariosController.setTabelaUsuarios(tabelaUsuarios);
+                 UsuariosController.setTabelaUsuarios(tabelaUsuarios);               
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (Exception e) {
@@ -210,8 +209,8 @@ public class PrincipalController{
 	                 tabelaClients = clientesController.construirTabela();
 	                 getTelaBase().setCenter(tabelaClients);
 	                 clientesController.setTelaBase(telaBase);
-	                 clientesController.setTabelaClientes(tabelaClients);
-	                 
+	                 clientesController.setTabelaClientes(tabelaClients);	
+	            
 	            } catch (IOException e) {
 	                e.printStackTrace();
 	            } catch (Exception e) {

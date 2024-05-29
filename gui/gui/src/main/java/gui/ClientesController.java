@@ -12,7 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import gui.Services.Clients;
-import gui.Services.Effects;
+import gui.Services.Style;
 import gui.Services.Uf_Enum;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -299,11 +299,11 @@ public class ClientesController {
 	}
 	
 	public void initialize() {
-		System.out.println("inicianto novo cliente");
+
 	}
 
 	public void aplicaEfeitos() {
-		Effects efeitos = new Effects();
+		Style efeitos = new Style();
 		efeitos.hover(getBtnNovo());
 		efeitos.hover(getBtnEditar());
 		efeitos.hover(getBtnApagar());
@@ -313,67 +313,65 @@ public class ClientesController {
 	@SuppressWarnings("unchecked")
 	public TableView<Clients> construirTabela() throws Exception {
 		setTabelaClientes(new TableView<Clients>());
-
-		Effects efeito = new Effects();
-		efeito.styleTable(getTabelaClientes());
-
+		
 		TableColumn<Clients, Integer> colunaID = new TableColumn<Clients, Integer>("ID");
 		colunaID.setCellValueFactory(new PropertyValueFactory<Clients, Integer>("id"));
-		colunaID.setPrefWidth(50);
+		
+		
 
 		TableColumn<Clients, String> colunaName = new TableColumn<Clients, String>("Nome");
 		colunaName.setCellValueFactory(new PropertyValueFactory<Clients, String>("name"));
-		colunaName.setPrefWidth(250);
-
+		
 		TableColumn<Clients, String> colunaEmail = new TableColumn<Clients, String>("Email");
 		colunaEmail.setCellValueFactory(new PropertyValueFactory<Clients, String>("email"));
-		colunaEmail.setPrefWidth(250);
+	
+		
 
 		TableColumn<Clients, String> colunaPhone = new TableColumn<Clients, String>("Telefone");
 		colunaPhone.setCellValueFactory(new PropertyValueFactory<Clients, String>("phone"));
-		colunaPhone.setPrefWidth(80);
+		
+		
 
 		TableColumn<Clients, String> colunaCpf_Cnpj = new TableColumn<Clients, String>("Cpf/Cnpj");
 		colunaCpf_Cnpj.setCellValueFactory(new PropertyValueFactory<Clients, String>("cpf_cnpj"));
-		colunaCpf_Cnpj.setPrefWidth(80);
-		efeito.corLinhaTabela(colunaCpf_Cnpj);
+		
 
 		TableColumn<Clients, String> colunaRg_Ie = new TableColumn<Clients, String>("Rg/Ie");
 		colunaRg_Ie.setCellValueFactory(new PropertyValueFactory<Clients, String>("rg_ie"));
-		colunaRg_Ie.setPrefWidth(80);
+		
 
 		TableColumn<Clients, String> colunaDateNasc_cons = new TableColumn<Clients, String>(
-				"Data de Nascimento/Constituição");
+				"Data Nasc/Const.");
 		colunaDateNasc_cons.setCellValueFactory(new PropertyValueFactory<Clients, String>("dateNasc_const"));
-		colunaRg_Ie.setPrefWidth(80);
+		
 
 		TableColumn<Clients, String> colunaDateExp = new TableColumn<Clients, String>("Data de Expedição");
 		colunaDateExp.setCellValueFactory(new PropertyValueFactory<Clients, String>("dateExp"));
-		colunaDateExp.setPrefWidth(80);
+	
 
 		TableColumn<Clients, String> colunaEndereco = new TableColumn<Clients, String>("Endereço");
 		colunaEndereco.setCellValueFactory(new PropertyValueFactory<Clients, String>("address"));
-		colunaEndereco.setPrefWidth(150);
+		
 
 		TableColumn<Clients, String> colunaNum = new TableColumn<Clients, String>("Número");
 		colunaNum.setCellValueFactory(new PropertyValueFactory<Clients, String>("addressNumber"));
-		colunaNum.setPrefWidth(20);
+		
 
 		TableColumn<Clients, String> colunaComplement = new TableColumn<Clients, String>("Complemento");
 		colunaComplement.setCellValueFactory(new PropertyValueFactory<Clients, String>("addressComplement"));
-		colunaComplement.setPrefWidth(80);
+		
 
 		TableColumn<Clients, String> colunaCity = new TableColumn<Clients, String>("Cidade");
 		colunaCity.setCellValueFactory(new PropertyValueFactory<Clients, String>("city"));
-		colunaCity.setPrefWidth(150);
+		
 
 		TableColumn<Clients, String> colunaUf = new TableColumn<Clients, String>("UF");
 		colunaUf.setCellValueFactory(new PropertyValueFactory<Clients, String>("uf"));
-		colunaUf.setPrefWidth(20);
+		
 
 		TableColumn<Clients, String> colunaCep = new TableColumn<Clients, String>("Cep");
 		colunaCep.setCellValueFactory(new PropertyValueFactory<Clients, String>("cep"));
-		colunaCep.setPrefWidth(80);
+		
 
 		// POPULA A TABELA
 		popularTabela();
@@ -384,10 +382,8 @@ public class ClientesController {
 				colunaCity, colunaUf, colunaCep);
 
 		if (getTabelaClientes() == null) {
-			getTabelaClientes().setPlaceholder(new Label("Nenhum usuário cadastrado."));
-
+			getTabelaClientes().setPlaceholder(new Label("Nenhum Cliente Cadastrado."));
 		}
-
 		return getTabelaClientes();
 	}
 

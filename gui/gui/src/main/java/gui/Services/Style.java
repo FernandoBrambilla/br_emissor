@@ -11,7 +11,7 @@ import javafx.scene.input.MouseEvent;
 
 
 
-public class Effects {
+public class Style {
 	
 	@SuppressWarnings("exports")
 	public void hover(Button btn) {
@@ -44,17 +44,8 @@ public class Effects {
 		campo.setStyle(null);
 	}
 	 
-	@SuppressWarnings("exports")
-	public void styleTable(@SuppressWarnings("rawtypes") TableView tabela) {
-		tabela.setStyle("-fx-font-size:16;"
-				+ "-fx-font-family: Calibri;");
-				
-	}
+
 	
-	@SuppressWarnings({ "exports", "rawtypes" })
-	public void corLinhaTabela(TableColumn coluna) {
-		coluna.setStyle("-fx-color: #FFFFFF;");
-				
-	}
+	
 
 }

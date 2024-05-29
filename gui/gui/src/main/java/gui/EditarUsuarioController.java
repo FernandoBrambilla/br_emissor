@@ -7,7 +7,7 @@ import java.net.http.HttpResponse;
 
 import org.json.JSONObject;
 
-import gui.Services.Effects;
+import gui.Services.Style;
 import gui.Services.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,7 +22,7 @@ import javafx.stage.Stage;
 
 public class EditarUsuarioController {
 
-	Effects effects = new Effects();
+	Style effects = new Style();
 
 	private String token = PrincipalController.getAccessToken();
 
