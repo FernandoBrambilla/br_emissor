@@ -13,9 +13,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
@@ -51,7 +49,7 @@ public class EditarUsuarioController {
 
 	@FXML
 	private Label info;
-	
+
 	@SuppressWarnings("exports")
 	public TextField getFullName() {
 		return fullName;
@@ -112,14 +110,12 @@ public class EditarUsuarioController {
 		this.info = info;
 	}
 
-
 	public void initialize() throws Exception {
 		getFullName().setText(PrincipalController.tabelaUsuarios.getSelectionModel().getSelectedItem().getFullName());
 		getUsername().setText(PrincipalController.tabelaUsuarios.getSelectionModel().getSelectedItem().getUserName());
 		getEmail().setText(PrincipalController.tabelaUsuarios.getSelectionModel().getSelectedItem().getEmail());
 		user = PrincipalController.tabelaUsuarios.getSelectionModel().getSelectedItem();
-		
-		
+
 	}
 
 	public boolean isNull() {
@@ -129,14 +125,13 @@ public class EditarUsuarioController {
 	@SuppressWarnings("exports")
 	public void salvar(ActionEvent action) {
 		/*
-		if (PrincipalController.tabelaUsuarios.getSelectionModel().getSelectedItem().getUserName().equals("admin")) {
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setHeaderText(null);
-			alert.setContentText("Usuário ADMIN não pode ser alterado!");
-			alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-			alert.showAndWait();
-			return;
-		*/
+		 * if (PrincipalController.tabelaUsuarios.getSelectionModel().getSelectedItem().
+		 * getUserName().equals("admin")) { Alert alert = new
+		 * Alert(Alert.AlertType.ERROR); alert.setHeaderText(null);
+		 * alert.setContentText("Usuário ADMIN não pode ser alterado!");
+		 * alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+		 * alert.showAndWait(); return;
+		 */
 
 		// VERIFICA SE CAMPOS NOME, USUARIO E SENHA SÃO VAZIOS
 		if (fullName.getText().isEmpty() || username.getText().isEmpty() || email.getText().isEmpty()) {
@@ -161,14 +156,12 @@ public class EditarUsuarioController {
 				effects.campoObrigatorioRemove(getPassword2());
 				fazerRequisicao(user);
 
-			} 
-			else {
+			} else {
 				effects.campoObrigatorio(getPassword1());
 				effects.campoObrigatorio(getPassword2());
 				getInfo().setText("*Senhas digitada não conferem.");
 			}
-		}
-		else {
+		} else {
 			effects.campoObrigatorioRemove(getFullName());
 			effects.campoObrigatorioRemove(getUsername());
 			effects.campoObrigatorioRemove(getEmail());
@@ -205,10 +198,8 @@ public class EditarUsuarioController {
 			String urlUpdate = "http://localhost:8080/users";
 			HttpClient client = HttpClient.newHttpClient();
 			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(urlUpdate))
-					.header("Authorization", "Bearer " + token)
-					.header("Content-Type", "application/json")
-					.PUT(HttpRequest.BodyPublishers.ofString(json.toString()))
-					.build();
+					.header("Authorization", "Bearer " + token).header("Content-Type", "application/json")
+					.PUT(HttpRequest.BodyPublishers.ofString(json.toString())).build();
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			String message = response.body().substring(83, 152);
 			int statusCode = response.statusCode();
@@ -216,7 +207,7 @@ public class EditarUsuarioController {
 			if (statusCode == 200) {
 				Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 				alert.setHeaderText(null);
-			alert.setContentText("Usuário \"" + getUsername().getText() + "\" atualizado com sucesso! ");
+				alert.setContentText("Usuário \"" + getUsername().getText() + "\" atualizado com sucesso! ");
 				alert.showAndWait();
 				Stage stage = (Stage) btnCancelar.getScene().getWindow();
 				stage.close();

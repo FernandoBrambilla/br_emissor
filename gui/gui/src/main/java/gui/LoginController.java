@@ -1,6 +1,5 @@
 package gui;
 
-
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -9,8 +8,8 @@ import java.net.http.HttpResponse;
 
 import org.json.JSONObject;
 
-import gui.Services.Style;
 import gui.Services.Login;
+import gui.Services.Style;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -146,8 +145,8 @@ public class LoginController extends AnchorPane {
 	}
 
 	/**
-	 * Método responsável por verificar os campos e fazer a
-	 * requisição de login, retornando autenticação.
+	 * Método responsável por verificar os campos e fazer a requisição de login,
+	 * retornando autenticação.
 	 */
 	@FXML
 	private Login fazerLogin() {
@@ -162,13 +161,13 @@ public class LoginController extends AnchorPane {
 			} else {
 				String username = getUserName().getText();
 				String password = null;
-				if(getPassword().isVisible()) {
-					password =  getPassword().getText();
+				if (getPassword().isVisible()) {
+					password = getPassword().getText();
 				}
-				if(getPasswordText().isVisible()) {
-					password =  getPasswordText().getText();
+				if (getPasswordText().isVisible()) {
+					password = getPasswordText().getText();
 				}
-				 
+
 				// FAZER LOGIN
 				String urlLogin = "http://localhost:8080/auth/signin";
 				HttpClient client = HttpClient.newHttpClient();
@@ -208,9 +207,8 @@ public class LoginController extends AnchorPane {
 	private void initialize() throws IOException {
 		getPasswordText().setVisible(false);
 		getHiddenPassword().setVisible(false);
-		
+
 		getBtnEntrar().setOnAction((event) -> {
-			
 
 			PrincipalController principalController = new PrincipalController();
 			try {
@@ -230,10 +228,9 @@ public class LoginController extends AnchorPane {
 		});
 	}
 
-	
-	
 	/**
 	 * Torna visível os caracteres do compo senha.
+	 * 
 	 * @param event
 	 */
 	@SuppressWarnings("exports")
@@ -245,9 +242,10 @@ public class LoginController extends AnchorPane {
 		getPassword().setVisible(false);
 		getShowPassword().setVisible(false);
 	}
-	
+
 	/**
 	 * Oculta os caracteres do compo senha.
+	 * 
 	 * @param event
 	 */
 	@SuppressWarnings("exports")

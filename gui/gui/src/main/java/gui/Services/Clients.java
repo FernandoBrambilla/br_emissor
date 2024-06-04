@@ -1,10 +1,10 @@
 package gui.Services;
 
-import java.util.Date;
-
 public class Clients {
 	
 	private Long id;
+	
+	private String tipo;
 	
 	private String name;
 	
@@ -28,12 +28,18 @@ public class Clients {
 	
 	private String city;
 	
-	private String uf;
+	private Uf_Enum uf;
 	
 	private String cep;
+	
+	private String obs;
 
 	public Long getId() {
 		return id;
+	}
+
+	public String getTipo() {
+		return tipo;
 	}
 
 	public String getName() {
@@ -80,7 +86,7 @@ public class Clients {
 		return city;
 	}
 
-	public String getUf() {
+	public Uf_Enum getUf() {
 		return uf;
 	}
 
@@ -88,8 +94,16 @@ public class Clients {
 		return cep;
 	}
 
+	public String getObs() {
+		return obs;
+	}
+
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
 
 	public void setName(String name) {
@@ -136,11 +150,16 @@ public class Clients {
 		this.city = city;
 	}
 
-	public void setUf(String uf) {
+	public void setUf(Uf_Enum uf) {
 		this.uf = uf;
 	}
 
 	public void setCep(String cep) {
 		this.cep = cep;
 	}
+
+	public void setObs(String obs) {
+		this.obs = obs;
+	}
+
 }

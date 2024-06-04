@@ -90,8 +90,7 @@ public class UsuariosController extends Application {
 
 	@FXML
 	private Label info;
-	
-	
+
 	public PrincipalController getPrincipalController() {
 		return principalController;
 	}
@@ -297,43 +296,37 @@ public class UsuariosController extends Application {
 		efeitos.hover(getBtnApagar());
 		efeitos.hover(getBtnInativar());
 	}
-	
 
 	@SuppressWarnings({ "unchecked" })
 	public TableView<User> construirTabela() throws Exception {
 		setTabelaUsuarios(new TableView<User>());
-		
+
 		TableColumn<User, Integer> colunaID = new TableColumn<User, Integer>("ID");
 		colunaID.setCellValueFactory(new PropertyValueFactory<User, Integer>("id"));
 		colunaID.setPrefWidth(70);
-		
-		
+
 		TableColumn<User, String> colunaName = new TableColumn<User, String>("Nome");
 		colunaName.setCellValueFactory(new PropertyValueFactory<User, String>("fullName"));
 		colunaName.setPrefWidth(400);
-		
 
 		TableColumn<User, String> colunaEmail = new TableColumn<User, String>("Email");
 		colunaEmail.setCellValueFactory(new PropertyValueFactory<User, String>("email"));
 		colunaEmail.setPrefWidth(400);
-		
 
 		TableColumn<User, String> colunaUsername = new TableColumn<User, String>("Nome de Usuário");
 		colunaUsername.setCellValueFactory(new PropertyValueFactory<User, String>("userName"));
 		colunaUsername.setPrefWidth(310);
-	
 
 		TableColumn<User, Boolean> colunaStatus = new TableColumn<User, Boolean>("Status");
 		colunaStatus.setCellValueFactory(new PropertyValueFactory<User, Boolean>("enabled"));
 		colunaStatus.setPrefWidth(150);
-		
+
 		// POPULA A TABELA
 		popularTabela();
-				
+
 		// ADICIONA AS COLUNAS
 		getTabelaUsuarios().getColumns().addAll(colunaID, colunaName, colunaEmail, colunaUsername, colunaStatus);
 
-		
 		if (getTabelaUsuarios() == null) {
 			getTabelaUsuarios().setPlaceholder(new Label("Nenhum usuário cadastrado."));
 
@@ -369,10 +362,9 @@ public class UsuariosController extends Application {
 				user.setCredentialsNonExpired(jsonObj.getBoolean("credentialsNonExpired"));
 				user.setFullName(jsonObj.getString("fullName"));
 				user.setUserName(jsonObj.getString("userName"));
-				if(jsonObj.getBoolean("enabled") == true) {
+				if (jsonObj.getBoolean("enabled") == true) {
 					user.setEnabled("Ativo");
-				}
-				else {
+				} else {
 					user.setEnabled("Inativo");
 				}
 				user.setPassword(jsonObj.getString("password"));
@@ -394,7 +386,7 @@ public class UsuariosController extends Application {
 	@FXML
 	public void salvar(ActionEvent action) throws Exception {
 		try {
-			//VERIFICA CAMPOS VAZIOS
+			// VERIFICA CAMPOS VAZIOS
 			if (getFullName().getText().isEmpty() || getUsername().getText().isEmpty() || getEmail().getText().isEmpty()
 					|| getPassword1().getText().isEmpty() || getPassword2().getText().isEmpty()) {
 				getInfo().setText("*Campos Obrigatórios!");
@@ -405,13 +397,13 @@ public class UsuariosController extends Application {
 				effects.campoObrigatorio(getPassword2());
 				return;
 			}
-			//VERFICA SE SENHAS DIGITADAS SÃO DIFERENTES
+			// VERFICA SE SENHAS DIGITADAS SÃO DIFERENTES
 			if (!getPassword1().getText().equals(getPassword2().getText())) {
 				effects.campoObrigatorio(getPassword1());
 				effects.campoObrigatorio(getPassword2());
 				getInfo().setText("*Senhas digitada não conferem!");
 				return;
-				
+
 			} else {
 				effects.campoObrigatorioRemove(getFullName());
 				effects.campoObrigatorioRemove(getUsername());
@@ -419,12 +411,11 @@ public class UsuariosController extends Application {
 				effects.campoObrigatorioRemove(getPassword1());
 				effects.campoObrigatorioRemove(getPassword2());
 				getInfo().setText(null);
-				
+
 				String fullName = getFullName().getText();
 				String username = getUsername().getText();
 				String email = getEmail().getText();
 				String password2 = getPassword2().getText();
-
 
 				// PADRÃO PARA NOVOS USUÁRIOS
 				boolean accountNonExpired = true;
@@ -510,7 +501,7 @@ public class UsuariosController extends Application {
 	}
 
 	// CHAMA TELA DE EDITAR USUÁRIO
-	@SuppressWarnings({ "exports"})
+	@SuppressWarnings({ "exports" })
 	@FXML
 	public void editar(ActionEvent action) throws Exception {
 		editar = new EditarUsuarioController();
@@ -593,21 +584,21 @@ public class UsuariosController extends Application {
 
 	@SuppressWarnings("exports")
 	public void inativar(ActionEvent action) throws IOException {
-		
-		//RECEBE O USUARIO SELECIONADO
+
+		// RECEBE O USUARIO SELECIONADO
 		user = PrincipalController.tabelaUsuarios.getSelectionModel().getSelectedItem();
-		
-		//VERIFICA SE USUÁRIO JÁ ESTA INATIVO
-		if(user.getEnabled() == "Inativo") {
+
+		// VERIFICA SE USUÁRIO JÁ ESTA INATIVO
+		if (user.getEnabled() == "Inativo") {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setHeaderText(null);
 			alert.setContentText("Usuário \"" + user.getFullName() + "\" já está inativo!");
 			alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
 			alert.showAndWait();
 			return;
-			
+
 		}
-		
+
 		// VERIFICA E NAO DEIXA INATIVAR TODOS USUÁRIOS
 		if (PrincipalController.tabelaUsuarios.getItems().size() == 1) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -656,7 +647,7 @@ public class UsuariosController extends Application {
 				json.put("roles", roles);
 
 				System.out.println(json);
-				
+
 				String urlUpdate = "http://localhost:8080/users";
 				HttpClient client = HttpClient.newHttpClient();
 				HttpRequest request = HttpRequest.newBuilder().uri(URI.create(urlUpdate))

@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane cacheShape="false" prefHeight="525.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ClientesController">
+<Pane cacheShape="false" prefHeight="610.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.NovoClienteController">
    <children>
       <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -29,7 +30,7 @@
             <Font name="Calibri" size="14.0" />
          </font>
       </Label>
-      <Separator layoutX="3.0" layoutY="448.0" prefHeight="8.0" prefWidth="792.0" />
+      <Separator layoutX="3.0" layoutY="539.0" prefHeight="8.0" prefWidth="792.0" />
       <TextField fx:id="name" cacheShape="false" layoutX="70.0" layoutY="150.0" prefHeight="30.0" prefWidth="470.0" promptText="Jose da Silva">
          <font>
             <Font name="Calibri" size="17.0" />
@@ -64,7 +65,7 @@
             <Font name="Calibri" size="17.0" />
          </font>
       </TextField>
-      <TextField fx:id="compl" cacheShape="false" layoutX="580.0" layoutY="350.0" prefHeight="30.0" prefWidth="200.0" promptText="Casa 01">
+      <TextField fx:id="compl" cacheShape="false" layoutX="545.0" layoutY="350.0" prefHeight="30.0" prefWidth="236.0" promptText="Casa 01">
          <font>
             <Font name="Calibri" size="17.0" />
          </font>
@@ -74,12 +75,22 @@
             <Font name="Calibri" size="17.0" />
          </font>
       </TextField>
-      <ChoiceBox fx:id="uf" layoutX="580.0" layoutY="400.0" prefHeight="30.0" prefWidth="200.0" />
-      <Button fx:id="btnSalvar" layoutX="453.0" layoutY="474.0" mnemonicParsing="false" onAction="#salvar" prefHeight="30.0" prefWidth="115.0" style="-fx-background-color: #2484BF;" text="Salvar" textFill="WHITE">
+      <TextField fx:id="cep" cacheShape="false" layoutX="480.0" layoutY="400.0" prefHeight="30.0" prefWidth="166.0" promptText="Curitiba">
+         <font>
+            <Font name="Calibri" size="17.0" />
+         </font>
+      </TextField>
+      <ComboBox fx:id="uf" layoutX="720.0" layoutY="400.0" prefHeight="30.0" prefWidth="60.0" />
+      <TextArea fx:id="obs" layoutX="70.0" layoutY="450.0" prefHeight="80.0" prefWidth="710.0" promptText="Observações">
+         <font>
+            <Font name="Calibri" size="17.0" />
+         </font>
+      </TextArea>
+      <Button fx:id="btnSalvar" layoutX="455.0" layoutY="560.0" mnemonicParsing="false" onAction="#salvar" prefHeight="30.0" prefWidth="115.0" style="-fx-background-color: #2484BF;" text="Salvar" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font></Button>
-      <Button fx:id="btnCancelar" layoutX="608.0" layoutY="474.0" mnemonicParsing="false" onAction="#cancelar" prefHeight="30.0" prefWidth="115.0" style="-fx-background-color: #2484BF;" text="Cancelar" textFill="WHITE">
+      <Button fx:id="btnCancelar" layoutX="620.0" layoutY="560.0" mnemonicParsing="false" onAction="#cancelar" prefHeight="30.0" prefWidth="115.0" style="-fx-background-color: #2484BF;" text="Cancelar" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font></Button>
@@ -98,22 +109,22 @@
             <Font name="Calibri" size="15.0" />
          </font>
       </Label>
-      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="545.0" layoutY="150.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: white;" text="CPF">
+      <Label fx:id="labelCpf_Cnpj" alignment="CENTER_RIGHT" focusTraversable="false" layoutX="545.0" layoutY="150.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: white;" text="CPF">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
       </Label>
-      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="545.0" layoutY="200.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: white;" text="RG">
+      <Label fx:id="labelRgIe" alignment="CENTER_RIGHT" focusTraversable="false" layoutX="545.0" layoutY="200.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: white;" text="RG">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
       </Label>
-      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="445.0" layoutY="250.0" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: white;" text="Data de Nascimento">
+      <Label fx:id="labelDataNascConst" focusTraversable="false" layoutX="450.0" layoutY="250.0" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: white;" text="Data de Nascimento">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
       </Label>
-      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="445.0" layoutY="300.0" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: white;" text="Data de Emissão RG">
+      <Label fx:id="labelEmissRg" focusTraversable="false" layoutX="450.0" layoutY="300.0" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: white;" text="Data de Emissão RG">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
@@ -128,12 +139,12 @@
             <Font name="Calibri" size="15.0" />
          </font>
       </Label>
-      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="445.0" layoutY="350.0" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: white;" text="Complemento">
+      <Label contentDisplay="RIGHT" focusTraversable="false" layoutX="450.0" layoutY="350.0" prefHeight="30.0" prefWidth="92.0" style="-fx-background-color: white;" text="Complemento">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
       </Label>
-      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="445.0" layoutY="400.0" prefHeight="30.0" prefWidth="130.0" style="-fx-background-color: white;" text="Estado">
+      <Label alignment="CENTER_RIGHT" focusTraversable="false" layoutX="665.0" layoutY="400.0" prefHeight="30.0" prefWidth="50.0" style="-fx-background-color: white;" text="Estado">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
@@ -144,17 +155,27 @@
          </font>
       </Label>
       <Separator layoutX="3.0" layoutY="134.0" prefHeight="8.0" prefWidth="792.0" />
-      <RadioButton fx:id="pf" layoutX="200.0" layoutY="106.0" mnemonicParsing="false" selected="true" text="Pessoa Física">
+      <RadioButton fx:id="pf" layoutX="200.0" layoutY="106.0" mnemonicParsing="false" onAction="#setPF" selected="true" text="Pessoa Física">
          <font>
             <Font name="Calibri" size="14.0" />
          </font>
       </RadioButton>
-      <RadioButton fx:id="pf" layoutX="540.0" layoutY="106.0" mnemonicParsing="false" text="Pessoa Jurídica">
+      <RadioButton fx:id="pj" layoutX="540.0" layoutY="106.0" mnemonicParsing="false" onAction="#setPJ" text="Pessoa Jurídica">
          <font>
             <Font name="Calibri" size="14.0" />
          </font>
       </RadioButton>
       <DatePicker fx:id="dataNasc_Const" layoutX="580.0" layoutY="250.0" prefHeight="30.0" prefWidth="200.0" promptText="01/01/2000" />
       <DatePicker fx:id="dataEmis" layoutX="580.0" layoutY="300.0" prefHeight="30.0" prefWidth="200.0" promptText="01/01/2000" />
+      <RadioButton fx:id="IeIsento" layoutX="558.0" layoutY="257.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#ieIsentoAction" text="IE Isento" visible="false">
+         <font>
+            <Font name="Calibri" size="14.0" />
+         </font>
+      </RadioButton>
+      <Label focusTraversable="false" layoutX="450.0" layoutY="400.0" prefHeight="30.0" prefWidth="30.0" style="-fx-background-color: white;" text="CEP">
+         <font>
+            <Font name="Calibri" size="15.0" />
+         </font>
+      </Label>
    </children>
 </Pane>
