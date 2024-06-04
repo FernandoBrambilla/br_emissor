@@ -7,8 +7,8 @@ import java.net.http.HttpResponse;
 
 import org.json.JSONObject;
 
-import gui.Services.Style;
-import gui.Services.User;
+import gui.Models.Style;
+import gui.Models.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;

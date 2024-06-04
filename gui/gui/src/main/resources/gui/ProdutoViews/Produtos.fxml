@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane prefHeight="72.0" prefWidth="766.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ProdutosController">
+   <children>
+      <Button fx:id="btnNovo" alignment="CENTER" graphicTextGap="10.0" layoutY="8.0" mnemonicParsing="false" onAction="#novo" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: deedfc;" text="Novo">
+         <font>
+            <Font name="Calibri" size="15.0" />
+         </font>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+         <graphic>
+            <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: pointer;">
+               <image>
+                  <Image url="@../img/newProduct.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="btnEditar" alignment="CENTER" graphicTextGap="10.0" layoutX="190.0" layoutY="8.0" mnemonicParsing="false" onAction="#editar" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: deedfc;" text="Editar">
+         <graphic>
+            <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/editProduct.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="Calibri" size="15.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="btnApagar" alignment="CENTER" graphicTextGap="10.0" layoutX="380.0" layoutY="8.0" mnemonicParsing="false" onAction="#apagar" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: deedfc;" text="Apagar">
+         <font>
+            <Font name="Calibri" size="15.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <graphic>
+            <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/dellProduct.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+   </children>
+</Pane>

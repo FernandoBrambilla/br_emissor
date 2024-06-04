@@ -2,10 +2,11 @@ package gui;
 
 import java.io.IOException;
 
-import gui.Services.Clients;
-import gui.Services.Login;
-import gui.Services.Style;
-import gui.Services.User;
+import gui.Models.Clients;
+import gui.Models.Login;
+import gui.Models.Produtos;
+import gui.Models.Style;
+import gui.Models.User;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
@@ -21,10 +22,14 @@ public class PrincipalController {
 	static UsuariosController usuariosController = null;
 
 	static ClientesController clientesController = null;
+	
+	static ProdutosController produtosController = null;
 
 	static TableView<User> tabelaUsuarios = null;
 
 	static TableView<Clients> tabelaClients = null;
+	
+	static TableView<Produtos> tabelaprodutos = null;
 
 	@FXML
 	private BorderPane menu;
@@ -52,6 +57,7 @@ public class PrincipalController {
 
 	@FXML
 	private Button btnEstatisticas;
+	
 
 	public static Login getUsuarioLogado() {
 		return usuarioLogado;
@@ -75,6 +81,23 @@ public class PrincipalController {
 
 	public static TableView<Clients> getTabelaClients() {
 		return tabelaClients;
+	}
+	
+
+	public static ProdutosController getProdutosController() {
+		return produtosController;
+	}
+
+	public static TableView<Produtos> getTabelaprodutos() {
+		return tabelaprodutos;
+	}
+
+	public static void setProdutosController(ProdutosController produtosController) {
+		PrincipalController.produtosController = produtosController;
+	}
+
+	public static void setTabelaprodutos(TableView<Produtos> tabelaprodutos) {
+		PrincipalController.tabelaprodutos = tabelaprodutos;
 	}
 
 	@SuppressWarnings("exports")
@@ -223,7 +246,7 @@ public class PrincipalController {
 	private void initialize() throws IOException {
 		getBtnUsuarios().setOnAction((event) -> {
 			try {
-				usuariosController = new UsuariosController();
+				setUsuariosController(new UsuariosController());
 
 				// CARREGA O MENU DE USUARIOS
 				FXMLLoader loader = new FXMLLoader();
@@ -231,8 +254,9 @@ public class PrincipalController {
 				getMenu().setCenter(loader.load());
 
 				// CARREGA A TABELA DE USUARIOS
-				tabelaUsuarios = usuariosController.construirTabela();
+				setTabelaUsuarios(getUsuariosController().construirTabela());
 				getTelaBase().setCenter(tabelaUsuarios);
+				getTelaBase().setTop(null);
 				usuariosController.setTelaBase(telaBase);
 				UsuariosController.setTabelaUsuarios(tabelaUsuarios);
 			} catch (IOException e) {
@@ -244,7 +268,7 @@ public class PrincipalController {
 
 		getBtnClientes().setOnAction((event) -> {
 			try {
-				clientesController = new ClientesController();
+				setClientesController(new ClientesController());
 
 				// CARREGA O MENU DE USUARIOS
 				FXMLLoader loader = new FXMLLoader();
@@ -254,8 +278,31 @@ public class PrincipalController {
 				// CARREGA A TABELA DE CLIENTES
 				tabelaClients = clientesController.construirTabela();
 				getTelaBase().setCenter(tabelaClients);
+				getTelaBase().setTop(null);
 				clientesController.setTelaBase(telaBase);
 				clientesController.setTabelaClientes(tabelaClients);
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
+		
+		
+		getBtnProdutos().setOnAction((event) -> {
+			try {
+				setProdutosController(new ProdutosController());
+				FXMLLoader loader = new FXMLLoader();
+				loader.setLocation(getClass().getResource("ProdutoViews/Produtos.fxml"));
+				getMenu().setCenter(loader.load());
+
+				setTabelaprodutos(produtosController.construirTabela());
+				getTelaBase().setCenter(getTabelaprodutos());
+				getTelaBase().setTop(null);
+				getProdutosController().setTelaBase(getTelaBase());
+				getProdutosController().setTabelaprodutos(getTabelaprodutos());
+				
 
 			} catch (IOException e) {
 				e.printStackTrace();

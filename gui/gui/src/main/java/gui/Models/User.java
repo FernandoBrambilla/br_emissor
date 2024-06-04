@@ -1,4 +1,4 @@
-package gui.Services;
+package gui.Models;
 
 public class User {
 	

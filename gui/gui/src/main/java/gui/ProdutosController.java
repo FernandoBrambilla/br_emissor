@@ -5,7 +5,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,41 +12,23 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import gui.Models.Clients;
+import gui.Models.Produtos;
 import gui.Models.Style;
 import gui.Models.Uf_Enum;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Region;
-import javafx.stage.Stage;
 
-public class ClientesController {
-
+public class ProdutosController {
+	
 	private static String token = PrincipalController.getAccessToken();
-
-	static TableView<Clients> tabelaClientes = null;
-
-	static ObservableList<Clients> observableList;
-
-	static NovoClienteController novoClient = null;
-
-	static EditarClienteController editarClient = null;
-
+	
 	@FXML
 	private BorderPane telaBase;
-
+	
 	@FXML
 	private Button btnNovo;
 
@@ -56,102 +37,58 @@ public class ClientesController {
 
 	@FXML
 	private Button btnApagar;
+	
+	static TableView<Produtos> tabelaprodutos = null;
 
-	@FXML
-	private Button btnInativar;
+	static ObservableList<Produtos> observableList;
 
-	public static EditarClienteController getEditarClient() {
-		return editarClient;
+
+	public static TableView<Produtos> getTabelaprodutos() {
+		return tabelaprodutos;
 	}
 
-	public static void setEditarClient(EditarClienteController editarClient) {
-		ClientesController.editarClient = editarClient;
-	}
-
-	public static String getToken() {
-		return token;
-	}
-
-	public static TableView<Clients> getTabelaClientes() {
-		return tabelaClientes;
-	}
-
-	public static ObservableList<Clients> getObservableList() {
+	public static ObservableList<Produtos> getObservableList() {
 		return observableList;
 	}
 
-	public static NovoClienteController getNovoClient() {
-		return novoClient;
+	public static void setTabelaprodutos(TableView<Produtos> tabelaprodutos) {
+		ProdutosController.tabelaprodutos = tabelaprodutos;
 	}
 
-	@SuppressWarnings("exports")
+	public static void setObservableList(ObservableList<Produtos> observableList) {
+		ProdutosController.observableList = observableList;
+	}
+
 	public BorderPane getTelaBase() {
 		return telaBase;
 	}
 
-	@SuppressWarnings("exports")
-	public Button getBtnNovo() {
-		return btnNovo;
-	}
-
-	@SuppressWarnings("exports")
-	public Button getBtnEditar() {
-		return btnEditar;
-	}
-
-	@SuppressWarnings("exports")
-	public Button getBtnApagar() {
-		return btnApagar;
-	}
-
-	@SuppressWarnings("exports")
-	public Button getBtnInativar() {
-		return btnInativar;
-	}
-
-	public static void setToken(String token) {
-		ClientesController.token = token;
-	}
-
-	public static void setTabelaClientes(TableView<Clients> tabelaClientes) {
-		ClientesController.tabelaClientes = tabelaClientes;
-	}
-
-	public static void setObservableList(ObservableList<Clients> observableList) {
-		ClientesController.observableList = observableList;
-	}
-
-	public static void setNovoClient(NovoClienteController novoClient) {
-		ClientesController.novoClient = novoClient;
-	}
-
-	@SuppressWarnings("exports")
 	public void setTelaBase(BorderPane telaBase) {
 		this.telaBase = telaBase;
 	}
 
-	@SuppressWarnings("exports")
+	public Button getBtnNovo() {
+		return btnNovo;
+	}
+
+	public Button getBtnEditar() {
+		return btnEditar;
+	}
+
+	public Button getBtnApagar() {
+		return btnApagar;
+	}
+
 	public void setBtnNovo(Button btnNovo) {
 		this.btnNovo = btnNovo;
 	}
 
-	@SuppressWarnings("exports")
 	public void setBtnEditar(Button btnEditar) {
 		this.btnEditar = btnEditar;
 	}
 
-	@SuppressWarnings("exports")
 	public void setBtnApagar(Button btnApagar) {
 		this.btnApagar = btnApagar;
-	}
-
-	@SuppressWarnings("exports")
-	public void setBtnInativar(Button btnInativar) {
-		this.btnInativar = btnInativar;
-	}
-
-	public void initialize() {
-
 	}
 
 	public void aplicaEfeitos() {
@@ -159,26 +96,28 @@ public class ClientesController {
 		efeitos.hover(getBtnNovo());
 		efeitos.hover(getBtnEditar());
 		efeitos.hover(getBtnApagar());
-		efeitos.hover(getBtnInativar());
+	
 	}
-
+	
+	
 	@SuppressWarnings("unchecked")
-	public TableView<Clients> construirTabela() throws Exception {
-		setTabelaClientes(new TableView<Clients>());
+	
+	public TableView<Produtos> construirTabela() throws Exception {
+		
+		setTabelaprodutos(new TableView<Produtos>());
+/*
+		TableColumn<Produtos, Integer> colunaID = new TableColumn<Produtos, Integer>("ID");
+		colunaID.setCellValueFactory(new PropertyValueFactory<Produtos, Integer>("id"));
 
-		TableColumn<Clients, Integer> colunaID = new TableColumn<Clients, Integer>("ID");
-		colunaID.setCellValueFactory(new PropertyValueFactory<Clients, Integer>("id"));
+		TableColumn<Produtos, String> colunaDesc = new TableColumn<Produtos, String>("Descrição");
+		colunaDesc.setCellValueFactory(new PropertyValueFactory<Produtos, String>("descricao"));
 
-		TableColumn<Clients, String> colunaTipo = new TableColumn<Clients, String>("Pessoa");
-		colunaTipo.setCellValueFactory(new PropertyValueFactory<Clients, String>("tipo"));
-
-		TableColumn<Clients, String> colunaName = new TableColumn<Clients, String>("Nome");
-		colunaName.setCellValueFactory(new PropertyValueFactory<Clients, String>("name"));
-		colunaName.setMinWidth(300);
-
-		TableColumn<Clients, String> colunaEmail = new TableColumn<Clients, String>("Email");
-		colunaEmail.setCellValueFactory(new PropertyValueFactory<Clients, String>("email"));
-		colunaEmail.setMinWidth(300);
+		TableColumn<Produtos, Integer> colunaName = new TableColumn<Produtos, Integer>("Estoque");
+		colunaName.setCellValueFactory(new PropertyValueFactory<Produtos, Integer>("estoque"));
+		
+		TableColumn<Produtos, String> colunaCategoria = new TableColumn<Produtos, String>("Categoria");
+		colunaCategoria.setCellValueFactory(new PropertyValueFactory<Produtos, String>("categoria"));
+		
 
 		TableColumn<Clients, String> colunaPhone = new TableColumn<Clients, String>("Telefone");
 		colunaPhone.setCellValueFactory(new PropertyValueFactory<Clients, String>("phone"));
@@ -219,6 +158,7 @@ public class ClientesController {
 
 		// POPULA A TABELA
 		popularTabela();
+		
 
 		// ADICIONA AS COLUNAS
 		getTabelaClientes().getColumns().addAll(colunaID, colunaTipo, colunaName, colunaEmail, colunaPhone,
@@ -227,17 +167,21 @@ public class ClientesController {
 
 		if (getTabelaClientes() == null) {
 			getTabelaClientes().setPlaceholder(new Label("Nenhum Cliente Cadastrado."));
-		}
-		return getTabelaClientes();
+		}*/
+		return getTabelaprodutos();
+		
 	}
 
 	public static void popularTabela() throws Exception {
+		/*
 		List<Clients> clientes = getAllClients();
 		setObservableList(FXCollections.observableArrayList(clientes));
 		getTabelaClientes().setItems(observableList);
+		*/
 	}
 
 	private static List<Clients> getAllClients() throws Exception {
+
 		try {
 			// BUSCA TODOS CLIENTES
 			String url = "http://localhost:8080/clients";
@@ -272,104 +216,26 @@ public class ClientesController {
 				cliente.setObs(jsonObj.getString("obs"));
 				clientes.add(cliente);
 			}
+			
 			return clientes;
 		} catch (Exception e) {
 			throw new Exception(e.getMessage() + e.getCause());
 		}
+		
 	}
 
-	// CHAMA TELA DE CADSTRAR USUÁRIO
 	@SuppressWarnings("exports")
-
 	public void novo(ActionEvent action) throws IOException {
-		setNovoClient(new NovoClienteController());
-		Stage stage = new Stage();
-		Parent painel = FXMLLoader.load(getClass().getResource("ClienteViews/NovoCliente.fxml"));
-		Scene scene = new Scene(painel, 800, 610);
-		stage.setTitle("Cadasto de Usuários");
-		stage.setScene(scene);
-		stage.show();
-
 	}
-
+	
 	@SuppressWarnings("exports")
 	public void editar(ActionEvent action) throws IOException {
-		setEditarClient(new EditarClienteController());
-		// VERIFICA SE FOIS SELECIONADO UM USUARIO PARA EDITAR
-		if (PrincipalController.getTabelaClients().getSelectionModel().isEmpty()) {
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setHeaderText(null);
-			alert.setContentText("Selecione um Cliente para editar.");
-			alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-			alert.showAndWait();
-			return;
-		}
-
-		else {
-			Stage stage = new Stage();
-			Parent painel = FXMLLoader.load(getClass().getResource("ClienteViews/EditarCliente.fxml"));
-			Scene scene = new Scene(painel, 800, 610);
-			stage.setTitle("Editar Cliente");
-			stage.setScene(scene);
-			stage.show();
-
-		}
-
 	}
-
+	
 	@SuppressWarnings("exports")
 	public void apagar(ActionEvent action) throws IOException {
-
-		// VERIFICA SE FOI SELECIONADO UM CLIENTE PARA APAGAR
-		if (ClientesController.getTabelaClientes().getSelectionModel().isEmpty()) {
-			Alert alert = new Alert(Alert.AlertType.ERROR);
-			alert.setHeaderText(null);
-			alert.setContentText("Selecione um Cliente!.");
-			alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-			alert.showAndWait();
-		} else {
-			Long id = ClientesController.getTabelaClientes().getSelectionModel().getSelectedItem().getId();
-			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-			alert.setHeaderText(null);
-			alert.setContentText("Deseja apagar o cliente \""
-					+ ClientesController.getTabelaClientes().getSelectionModel().getSelectedItem().getName() + "\"?");
-			alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-			alert.showAndWait();
-			if (alert.getResult() == ButtonType.CANCEL) {
-				alert.close();
-				return;
-			}
-			try {
-				// REQUIÇÃO PARA DELETAR
-				String urlDelete = "http://localhost:8080/clients/" + id;
-				HttpClient client = HttpClient.newHttpClient();
-				HttpRequest request = HttpRequest.newBuilder().header("Authorization", "Bearer " + token)
-						.header("Content-Type", "application/json").DELETE().uri(URI.create(urlDelete)).build();
-				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-				int status = response.statusCode();
-
-				if (status == 204) {
-					Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
-					alert1.setHeaderText(null);
-					alert1.setContentText("Cliente apagado com sucesso! ");
-					alert1.showAndWait();
-					ClientesController.popularTabela();
-				}
-
-			} catch (Exception e) {
-				Alert alert2 = new Alert(Alert.AlertType.ERROR);
-				alert2.setHeaderText(null);
-				alert2.setContentText("Erro. " + e.getMessage());
-				alert2.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-				alert2.showAndWait();
-			}
-		}
-
 	}
-
-	@SuppressWarnings("exports")
-	public void inativar(ActionEvent action) throws IOException {
-
-	}
-
+	
+	
+	
 }

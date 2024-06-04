@@ -11,8 +11,8 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import gui.Services.Style;
-import gui.Services.User;
+import gui.Models.Style;
+import gui.Models.User;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

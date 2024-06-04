@@ -10,8 +10,8 @@ import java.time.format.DateTimeFormatter;
 
 import org.json.JSONObject;
 
-import gui.Services.Style;
-import gui.Services.Uf_Enum;
+import gui.Models.Style;
+import gui.Models.Uf_Enum;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;

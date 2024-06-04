@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane prefHeight="72.0" prefWidth="766.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.UsuariosController">
+<Pane prefHeight="72.0" prefWidth="766.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.UsuariosController">
    <children>
-      <Button fx:id="btnNovo" alignment="CENTER" graphicTextGap="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#novo" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: #F4F4F4;" text="Novo">
+      <Button fx:id="btnNovo" alignment="CENTER" graphicTextGap="10.0" layoutY="10.0" mnemonicParsing="false" onAction="#novo" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: deedfc;" text="Novo">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
@@ -18,9 +18,9 @@
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
          </padding>
          <graphic>
-            <ImageView fitHeight="30.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: pointer;">
+            <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: pointer;">
                <image>
-                  <Image url="@../img/userAdd.png" />
+                  <Image url="@../img/addUser.png" />
                </image>
             </ImageView>
          </graphic>
@@ -28,26 +28,11 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button fx:id="btnInativar" alignment="CENTER" graphicTextGap="10.0" layoutX="570.0" layoutY="10.0" mnemonicParsing="false" onAction="#inativar" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: #F4F4F4;" text="Inativar">
+      <Button fx:id="btnInativar" alignment="CENTER" graphicTextGap="10.0" layoutX="570.0" layoutY="10.0" mnemonicParsing="false" onAction="#inativar" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: deedfc;" text="Inativar">
          <graphic>
-            <ImageView fitHeight="35.0" fitWidth="35.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../img/userInactive.png" />
-               </image>
-            </ImageView>
-         </graphic>
-         <font>
-            <Font name="Calibri" size="15.0" />
-         </font>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </Button>
-      <Button fx:id="btnEditar" alignment="CENTER" graphicTextGap="10.0" layoutX="190.0" layoutY="10.0" mnemonicParsing="false" onAction="#editar" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: #F4F4F4;" text="Editar">
-         <graphic>
-            <ImageView fitHeight="35.0" fitWidth="30.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../img/userEdit.png" />
+                  <Image url="@../img/inactiveUser.png" />
                </image>
             </ImageView>
          </graphic>
@@ -58,7 +43,22 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button fx:id="btnApagar" alignment="CENTER" graphicTextGap="10.0" layoutX="380.0" layoutY="10.0" mnemonicParsing="false" onAction="#apagar" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: #F4F4F4;" text="Apagar">
+      <Button fx:id="btnEditar" alignment="CENTER" graphicTextGap="10.0" layoutX="190.0" layoutY="10.0" mnemonicParsing="false" onAction="#editar" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: deedfc;" text="Editar">
+         <graphic>
+            <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/editUser.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <font>
+            <Font name="Calibri" size="15.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="btnApagar" alignment="CENTER" graphicTextGap="10.0" layoutX="380.0" layoutY="10.0" mnemonicParsing="false" onAction="#apagar" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: deedfc;" text="Apagar">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
@@ -66,9 +66,9 @@
             <Cursor fx:constant="HAND" />
          </cursor>
          <graphic>
-            <ImageView fitHeight="28.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../img/userRemove.png" />
+                  <Image url="@../img/deleteUser.png" />
                </image>
             </ImageView>
          </graphic>

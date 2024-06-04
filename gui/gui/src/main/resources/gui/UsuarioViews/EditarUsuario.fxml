@@ -13,7 +13,7 @@
    <children>
       <ImageView fitHeight="100.0" fitWidth="100.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../img/userEdit.png" />
+            <Image url="@../img/editUserL.png" />
          </image>
       </ImageView>
       <Label alignment="CENTER" layoutY="64.0" prefHeight="22.0" prefWidth="585.0" text="Editar Usuário">

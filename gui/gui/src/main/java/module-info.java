@@ -16,6 +16,6 @@ module gui {
 	
 	opens gui to javafx.base, javafx.fxml, application.model;
     exports gui;
-    exports gui.Services;
+    exports gui.Models;
        
 }

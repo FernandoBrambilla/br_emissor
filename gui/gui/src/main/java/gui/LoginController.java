@@ -8,8 +8,8 @@ import java.net.http.HttpResponse;
 
 import org.json.JSONObject;
 
-import gui.Services.Login;
-import gui.Services.Style;
+import gui.Models.Login;
+import gui.Models.Style;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
