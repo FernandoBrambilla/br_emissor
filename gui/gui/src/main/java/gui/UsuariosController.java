@@ -23,6 +23,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -300,32 +301,38 @@ public class UsuariosController extends Application {
 	@SuppressWarnings({ "unchecked" })
 	public TableView<User> construirTabela() throws Exception {
 		setTabelaUsuarios(new TableView<User>());
+		getTabelaUsuarios().setMinWidth(1200);
+		
 
 		TableColumn<User, Integer> colunaID = new TableColumn<User, Integer>("ID");
 		colunaID.setCellValueFactory(new PropertyValueFactory<User, Integer>("id"));
-		colunaID.setPrefWidth(70);
+		colunaID.setMinWidth(50);
 
 		TableColumn<User, String> colunaName = new TableColumn<User, String>("Nome");
 		colunaName.setCellValueFactory(new PropertyValueFactory<User, String>("fullName"));
-		colunaName.setPrefWidth(400);
-
+		colunaName.setMinWidth(350);
+		
+		TableColumn<User, String> colunaUsername = new TableColumn<User, String>("Usuário");
+		colunaUsername.setCellValueFactory(new PropertyValueFactory<User, String>("userName"));
+		colunaUsername.setMinWidth(330);
+		
+		
 		TableColumn<User, String> colunaEmail = new TableColumn<User, String>("Email");
 		colunaEmail.setCellValueFactory(new PropertyValueFactory<User, String>("email"));
-		colunaEmail.setPrefWidth(400);
-
-		TableColumn<User, String> colunaUsername = new TableColumn<User, String>("Nome de Usuário");
-		colunaUsername.setCellValueFactory(new PropertyValueFactory<User, String>("userName"));
-		colunaUsername.setPrefWidth(310);
+		colunaEmail.setMinWidth(350);
+		
 
 		TableColumn<User, Boolean> colunaStatus = new TableColumn<User, Boolean>("Status");
 		colunaStatus.setCellValueFactory(new PropertyValueFactory<User, Boolean>("enabled"));
-		colunaStatus.setPrefWidth(150);
+		colunaStatus.setMinWidth(148);
 
-		// POPULA A TABELA
-		popularTabela();
+		
 
 		// ADICIONA AS COLUNAS
 		getTabelaUsuarios().getColumns().addAll(colunaID, colunaName, colunaEmail, colunaUsername, colunaStatus);
+		
+		// POPULA A TABELA
+				popularTabela();
 
 		if (getTabelaUsuarios() == null) {
 			getTabelaUsuarios().setPlaceholder(new Label("Nenhum usuário cadastrado."));
@@ -351,7 +358,6 @@ public class UsuariosController extends Application {
 					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			JSONArray usuarios = new JSONArray(response.body());
-
 			User user;
 			List<User> users = new ArrayList<>();
 
@@ -537,7 +543,7 @@ public class UsuariosController extends Application {
 			alert.setContentText("Não é permitido apagar todos os usuários!");
 			alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
 			alert.showAndWait();
-			return;
+
 		}
 
 		// VERIFICA SE FOI SELECIONADO UM USUÁRIO PARA APAGAR
@@ -555,6 +561,10 @@ public class UsuariosController extends Application {
 					+ PrincipalController.tabelaUsuarios.getSelectionModel().getSelectedItem().getUserName() + "\"?");
 			alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
 			alert.showAndWait();
+			if (alert.getResult() == ButtonType.CANCEL) {
+				alert.close();
+				return;
+			}
 			try {
 				// REQUIÇÃO PARA DELETAR
 				String urlDelete = "http://localhost:8080/users/" + id;
@@ -645,8 +655,6 @@ public class UsuariosController extends Application {
 				json.put("permissions", permissions);
 				json.put("authorities", authorities);
 				json.put("roles", roles);
-
-				System.out.println(json);
 
 				String urlUpdate = "http://localhost:8080/users";
 				HttpClient client = HttpClient.newHttpClient();

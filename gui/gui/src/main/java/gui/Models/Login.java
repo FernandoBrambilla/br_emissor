@@ -1,14 +1,17 @@
 package gui.Models;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 public class Login {
 	
 	private String userName;
 	
 	private boolean authenticated;
 	
-	private String create;
+	private LocalDateTime create;
 	
-	private String expiration;
+	private LocalDateTime expiration;
 	
 	private String accessToken;
 	
@@ -30,10 +33,10 @@ public class Login {
 	public boolean isAuthenticated() {
 		return authenticated;
 	}
-	public String getCreate() {
+	public LocalDateTime getCreate() {
 		return create;
 	}
-	public String getExpiration() {
+	public LocalDateTime getExpiration() {
 		return expiration;
 	}
 	public String getAccessToken() {
@@ -48,10 +51,10 @@ public class Login {
 	public void setAuthenticated(boolean authenticated) {
 		this.authenticated = authenticated;
 	}
-	public void setCreate(String create) {
+	public void setCreate(LocalDateTime create) {
 		this.create = create;
 	}
-	public void setExpiration(String expiration) {
+	public void setExpiration(LocalDateTime expiration) {
 		this.expiration = expiration;
 	}
 	public void setAccessToken(String accessToken) {

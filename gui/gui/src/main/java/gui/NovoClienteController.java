@@ -425,7 +425,7 @@ public class NovoClienteController {
 				String tipo = getPf().isSelected() ? "Física" : "Jurídica";
 
 				JSONObject json = new JSONObject();
-				json.put("name", getName().getText());
+				json.put("name", getName().getText()); 
 				json.put("tipo", tipo);
 				json.put("phone", getPhone().getText());
 				json.put("email", getEmail().getText());

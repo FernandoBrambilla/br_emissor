@@ -99,7 +99,7 @@ public class ProdutosController {
 	
 	}
 	
-	
+	 
 	@SuppressWarnings("unchecked")
 	
 	public TableView<Produtos> construirTabela() throws Exception {

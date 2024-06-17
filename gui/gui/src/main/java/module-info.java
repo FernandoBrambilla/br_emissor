@@ -11,6 +11,7 @@ module gui {
 	requires org.apache.httpcomponents.core5.httpcore5;
 	requires org.json;
 	requires java.desktop;
+	requires org.yaml.snakeyaml;
 	
    
 	

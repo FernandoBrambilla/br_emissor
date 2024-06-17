@@ -5,6 +5,10 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 
 import org.json.JSONObject;
 
@@ -139,9 +143,33 @@ public class LoginController extends AnchorPane {
 		this.btnEntrar = btnEntrar;
 	}
 
+	@SuppressWarnings("exports")
 	@FXML
-	private void login(ActionEvent action) {
+	public void login(ActionEvent action) {
 		fazerLogin();
+	}
+
+	private Boolean checarParametrosNull() {
+		Style efeito = new Style();
+		if (getPassword().isVisible()) {
+			if (getUserName().getText().isEmpty() || getPassword().getText().isEmpty()) {
+				efeito.campoObrigatorio(getUserName());
+				efeito.campoObrigatorio(getPassword());
+				getInfo().setText("*Campos Obrigatórios");
+				return false;
+			}
+		}
+		if (getPasswordText().isVisible()) {
+			if (getUserName().getText().isEmpty() || getPasswordText().getText().isEmpty()) {
+				efeito.campoObrigatorio(getUserName());
+				efeito.campoObrigatorio(getPasswordText());
+				getInfo().setText("*Campos Obrigatórios");
+				return false;
+			}
+		}
+
+		return true;
+
 	}
 
 	/**
@@ -151,14 +179,9 @@ public class LoginController extends AnchorPane {
 	@FXML
 	private Login fazerLogin() {
 		Style efeito = new Style();
-		try {
-			if (getUserName().getText().isEmpty() || getPassword().getText().isEmpty()) {
-
-				efeito.campoObrigatorio(getUserName());
-				efeito.campoObrigatorio(getPassword());
-				getInfo().setText("*Campos Obrigatórios");
-
-			} else {
+		
+		if (checarParametrosNull()) {
+			try {
 				String username = getUserName().getText();
 				String password = null;
 				if (getPassword().isVisible()) {
@@ -179,11 +202,15 @@ public class LoginController extends AnchorPane {
 				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 				JSONObject responseJson = new JSONObject(response.body());
 
+				DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+				String create = responseJson.getString("create").substring(0, 19).replaceAll("T", " ");
+				String expirtation = responseJson.getString("expiration").substring(0, 19).replaceAll("T", " ");
+
 				// CRIA UM OBJETO LOGIN
 				login.setUserName(responseJson.getString("userName"));
 				login.setAuthenticated(responseJson.getBoolean("authenticated"));
-				login.setCreate(responseJson.getString("create"));
-				login.setExpiration(responseJson.getString("expiration"));
+				login.setCreate(LocalDateTime.parse(create, format));
+				login.setExpiration(LocalDateTime.parse(expirtation, format));
 				login.setAccessToken(responseJson.getString("accessToken"));
 				login.setRefleshToken(responseJson.getString("refleshToken"));
 
@@ -193,32 +220,31 @@ public class LoginController extends AnchorPane {
 
 				}
 				return login;
-			}
-		} catch (Exception e) {
-			efeito.campoObrigatorio(getUserName());
-			efeito.campoObrigatorio(getPassword());
 
-			getInfo().setText("*Usuário ou Senha inválidos. Verifique os campos e tente novamente");
+			} catch (Exception e) {
+				efeito.campoObrigatorio(getUserName());
+				efeito.campoObrigatorio(getPassword());
+				efeito.campoObrigatorio(getPasswordText());
+				getInfo().setText("*Usuário ou Senha inválidos. Verifique os campos e tente novamente!");
+			}
 		}
 		return null;
 	}
 
 	@FXML
 	private void initialize() throws IOException {
+		getBtnEntrar().setStyle("-fx-background-color:  #0C70F2;");
 		getPasswordText().setVisible(false);
 		getHiddenPassword().setVisible(false);
-
 		getBtnEntrar().setOnAction((event) -> {
-
 			PrincipalController principalController = new PrincipalController();
 			try {
 				fazerLogin();
-
 				if (login.isAuthenticated()) {
 					principalController.getLogin(fazerLogin());
-					Parent telaPrincipal = FXMLLoader
-							.load(PrincipalController.class.getResource("PrincipalViews/Principal.fxml"));
-					this.telaBase.setCenter(telaPrincipal);
+
+					App.setRoot("PrincipalViews/Principal");
+
 				} else {
 					return;
 				}

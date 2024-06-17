@@ -1,54 +1,59 @@
 
 .table-view {-fx-font-size:17;
 		-fx-font-family: Calibri;
-		-fx-background-color: white;
-		 -fx-border-color: white;
+		 -fx-border-color:  #F2F2F2;
+		 -fx-background-color:   #F2F2F2; 
 		}
 
+/*TEXTO CABEÇALHO TABELA */
 .table-view .column-header { 
-    -fx-background-color: #2484BF; 
-     -fx-text-background-color: #E9F6FF; 
+    -fx-background-color: white; 
+     -fx-text-background-color: black; 
       -fx-border-width: 0px;
-     -fx-border-color: white;
+     -fx-border-color: #F2F2F2;
      
   
 }
 		
 .table-view .table-cell{
-    -fx-border-color: white;
+    -fx-border-color: #F2F2F2;
     -fx-border-width: 0 0 5px;
-    -fx-padding: 10px 0 10px 10px;
-      
-    
-   
+    -fx-padding: 10px 0 10px 10px; 
    }
+   
+   /*LINHA PAR */
+.table-row-cell:odd{
+    -fx-background-color: #F2F2F2;
 
+    }
+ 
+ /*LINHA IMPAR */
+.table-row-cell:even{
+    -fx-background-color: #F2F2F2;
+   
+    
+}
+
+/*LINHA PAR  HOVER*/
 .table-row-cell:odd:hover {
-
-   -fx-background-color: #C0D6EA; 
-   -fx-text-background-color: #010440; 
+   -fx-background-color: #CED4D7;
+   -fx-text-background-color:  #323639;
    	 -fx-border-color: none;
    
 }
+
+/*LINHA IMPAR HOVER */
 .table-row-cell:even:hover {
-   -fx-background-color: #C0D6EA; 
-   -fx-text-background-color: #010440; 
-    
-}
-.table-row-cell:odd{
-    -fx-background-color: #E9F6FF;
-  
-    
-
-    }
-.table-row-cell:even{
-    -fx-background-color: #E9F6FF;
+   -fx-background-color: #CED4D7;
+   -fx-text-background-color:  #323639;
     
 }
 
+
+
+/*LINHA SELECIONADA */
 .table-row-cell:focused{
  -fx-font-weight: bold;
-    -fx-background-color: #C0D6EA; 
-   -fx-text-background-color: #010440;
-   
+    -fx-background-color:  #CED4D7; 
+   -fx-text-background-color: black;
 }

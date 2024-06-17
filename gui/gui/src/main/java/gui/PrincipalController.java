@@ -1,17 +1,35 @@
 package gui;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 import gui.Models.Clients;
 import gui.Models.Login;
 import gui.Models.Produtos;
 import gui.Models.Style;
 import gui.Models.User;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 public class PrincipalController {
 
@@ -19,16 +37,18 @@ public class PrincipalController {
 
 	static String accessToken = null;
 
+	static ConfiguracoesController configuracoes = null;
+
 	static UsuariosController usuariosController = null;
 
 	static ClientesController clientesController = null;
-	
+
 	static ProdutosController produtosController = null;
 
 	static TableView<User> tabelaUsuarios = null;
 
 	static TableView<Clients> tabelaClients = null;
-	
+
 	static TableView<Produtos> tabelaprodutos = null;
 
 	@FXML
@@ -57,7 +77,26 @@ public class PrincipalController {
 
 	@FXML
 	private Button btnEstatisticas;
-	
+
+	@FXML
+	private Button btnConfiguracoes;
+
+	@FXML
+	private Label usuario;
+
+	@FXML
+	private Label licenca;
+
+	@FXML
+	private Label secao;
+
+	public Label getSecao() {
+		return secao;
+	}
+
+	public void setSecao(Label secao) {
+		this.secao = secao;
+	}
 
 	public static Login getUsuarioLogado() {
 		return usuarioLogado;
@@ -65,6 +104,14 @@ public class PrincipalController {
 
 	public static String getAccessToken() {
 		return accessToken;
+	}
+
+	public static ConfiguracoesController getConfiguracoes() {
+		return configuracoes;
+	}
+
+	public static void setConfiguracoes(ConfiguracoesController configuracoes) {
+		PrincipalController.configuracoes = configuracoes;
 	}
 
 	public static UsuariosController getUsuariosController() {
@@ -82,7 +129,6 @@ public class PrincipalController {
 	public static TableView<Clients> getTabelaClients() {
 		return tabelaClients;
 	}
-	
 
 	public static ProdutosController getProdutosController() {
 		return produtosController;
@@ -222,6 +268,36 @@ public class PrincipalController {
 		this.style = style;
 	}
 
+	@SuppressWarnings("exports")
+	public Button getBtnConfiguracoes() {
+		return btnConfiguracoes;
+	}
+
+	@SuppressWarnings("exports")
+	public Label getUsuario() {
+		return usuario;
+	}
+
+	@SuppressWarnings("exports")
+	public Label getLicenca() {
+		return licenca;
+	}
+
+	@SuppressWarnings("exports")
+	public void setBtnConfiguracoes(Button btnConfiguracoes) {
+		this.btnConfiguracoes = btnConfiguracoes;
+	}
+
+	@SuppressWarnings("exports")
+	public void setUsuario(Label usuario) {
+		this.usuario = usuario;
+	}
+
+	@SuppressWarnings("exports")
+	public void setLicenca(Label licenca) {
+		this.licenca = licenca;
+	}
+
 	public void aplicaEfeitos() {
 		Style efeitos = new Style();
 		efeitos.hover(getBtnVendas());
@@ -231,32 +307,54 @@ public class PrincipalController {
 		efeitos.hover(getBtnCaixa());
 		efeitos.hover(getBtnUsuarios());
 		efeitos.hover(getBtnEstatisticas());
+		efeitos.hover(getBtnConfiguracoes());
 	}
 
 	public void getLogin(Login login) throws IOException {
-		usuarioLogado = login;
+		setUsuarioLogado(login);
 		setAccessToken(login.getAccessToken());
 
 	}
 
+	@SuppressWarnings("exports")
+	public void configuracoes(ActionEvent event) throws IOException {
+		setConfiguracoes(new ConfiguracoesController());
+		Stage stage = new Stage();
+		Parent painel = FXMLLoader.load(getClass().getResource("ConfiguracoesViews/Configuracoes.fxml"));
+		Scene scene = new Scene(painel, 800, 680);
+		stage.setTitle("Configurações");
+		stage.setScene(scene);
+		stage.show();
+		getStyle().adicinarCorBotaoSelecionado(getBtnConfiguracoes());
+	}
+
 	Style style = new Style();
 
-	@SuppressWarnings("static-access")
+	@SuppressWarnings({ "static-access" })
 	@FXML
-	private void initialize() throws IOException {
+	private void initialize() throws IOException, ParseException{
 		getBtnUsuarios().setOnAction((event) -> {
 			try {
 				setUsuariosController(new UsuariosController());
+				getStyle().adicinarCorBotaoSelecionado(getBtnUsuarios());
+				getStyle().removerCorBotaoSelecionado(getBtnCaixa());
+				getStyle().removerCorBotaoSelecionado(getBtnClientes());
+				getStyle().removerCorBotaoSelecionado(getBtnEstatisticas());
+				getStyle().removerCorBotaoSelecionado(getBtnOrcamento());
+				getStyle().removerCorBotaoSelecionado(getBtnProdutos());
+				getStyle().removerCorBotaoSelecionado(getBtnVendas());
+				getStyle().removerCorBotaoSelecionado(getBtnConfiguracoes());
+				
+				
 
 				// CARREGA O MENU DE USUARIOS
 				FXMLLoader loader = new FXMLLoader();
 				loader.setLocation(getClass().getResource("UsuarioViews/Usuarios.fxml"));
-				getMenu().setCenter(loader.load());
-
+				getMenu().setTop(loader.load());
 				// CARREGA A TABELA DE USUARIOS
 				setTabelaUsuarios(getUsuariosController().construirTabela());
 				getTelaBase().setCenter(tabelaUsuarios);
-				getTelaBase().setTop(null);
+
 				usuariosController.setTelaBase(telaBase);
 				UsuariosController.setTabelaUsuarios(tabelaUsuarios);
 			} catch (IOException e) {
@@ -269,16 +367,24 @@ public class PrincipalController {
 		getBtnClientes().setOnAction((event) -> {
 			try {
 				setClientesController(new ClientesController());
+				getStyle().adicinarCorBotaoSelecionado(getBtnClientes());
+				getStyle().removerCorBotaoSelecionado(getBtnCaixa());
+				getStyle().removerCorBotaoSelecionado(getBtnUsuarios());
+				getStyle().removerCorBotaoSelecionado(getBtnEstatisticas());
+				getStyle().removerCorBotaoSelecionado(getBtnOrcamento());
+				getStyle().removerCorBotaoSelecionado(getBtnProdutos());
+				getStyle().removerCorBotaoSelecionado(getBtnVendas());
+				getStyle().removerCorBotaoSelecionado(getBtnConfiguracoes());
 
 				// CARREGA O MENU DE USUARIOS
 				FXMLLoader loader = new FXMLLoader();
 				loader.setLocation(getClass().getResource("ClienteViews/Clientes.fxml"));
-				getMenu().setCenter(loader.load());
+				getMenu().setTop(loader.load());
 
 				// CARREGA A TABELA DE CLIENTES
 				tabelaClients = clientesController.construirTabela();
 				getTelaBase().setCenter(tabelaClients);
-				getTelaBase().setTop(null);
+
 				clientesController.setTelaBase(telaBase);
 				clientesController.setTabelaClientes(tabelaClients);
 
@@ -288,21 +394,29 @@ public class PrincipalController {
 				e.printStackTrace();
 			}
 		});
-		
-		
+
 		getBtnProdutos().setOnAction((event) -> {
 			try {
+
 				setProdutosController(new ProdutosController());
+				getStyle().adicinarCorBotaoSelecionado(getBtnProdutos());
+				getStyle().removerCorBotaoSelecionado(getBtnCaixa());
+				getStyle().removerCorBotaoSelecionado(getBtnClientes());
+				getStyle().removerCorBotaoSelecionado(getBtnEstatisticas());
+				getStyle().removerCorBotaoSelecionado(getBtnOrcamento());
+				getStyle().removerCorBotaoSelecionado(getBtnUsuarios());
+				getStyle().removerCorBotaoSelecionado(getBtnVendas());
+				getStyle().removerCorBotaoSelecionado(getBtnConfiguracoes());
+				
 				FXMLLoader loader = new FXMLLoader();
 				loader.setLocation(getClass().getResource("ProdutoViews/Produtos.fxml"));
-				getMenu().setCenter(loader.load());
+				getMenu().setTop(loader.load());
 
 				setTabelaprodutos(produtosController.construirTabela());
 				getTelaBase().setCenter(getTabelaprodutos());
-				getTelaBase().setTop(null);
+
 				getProdutosController().setTelaBase(getTelaBase());
 				getProdutosController().setTabelaprodutos(getTabelaprodutos());
-				
 
 			} catch (IOException e) {
 				e.printStackTrace();

@@ -4,10 +4,6 @@
 <?import javafx.geometry.Rectangle2D?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -16,39 +12,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="810.0" prefWidth="1530.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.PrincipalController">
+<VBox prefHeight="810.0" prefWidth="1530.0" style="-fx-background-color: #323639;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.PrincipalController">
    <children>
-      <Pane prefHeight="800.0" prefWidth="1300.0">
+      <Pane prefHeight="800.0" prefWidth="1300.0" style="-fx-background-color: #F2F2F2;">
          <children>
-            <MenuBar maxHeight="1.7976931348623157E308" minHeight="0.0" prefHeight="40.0" prefWidth="1530.0" style="-fx-background-color: white;">
-              <menus>
-                <Menu mnemonicParsing="false" text="Arquivo">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="Imprimir" />
-                        <MenuItem mnemonicParsing="false" text="Sair" />
-                  </items>
-                </Menu>
-                <Menu mnemonicParsing="false" text="Ajuda">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="About" />
-                  </items>
-                </Menu>
-              </menus>
-               <opaqueInsets>
-                  <Insets />
-               </opaqueInsets>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-            </MenuBar>
-            <FlowPane layoutY="40.0" prefHeight="760.0" prefWidth="170.0" style="-fx-background-color: white;">
+            <FlowPane prefHeight="800.0" prefWidth="170.0" style="-fx-background-color: #323639;">
                <children>
-                  <Button fx:id="btnVendas" alignment="BOTTOM_CENTER" cacheShape="false" contentDisplay="TOP" depthTest="ENABLE" layoutX="44.0" layoutY="20.0" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="90.0" prefWidth="115.0" scaleShape="false" style="-fx-background-color: deedfc; -fx-padding: 10;" text="Vendas">
+                  <Button fx:id="btnVendas" alignment="CENTER_RIGHT" cache="true" cacheShape="false" contentDisplay="RIGHT" depthTest="ENABLE" graphicTextGap="10.0" layoutX="10.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onMouseEntered="#aplicaEfeitos" prefHeight="40.0" prefWidth="161.0" scaleShape="false" style="-fx-background-color: #323639;" text="Vendas" textFill="WHITE">
                      <font>
-                        <Font name="Calibri Bold" size="18.0" />
+                        <Font name="Calibri" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: pointer;">
+                        <ImageView fitHeight="30.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../img/vendas.png" />
                            </image>
@@ -64,15 +39,15 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                      <FlowPane.margin>
-                        <Insets left="20.0" top="5.0" />
+                        <Insets bottom="5.0" left="10.0" top="5.0" />
                      </FlowPane.margin>
                   </Button>
-                  <Button fx:id="btnOrcamento" alignment="BOTTOM_CENTER" contentDisplay="TOP" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="85.0" prefWidth="115.0" style="-fx-background-color: deedfc; -fx-padding: 10;" text="Orçamentos">
+                  <Button fx:id="btnOrcamento" alignment="CENTER_RIGHT" contentDisplay="RIGHT" graphicTextGap="10.0" layoutX="10.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onMouseEntered="#aplicaEfeitos" prefHeight="40.0" prefWidth="161.0" style="-fx-background-color: #323639;" text="Orçamentos" textFill="WHITE">
                      <font>
-                        <Font name="Calibri Bold" size="18.0" />
+                        <Font name="Calibri" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../img/orcamentos.png" />
                            </image>
@@ -85,15 +60,15 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                      <FlowPane.margin>
-                        <Insets left="20.0" top="5.0" />
+                        <Insets bottom="5.0" left="10.0" top="5.0" />
                      </FlowPane.margin>
                   </Button>
-                  <Button fx:id="btnClientes" alignment="BOTTOM_CENTER" contentDisplay="TOP" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="0.0" prefWidth="115.0" style="-fx-background-color: deedfc; -fx-padding: 10;" text="Clientes">
+                  <Button fx:id="btnClientes" alignment="CENTER_RIGHT" contentDisplay="RIGHT" graphicTextGap="10.0" layoutX="10.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onMouseEntered="#aplicaEfeitos" prefHeight="40.0" prefWidth="161.0" style="-fx-background-color: #323639;" text="Clientes" textFill="WHITE">
                      <font>
-                        <Font name="Calibri Bold" size="18.0" />
+                        <Font name="Calibri" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="22.0" fitWidth="22.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../img/clientes.png" />
                            </image>
@@ -106,15 +81,15 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                      <FlowPane.margin>
-                        <Insets left="20.0" top="5.0" />
+                        <Insets bottom="5.0" left="10.0" top="5.0" />
                      </FlowPane.margin>
                   </Button>
-                  <Button fx:id="btnProdutos" alignment="BOTTOM_CENTER" contentDisplay="TOP" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="90.0" prefWidth="115.0" style="-fx-background-color: deedfc; -fx-padding: 10;" text="Produtos">
+                  <Button fx:id="btnProdutos" alignment="CENTER_RIGHT" contentDisplay="RIGHT" graphicTextGap="10.0" layoutX="10.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onMouseEntered="#aplicaEfeitos" prefHeight="40.0" prefWidth="161.0" style="-fx-background-color: #323639;" text="Produtos" textFill="WHITE">
                      <font>
-                        <Font name="Calibri Bold" size="18.0" />
+                        <Font name="Calibri" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../img/produtos.png" />
                            </image>
@@ -127,15 +102,15 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                      <FlowPane.margin>
-                        <Insets left="20.0" top="5.0" />
+                        <Insets bottom="5.0" left="10.0" top="5.0" />
                      </FlowPane.margin>
                   </Button>
-                  <Button fx:id="btnCaixa" alignment="BOTTOM_CENTER" contentDisplay="TOP" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="0.0" prefWidth="115.0" style="-fx-background-color: deedfc; -fx-padding: 10;" text="Caixa">
+                  <Button fx:id="btnCaixa" alignment="CENTER_RIGHT" contentDisplay="RIGHT" graphicTextGap="10.0" layoutX="10.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onMouseEntered="#aplicaEfeitos" prefHeight="40.0" prefWidth="161.0" style="-fx-background-color: #323639;" text="Caixa" textFill="WHITE">
                      <font>
-                        <Font name="Calibri Bold" size="18.0" />
+                        <Font name="Calibri" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../img/caixa.png" />
                            </image>
@@ -148,15 +123,15 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                      <FlowPane.margin>
-                        <Insets left="20.0" top="5.0" />
+                        <Insets bottom="5.0" left="10.0" top="5.0" />
                      </FlowPane.margin>
                   </Button>
-                  <Button fx:id="btnUsuarios" alignment="BOTTOM_CENTER" contentDisplay="TOP" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="90.0" prefWidth="115.0" style="-fx-background-color: deedfc; -fx-padding: 10;" text="Usuários">
+                  <Button fx:id="btnUsuarios" alignment="CENTER_RIGHT" contentDisplay="RIGHT" graphicTextGap="10.0" layoutX="10.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onMouseEntered="#aplicaEfeitos" prefHeight="40.0" prefWidth="161.0" style="-fx-background-color: #323639;" text="Usuários" textFill="WHITE">
                      <font>
-                        <Font name="Calibri Bold" size="18.0" />
+                        <Font name="Calibri" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../img/usuarios.png" />
                            </image>
@@ -169,15 +144,15 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                      <FlowPane.margin>
-                        <Insets left="20.0" top="5.0" />
+                        <Insets bottom="5.0" left="10.0" top="5.0" />
                      </FlowPane.margin>
                   </Button>
-                  <Button fx:id="btnEstatisticas" alignment="BOTTOM_CENTER" contentDisplay="TOP" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="90.0" prefWidth="115.0" style="-fx-background-color: deedfc; -fx-padding: 10;" text="Estatísticas">
+                  <Button fx:id="btnEstatisticas" alignment="CENTER_RIGHT" contentDisplay="RIGHT" graphicTextGap="10.0" layoutX="10.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onMouseEntered="#aplicaEfeitos" prefHeight="40.0" prefWidth="161.0" style="-fx-background-color: #323639;" text="Estatísticas" textFill="WHITE">
                      <font>
-                        <Font name="Calibri Bold" size="18.0" />
+                        <Font name="Calibri" size="17.0" />
                      </font>
                      <graphic>
-                        <ImageView fitHeight="55.0" fitWidth="55.0" pickOnBounds="true" preserveRatio="true">
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../img/estatisticas.png" />
                            </image>
@@ -190,27 +165,29 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                      <FlowPane.margin>
-                        <Insets left="20.0" top="5.0" />
+                        <Insets bottom="5.0" left="10.0" top="5.0" />
+                     </FlowPane.margin>
+                  </Button>
+                  <Button fx:id="btnConfiguracoes" alignment="CENTER_RIGHT" contentDisplay="RIGHT" graphicTextGap="10.0" layoutX="10.0" mnemonicParsing="false" nodeOrientation="RIGHT_TO_LEFT" onAction="#configuracoes" prefHeight="39.0" prefWidth="161.0" style="-fx-background-color: #323639;" text="Configurações" textFill="WHITE">
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../img/configuracoes.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                     <font>
+                        <Font name="Calibri" size="15.0" />
+                     </font>
+                     <FlowPane.margin>
+                        <Insets bottom="5.0" left="10.0" top="5.0" />
                      </FlowPane.margin>
                   </Button>
                </children>
             </FlowPane>
-            <BorderPane fx:id="telaBase" layoutX="170.0" layoutY="130.0" maxWidth="1357.0" minWidth="1357.0" prefHeight="660.0" prefWidth="1357.0" style="-fx-background-color: white;">
-               <center>
-                  <Label alignment="CENTER" prefHeight="65.0" prefWidth="519.0" text="Nenhuma venda realizada! Abra o caixa para começar." BorderPane.alignment="CENTER">
-                     <font>
-                        <Font name="Calibri" size="18.0" />
-                     </font>
-                  </Label>
-               </center>
-               <top>
-                  <ImageView fitHeight="256.0" fitWidth="566.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-                     <image>
-                        <Image url="@../img/init.jpg" />
-                     </image>
-                  </ImageView>
-               </top></BorderPane>
-            <BorderPane fx:id="menu" layoutX="170.0" layoutY="40.0" prefHeight="90.0" prefWidth="1360.0" style="-fx-background-color: white;" />
+            <BorderPane fx:id="telaBase" layoutX="300.0" layoutY="80.0" maxWidth="1230.0" prefHeight="700.0" prefWidth="1250.0" style="-fx-background-color: #171B36;" />
+            <BorderPane fx:id="menu" layoutX="169.0" prefHeight="800.0" prefWidth="131.0" style="-fx-background-color: #323639;" />
+            <Pane layoutX="300.0" prefHeight="80.0" prefWidth="1230.0" style="-fx-background-color: #171B36;" />
          </children>
       </Pane>
    </children>

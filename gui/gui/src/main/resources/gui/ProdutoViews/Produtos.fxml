@@ -8,19 +8,19 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane prefHeight="72.0" prefWidth="766.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ProdutosController">
+<Pane prefHeight="392.0" prefWidth="130.0" style="-fx-background-color: #171B36;" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.ProdutosController">
    <children>
-      <Button fx:id="btnNovo" alignment="CENTER" graphicTextGap="10.0" layoutY="8.0" mnemonicParsing="false" onAction="#novo" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: deedfc;" text="Novo">
+      <Button fx:id="btnNovo" alignment="CENTER" graphicTextGap="10.0" layoutX="10.0" layoutY="80.0" mnemonicParsing="false" onAction="#novo" onMouseEntered="#aplicaEfeitos" prefHeight="45.0" prefWidth="110.0" style="-fx-background-color: #171B36;" text="Novo" textFill="WHITE">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
          <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            <Insets left="5.0" top="5.0" />
          </padding>
          <graphic>
-            <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: pointer;">
+            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: pointer;">
                <image>
-                  <Image url="@../img/newProduct.png" />
+                  <Image url="@../img/adicionar.png" />
                </image>
             </ImageView>
          </graphic>
@@ -28,11 +28,11 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button fx:id="btnEditar" alignment="CENTER" graphicTextGap="10.0" layoutX="190.0" layoutY="8.0" mnemonicParsing="false" onAction="#editar" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: deedfc;" text="Editar">
+      <Button fx:id="btnEditar" alignment="CENTER" graphicTextGap="10.0" layoutX="10.0" layoutY="180.0" mnemonicParsing="false" onAction="#editar" onMouseEntered="#aplicaEfeitos" prefHeight="45.0" prefWidth="110.0" style="-fx-background-color: #171B36;" text="Editar" textFill="WHITE">
          <graphic>
-            <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../img/editProduct.png" />
+                  <Image url="@../img/editar.png" />
                </image>
             </ImageView>
          </graphic>
@@ -42,8 +42,11 @@
          <cursor>
             <Cursor fx:constant="HAND" />
          </cursor>
+         <padding>
+            <Insets left="5.0" top="5.0" />
+         </padding>
       </Button>
-      <Button fx:id="btnApagar" alignment="CENTER" graphicTextGap="10.0" layoutX="380.0" layoutY="8.0" mnemonicParsing="false" onAction="#apagar" onMouseEntered="#aplicaEfeitos" prefHeight="50.0" prefWidth="165.0" style="-fx-background-color: deedfc;" text="Apagar">
+      <Button fx:id="btnApagar" alignment="CENTER" graphicTextGap="10.0" layoutX="10.0" layoutY="130.0" mnemonicParsing="false" onAction="#apagar" onMouseEntered="#aplicaEfeitos" prefHeight="45.0" prefWidth="110.0" style="-fx-background-color: #171B36;" text="Apagar" textFill="WHITE">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
@@ -51,12 +54,15 @@
             <Cursor fx:constant="HAND" />
          </cursor>
          <graphic>
-            <ImageView fitHeight="45.0" fitWidth="45.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@../img/dellProduct.png" />
+                  <Image url="@../img/remover.png" />
                </image>
             </ImageView>
          </graphic>
+         <padding>
+            <Insets left="5.0" top="5.0" />
+         </padding>
       </Button>
    </children>
 </Pane>

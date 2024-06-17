@@ -1,6 +1,7 @@
 package gui;
 
 import java.io.IOException;
+import java.util.TimeZone;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -22,6 +23,7 @@ public class App extends Application {
 
 	@Override
     public void start(@SuppressWarnings("exports") Stage primaryStage) throws IOException {
+		TimeZone.setDefault(TimeZone.getTimeZone("America/Sao_Paulo"));
 		
 		root = loadFXML("LoginViews/login");
     	stage = primaryStage;
