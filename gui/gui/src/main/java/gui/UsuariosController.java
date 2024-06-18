@@ -367,7 +367,7 @@ public class UsuariosController extends Application {
 				user = new User();
 				user.setCredentialsNonExpired(jsonObj.getBoolean("credentialsNonExpired"));
 				user.setFullName(jsonObj.getString("fullName"));
-				user.setUserName(jsonObj.getString("userName"));
+				user.setUserName(jsonObj.getString("userName")); 
 				if (jsonObj.getBoolean("enabled") == true) {
 					user.setEnabled("Ativo");
 				} else {

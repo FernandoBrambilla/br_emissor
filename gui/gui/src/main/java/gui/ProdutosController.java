@@ -12,14 +12,17 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import gui.Models.Clients;
-import gui.Models.Produtos;
+import gui.Models.Produto;
 import gui.Models.Style;
-import gui.Models.Uf_Enum;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 
 public class ProdutosController {
@@ -35,27 +38,27 @@ public class ProdutosController {
 	@FXML
 	private Button btnEditar;
 
-	@FXML
+	@FXML 
 	private Button btnApagar;
 	
-	static TableView<Produtos> tabelaprodutos = null;
+	static TableView<Produto> tabelaprodutos = null;
 
-	static ObservableList<Produtos> observableList;
+	static ObservableList<Produto> observableList;
 
 
-	public static TableView<Produtos> getTabelaprodutos() {
+	public static TableView<Produto> getTabelaprodutos() {
 		return tabelaprodutos;
 	}
 
-	public static ObservableList<Produtos> getObservableList() {
+	public static ObservableList<Produto> getObservableList() {
 		return observableList;
 	}
 
-	public static void setTabelaprodutos(TableView<Produtos> tabelaprodutos) {
+	public static void setTabelaprodutos(TableView<Produto> tabelaprodutos) {
 		ProdutosController.tabelaprodutos = tabelaprodutos;
 	}
 
-	public static void setObservableList(ObservableList<Produtos> observableList) {
+	public static void setObservableList(ObservableList<Produto> observableList) {
 		ProdutosController.observableList = observableList;
 	}
 
@@ -102,30 +105,31 @@ public class ProdutosController {
 	 
 	@SuppressWarnings("unchecked")
 	
-	public TableView<Produtos> construirTabela() throws Exception {
+	public TableView<Produto> construirTabela() throws Exception {
 		
-		setTabelaprodutos(new TableView<Produtos>());
-/*
-		TableColumn<Produtos, Integer> colunaID = new TableColumn<Produtos, Integer>("ID");
-		colunaID.setCellValueFactory(new PropertyValueFactory<Produtos, Integer>("id"));
+		setTabelaprodutos(new TableView<Produto>());
 
-		TableColumn<Produtos, String> colunaDesc = new TableColumn<Produtos, String>("Descrição");
-		colunaDesc.setCellValueFactory(new PropertyValueFactory<Produtos, String>("descricao"));
+		TableColumn<Produto, Integer> colunaID = new TableColumn<Produto, Integer>("ID");
+		colunaID.setCellValueFactory(new PropertyValueFactory<Produto, Integer>("id"));
 
-		TableColumn<Produtos, Integer> colunaName = new TableColumn<Produtos, Integer>("Estoque");
-		colunaName.setCellValueFactory(new PropertyValueFactory<Produtos, Integer>("estoque"));
+		TableColumn<Produto, String> colunaDesc = new TableColumn<Produto, String>("Descrição");
+		colunaDesc.setCellValueFactory(new PropertyValueFactory<Produto, String>("descricao"));
 		
-		TableColumn<Produtos, String> colunaCategoria = new TableColumn<Produtos, String>("Categoria");
-		colunaCategoria.setCellValueFactory(new PropertyValueFactory<Produtos, String>("categoria"));
+		TableColumn<Produto, String> colunaCod = new TableColumn<Produto, String>("Código");
+		colunaCod.setCellValueFactory(new PropertyValueFactory<Produto, String>("codigo"));
+		
+		TableColumn<Produto, Integer> colunaEstoque = new TableColumn<Produto, Integer>("Estoque");
+		colunaEstoque.setCellValueFactory(new PropertyValueFactory<Produto, Integer>("estoque"));
 		
 
-		TableColumn<Clients, String> colunaPhone = new TableColumn<Clients, String>("Telefone");
-		colunaPhone.setCellValueFactory(new PropertyValueFactory<Clients, String>("phone"));
-		colunaPhone.setMinWidth(120);
+		TableColumn<Produto, Double> colunaCusto = new TableColumn<Produto, Double>("Custo");
+		colunaCusto.setCellValueFactory(new PropertyValueFactory<Produto, Double>("custo"));
 
-		TableColumn<Clients, String> colunaCpf_Cnpj = new TableColumn<Clients, String>("Cpf/Cnpj");
-		colunaCpf_Cnpj.setCellValueFactory(new PropertyValueFactory<Clients, String>("cpf_cnpj"));
 
+		TableColumn<Produto, Double> colunaValor = new TableColumn<Produto, Double>("Valor");
+		colunaValor.setCellValueFactory(new PropertyValueFactory<Produto, Double>("valorVenda"));
+		
+		/*
 		TableColumn<Clients, String> colunaRg_Ie = new TableColumn<Clients, String>("Rg/Ie");
 		colunaRg_Ie.setCellValueFactory(new PropertyValueFactory<Clients, String>("rg_ie"));
 
@@ -155,69 +159,57 @@ public class ProdutosController {
 
 		TableColumn<Clients, String> colunaObs = new TableColumn<Clients, String>("Obs");
 		colunaObs.setCellValueFactory(new PropertyValueFactory<Clients, String>("obs"));
-
+		 */
 		// POPULA A TABELA
 		popularTabela();
 		
 
 		// ADICIONA AS COLUNAS
-		getTabelaClientes().getColumns().addAll(colunaID, colunaTipo, colunaName, colunaEmail, colunaPhone,
-				colunaCpf_Cnpj, colunaRg_Ie, colunaDateNasc_cons, colunaDateExp, colunaEndereco, colunaNum,
-				colunaComplement, colunaCity, colunaUf, colunaCep, colunaObs);
+		getTabelaprodutos().getColumns().addAll(colunaID, colunaDesc,colunaCod, colunaEstoque, colunaCusto, colunaValor);
 
-		if (getTabelaClientes() == null) {
-			getTabelaClientes().setPlaceholder(new Label("Nenhum Cliente Cadastrado."));
-		}*/
+		if (getTabelaprodutos() == null) {
+			getTabelaprodutos().setPlaceholder(new Label("Nenhum Produto Cadastrado."));
+		}
 		return getTabelaprodutos();
 		
 	}
 
 	public static void popularTabela() throws Exception {
-		/*
-		List<Clients> clientes = getAllClients();
-		setObservableList(FXCollections.observableArrayList(clientes));
-		getTabelaClientes().setItems(observableList);
-		*/
+		List<Produto> produtos = getAllProducts();
+		setObservableList(FXCollections.observableArrayList(produtos));
+		getTabelaprodutos().setItems(observableList);
+		
 	}
 
-	private static List<Clients> getAllClients() throws Exception {
+	private static List<Produto> getAllProducts() throws Exception {
 
 		try {
-			// BUSCA TODOS CLIENTES
-			String url = "http://localhost:8080/clients";
+			// BUSCA TODOS PRODUTOS
+			String url = "http://localhost:8080/products";
 			HttpClient client = HttpClient.newHttpClient();
 			HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(url))
 					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			JSONArray responseJson = new JSONArray(response.body());
-
-			Clients cliente;
-			List<Clients> clientes = new ArrayList<>();
+			Produto produto;
+			List<Produto> produtos = new ArrayList<>();
 
 			// LOOP CONVERTE JSON EM CLIENTS
 			for (int i = 0; i < responseJson.length(); i++) {
 				JSONObject jsonObj = responseJson.getJSONObject(i);
-				cliente = new Clients();
-				cliente.setId(jsonObj.getLong("id"));
-				cliente.setTipo(jsonObj.getString("tipo"));
-				cliente.setName(jsonObj.getString("name"));
-				cliente.setPhone(jsonObj.getString("phone"));
-				cliente.setEmail(jsonObj.getString("email"));
-				cliente.setCpf_cnpj(jsonObj.getString("cpf_cnpj"));
-				cliente.setRg_ie(jsonObj.getString("rg_ie"));
-				cliente.setDateNasc_const(jsonObj.getString("dateNasc_const"));
-				cliente.setDateExp(jsonObj.getString("dateExp"));
-				cliente.setAddress(jsonObj.getString("address"));
-				cliente.setAddressNumber(jsonObj.getString("addressNumber"));
-				cliente.setAddressComplement(jsonObj.getString("addressComplement"));
-				cliente.setCity(jsonObj.getString("city"));
-				cliente.setUf(Uf_Enum.valueOf(jsonObj.getString("uf")));
-				cliente.setCep(jsonObj.getString("cep"));
-				cliente.setObs(jsonObj.getString("obs"));
-				clientes.add(cliente);
+				produto = new Produto();  
+				produto.setId(jsonObj.getLong("id"));
+				produto.setCodigo(jsonObj.getString("codigo"));
+				produto.setDescricao(jsonObj.getString("descricao"));
+				produto.setEstoque(jsonObj.getInt("estoque"));
+				produto.setValorVenda(jsonObj.getDouble("valorVenda"));
+				produto.setCusto((jsonObj.getDouble("custo") == 0 ? jsonObj.getDouble("custo"): 0));
+				produtos.add(produto);
 			}
+			System.out.println(produtos);
 			
-			return clientes;
+			
+			return produtos;
 		} catch (Exception e) {
 			throw new Exception(e.getMessage() + e.getCause());
 		}

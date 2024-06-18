@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 import gui.Models.Clients;
 import gui.Models.Login;
-import gui.Models.Produtos;
+import gui.Models.Produto;
 import gui.Models.Style;
 import gui.Models.User;
 import javafx.event.ActionEvent;
@@ -45,11 +45,11 @@ public class PrincipalController {
 
 	static ProdutosController produtosController = null;
 
-	static TableView<User> tabelaUsuarios = null;
+	static TableView<User> tabelaUsuarios = null; 
 
 	static TableView<Clients> tabelaClients = null;
 
-	static TableView<Produtos> tabelaprodutos = null;
+	static TableView<Produto> tabelaprodutos = null;
 
 	@FXML
 	private BorderPane menu;
@@ -134,7 +134,7 @@ public class PrincipalController {
 		return produtosController;
 	}
 
-	public static TableView<Produtos> getTabelaprodutos() {
+	public static TableView<Produto> getTabelaprodutos() {
 		return tabelaprodutos;
 	}
 
@@ -142,7 +142,7 @@ public class PrincipalController {
 		PrincipalController.produtosController = produtosController;
 	}
 
-	public static void setTabelaprodutos(TableView<Produtos> tabelaprodutos) {
+	public static void setTabelaprodutos(TableView<Produto> tabelaprodutos) {
 		PrincipalController.tabelaprodutos = tabelaprodutos;
 	}
 
@@ -408,6 +408,7 @@ public class PrincipalController {
 				getStyle().removerCorBotaoSelecionado(getBtnVendas());
 				getStyle().removerCorBotaoSelecionado(getBtnConfiguracoes());
 				
+				
 				FXMLLoader loader = new FXMLLoader();
 				loader.setLocation(getClass().getResource("ProdutoViews/Produtos.fxml"));
 				getMenu().setTop(loader.load());
@@ -421,7 +422,7 @@ public class PrincipalController {
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (Exception e) {
-				e.printStackTrace();
+				e.printStackTrace(); 
 			}
 		});
 	}

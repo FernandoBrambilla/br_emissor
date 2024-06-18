@@ -164,7 +164,7 @@ public class ClientesController {
 
 	@SuppressWarnings("unchecked")
 	public TableView<Clients> construirTabela() throws Exception {
-		setTabelaClientes(new TableView<Clients>());
+		setTabelaClientes(new TableView<Clients>()); 
 
 		TableColumn<Clients, Integer> colunaID = new TableColumn<Clients, Integer>("ID");
 		colunaID.setCellValueFactory(new PropertyValueFactory<Clients, Integer>("id"));
@@ -235,7 +235,7 @@ public class ClientesController {
 		List<Clients> clientes = getAllClients();
 		setObservableList(FXCollections.observableArrayList(clientes));
 		getTabelaClientes().setItems(observableList);
-	}
+	} 
 
 	private static List<Clients> getAllClients() throws Exception {
 		try {

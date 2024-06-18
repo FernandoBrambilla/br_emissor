@@ -13,14 +13,21 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="telaBase" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LoginController">
+<BorderPane fx:id="telaBase" xmlns="http://javafx.com/javafx/11" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.LoginController">
    <bottom>
       <Pane focusTraversable="true" prefHeight="800.0" prefWidth="1600.0" style="-fx-background-color: #323639;" BorderPane.alignment="CENTER">
          <children>
-            <Label alignment="CENTER" layoutX="576.0" layoutY="60.0" prefHeight="31.0" prefWidth="450.0" text="BrambillaTech - Geranciador" textFill="WHITE">
+            <Label alignment="CENTER" layoutX="576.0" layoutY="60.0" prefHeight="31.0" prefWidth="450.0" text="Sistemas de Gestão" textFill="WHITE">
                <font>
-                  <Font size="20.0" />
+                  <Font name="Calibri Bold" size="28.0" />
                </font>
+               <graphic>
+                  <ImageView fitHeight="150.0" fitWidth="100.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/logog.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </Label>
             <Label fx:id="info" alignment="CENTER" focusTraversable="false" layoutX="580.0" layoutY="315.0" prefHeight="17.0" prefWidth="440.0" textFill="#ff3d3d">
                <font>
@@ -74,11 +81,11 @@
                   <Cursor fx:constant="HAND" />
                </cursor>
             </ImageView>
-            <ImageView fitHeight="109.0" fitWidth="115.0" layoutX="747.0" layoutY="118.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@../img/erp.png" />
-               </image>
-            </ImageView>
+            <Label layoutX="787.0" layoutY="188.0" text="Bem Vindo" textFill="WHITE">
+               <font>
+                  <Font name="Calibri Bold" size="18.0" />
+               </font>
+            </Label>
          </children>
       </Pane>
    </bottom>

@@ -26,6 +26,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 public class LoginController extends AnchorPane {
 
@@ -240,11 +241,10 @@ public class LoginController extends AnchorPane {
 			PrincipalController principalController = new PrincipalController();
 			try {
 				fazerLogin();
-				if (login.isAuthenticated()) {
+				if (login.isAuthenticated()) { 
 					principalController.getLogin(fazerLogin());
-
 					App.setRoot("PrincipalViews/Principal");
-
+					
 				} else {
 					return;
 				}
@@ -253,7 +253,7 @@ public class LoginController extends AnchorPane {
 			}
 		});
 	}
-
+ 
 	/**
 	 * Torna visível os caracteres do compo senha.
 	 * 

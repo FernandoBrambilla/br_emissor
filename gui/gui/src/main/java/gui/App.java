@@ -27,7 +27,7 @@ public class App extends Application {
 		
 		root = loadFXML("LoginViews/login");
     	stage = primaryStage;
-    	stage.setTitle("BR Emissor");
+    	stage.setTitle("Br Sistemas de Gestão");
     	scene = new Scene(root);
     	scene.getStylesheets().add(getClass().getResource("Style/style.css").toExternalForm());
         stage.setScene(scene);
