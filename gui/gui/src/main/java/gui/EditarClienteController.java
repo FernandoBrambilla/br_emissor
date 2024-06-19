@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 
 import org.json.JSONObject;
 
-import gui.Models.Clients;
+import gui.Models.Cliente;
 import gui.Models.Style;
 import gui.Models.Uf_Enum;
 import javafx.event.ActionEvent;
@@ -28,7 +28,7 @@ import javafx.stage.Stage;
 
 public class EditarClienteController {
 
-	static Clients cliente = null;
+	static Cliente cliente = null;
 
 	private String token = PrincipalController.getAccessToken();
 
@@ -106,7 +106,7 @@ public class EditarClienteController {
 	@FXML
 	private Label labelEmissRg;
 
-	public static Clients getCliente() {
+	public static Cliente getCliente() {
 		return cliente;
 	}
 
@@ -237,7 +237,7 @@ public class EditarClienteController {
 		return labelEmissRg;
 	}
 
-	public static void setCliente(Clients cliente) {
+	public static void setCliente(Cliente cliente) {
 		EditarClienteController.cliente = cliente;
 	}
 
@@ -387,7 +387,7 @@ public class EditarClienteController {
 		getPf().setDisable(true);
 		getPj().setDisable(true);
 		getUf().getItems().setAll(Uf_Enum.values());
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+		//DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
 		if (ClientesController.getTabelaClientes().getSelectionModel().getSelectedItem().getTipo().equals("Jurídica")) {
 			getPj().setSelected(true);
@@ -408,9 +408,9 @@ public class EditarClienteController {
 		getEmail().setText(getCliente().getEmail());
 		getRg_ie().setText(getCliente().getRg_ie());
 		getPhone().setText(getCliente().getPhone());
-		getDataNasc_Const().setValue(LocalDate.parse(getCliente().getDateNasc_const(), formatter));
+		getDataNasc_Const().setValue(getCliente().getDateNasc_const());
 		getAdress().setText(getCliente().getAddress());
-		getDataEmis().setValue(LocalDate.parse(getCliente().getDateExp(), formatter));
+		getDataEmis().setValue(getCliente().getDateExp());
 		getNum().setText(getCliente().getAddressNumber());
 		getCompl().setText(getCliente().getAddressComplement());
 		getCity().setText(getCliente().getCity());

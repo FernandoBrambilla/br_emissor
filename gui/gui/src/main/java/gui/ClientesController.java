@@ -6,13 +6,15 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import gui.Models.Clients;
+import gui.Models.Cliente;
 import gui.Models.Style;
 import gui.Models.Uf_Enum;
 import javafx.collections.FXCollections;
@@ -37,9 +39,9 @@ public class ClientesController {
 
 	private static String token = PrincipalController.getAccessToken();
 
-	static TableView<Clients> tabelaClientes = null;
+	static TableView<Cliente> tabelaClientes = null;
 
-	static ObservableList<Clients> observableList;
+	static ObservableList<Cliente> observableList;
 
 	static NovoClienteController novoClient = null;
 
@@ -72,11 +74,11 @@ public class ClientesController {
 		return token;
 	}
 
-	public static TableView<Clients> getTabelaClientes() {
+	public static TableView<Cliente> getTabelaClientes() {
 		return tabelaClientes;
 	}
 
-	public static ObservableList<Clients> getObservableList() {
+	public static ObservableList<Cliente> getObservableList() {
 		return observableList;
 	}
 
@@ -113,11 +115,11 @@ public class ClientesController {
 		ClientesController.token = token;
 	}
 
-	public static void setTabelaClientes(TableView<Clients> tabelaClientes) {
+	public static void setTabelaClientes(TableView<Cliente> tabelaClientes) {
 		ClientesController.tabelaClientes = tabelaClientes;
 	}
 
-	public static void setObservableList(ObservableList<Clients> observableList) {
+	public static void setObservableList(ObservableList<Cliente> observableList) {
 		ClientesController.observableList = observableList;
 	}
 
@@ -163,59 +165,59 @@ public class ClientesController {
 	}
 
 	@SuppressWarnings("unchecked")
-	public TableView<Clients> construirTabela() throws Exception {
-		setTabelaClientes(new TableView<Clients>()); 
+	public TableView<Cliente> construirTabela() throws Exception {
+		setTabelaClientes(new TableView<Cliente>()); 
 
-		TableColumn<Clients, Integer> colunaID = new TableColumn<Clients, Integer>("ID");
-		colunaID.setCellValueFactory(new PropertyValueFactory<Clients, Integer>("id"));
+		TableColumn<Cliente, Integer> colunaID = new TableColumn<Cliente, Integer>("ID");
+		colunaID.setCellValueFactory(new PropertyValueFactory<Cliente, Integer>("id"));
 
-		TableColumn<Clients, String> colunaTipo = new TableColumn<Clients, String>("Pessoa");
-		colunaTipo.setCellValueFactory(new PropertyValueFactory<Clients, String>("tipo"));
+		TableColumn<Cliente, String> colunaTipo = new TableColumn<Cliente, String>("Pessoa");
+		colunaTipo.setCellValueFactory(new PropertyValueFactory<Cliente, String>("tipo"));
 
-		TableColumn<Clients, String> colunaName = new TableColumn<Clients, String>("Nome");
-		colunaName.setCellValueFactory(new PropertyValueFactory<Clients, String>("name"));
+		TableColumn<Cliente, String> colunaName = new TableColumn<Cliente, String>("Nome");
+		colunaName.setCellValueFactory(new PropertyValueFactory<Cliente, String>("name"));
 		colunaName.setMinWidth(300);
 
-		TableColumn<Clients, String> colunaEmail = new TableColumn<Clients, String>("Email");
-		colunaEmail.setCellValueFactory(new PropertyValueFactory<Clients, String>("email"));
+		TableColumn<Cliente, String> colunaEmail = new TableColumn<Cliente, String>("Email");
+		colunaEmail.setCellValueFactory(new PropertyValueFactory<Cliente, String>("email"));
 		colunaEmail.setMinWidth(300);
 
-		TableColumn<Clients, String> colunaPhone = new TableColumn<Clients, String>("Telefone");
-		colunaPhone.setCellValueFactory(new PropertyValueFactory<Clients, String>("phone"));
+		TableColumn<Cliente, String> colunaPhone = new TableColumn<Cliente, String>("Telefone");
+		colunaPhone.setCellValueFactory(new PropertyValueFactory<Cliente, String>("phone"));
 		colunaPhone.setMinWidth(120);
 
-		TableColumn<Clients, String> colunaCpf_Cnpj = new TableColumn<Clients, String>("Cpf/Cnpj");
-		colunaCpf_Cnpj.setCellValueFactory(new PropertyValueFactory<Clients, String>("cpf_cnpj"));
+		TableColumn<Cliente, String> colunaCpf_Cnpj = new TableColumn<Cliente, String>("Cpf/Cnpj");
+		colunaCpf_Cnpj.setCellValueFactory(new PropertyValueFactory<Cliente, String>("cpf_cnpj"));
 
-		TableColumn<Clients, String> colunaRg_Ie = new TableColumn<Clients, String>("Rg/Ie");
-		colunaRg_Ie.setCellValueFactory(new PropertyValueFactory<Clients, String>("rg_ie"));
+		TableColumn<Cliente, String> colunaRg_Ie = new TableColumn<Cliente, String>("Rg/Ie");
+		colunaRg_Ie.setCellValueFactory(new PropertyValueFactory<Cliente, String>("rg_ie"));
 
-		TableColumn<Clients, LocalDate> colunaDateNasc_cons = new TableColumn<Clients, LocalDate>("Data Nasc/Const.");
-		colunaDateNasc_cons.setCellValueFactory(new PropertyValueFactory<Clients, LocalDate>("dateNasc_const"));
+		TableColumn<Cliente, LocalDate> colunaDateNasc_cons = new TableColumn<Cliente, LocalDate>("Data Nasc/Const.");
+		colunaDateNasc_cons.setCellValueFactory(new PropertyValueFactory<Cliente, LocalDate>("dateNasc_const"));
 
-		TableColumn<Clients, LocalDate> colunaDateExp = new TableColumn<Clients, LocalDate>("Data de Expedição");
-		colunaDateExp.setCellValueFactory(new PropertyValueFactory<Clients, LocalDate>("dateExp"));
+		TableColumn<Cliente, LocalDate> colunaDateExp = new TableColumn<Cliente, LocalDate>("Data de Expedição");
+		colunaDateExp.setCellValueFactory(new PropertyValueFactory<Cliente, LocalDate>("dateExp"));
 
-		TableColumn<Clients, String> colunaEndereco = new TableColumn<Clients, String>("Endereço");
-		colunaEndereco.setCellValueFactory(new PropertyValueFactory<Clients, String>("address"));
+		TableColumn<Cliente, String> colunaEndereco = new TableColumn<Cliente, String>("Endereço");
+		colunaEndereco.setCellValueFactory(new PropertyValueFactory<Cliente, String>("address"));
 
-		TableColumn<Clients, String> colunaNum = new TableColumn<Clients, String>("Número");
-		colunaNum.setCellValueFactory(new PropertyValueFactory<Clients, String>("addressNumber"));
+		TableColumn<Cliente, String> colunaNum = new TableColumn<Cliente, String>("Número");
+		colunaNum.setCellValueFactory(new PropertyValueFactory<Cliente, String>("addressNumber"));
 
-		TableColumn<Clients, String> colunaComplement = new TableColumn<Clients, String>("Complemento");
-		colunaComplement.setCellValueFactory(new PropertyValueFactory<Clients, String>("addressComplement"));
+		TableColumn<Cliente, String> colunaComplement = new TableColumn<Cliente, String>("Complemento");
+		colunaComplement.setCellValueFactory(new PropertyValueFactory<Cliente, String>("addressComplement"));
 
-		TableColumn<Clients, String> colunaCity = new TableColumn<Clients, String>("Cidade");
-		colunaCity.setCellValueFactory(new PropertyValueFactory<Clients, String>("city"));
+		TableColumn<Cliente, String> colunaCity = new TableColumn<Cliente, String>("Cidade");
+		colunaCity.setCellValueFactory(new PropertyValueFactory<Cliente, String>("city"));
 
-		TableColumn<Clients, String> colunaUf = new TableColumn<Clients, String>("UF");
-		colunaUf.setCellValueFactory(new PropertyValueFactory<Clients, String>("uf"));
+		TableColumn<Cliente, String> colunaUf = new TableColumn<Cliente, String>("UF");
+		colunaUf.setCellValueFactory(new PropertyValueFactory<Cliente, String>("uf"));
 
-		TableColumn<Clients, String> colunaCep = new TableColumn<Clients, String>("Cep");
-		colunaCep.setCellValueFactory(new PropertyValueFactory<Clients, String>("cep"));
+		TableColumn<Cliente, String> colunaCep = new TableColumn<Cliente, String>("Cep");
+		colunaCep.setCellValueFactory(new PropertyValueFactory<Cliente, String>("cep"));
 
-		TableColumn<Clients, String> colunaObs = new TableColumn<Clients, String>("Obs");
-		colunaObs.setCellValueFactory(new PropertyValueFactory<Clients, String>("obs"));
+		TableColumn<Cliente, String> colunaObs = new TableColumn<Cliente, String>("Obs");
+		colunaObs.setCellValueFactory(new PropertyValueFactory<Cliente, String>("obs"));
 
 		// POPULA A TABELA
 		popularTabela();
@@ -232,12 +234,12 @@ public class ClientesController {
 	}
 
 	public static void popularTabela() throws Exception {
-		List<Clients> clientes = getAllClients();
+		List<Cliente> clientes = getAllClients();
 		setObservableList(FXCollections.observableArrayList(clientes));
 		getTabelaClientes().setItems(observableList);
 	} 
 
-	private static List<Clients> getAllClients() throws Exception {
+	private static List<Cliente> getAllClients() throws Exception {
 		try {
 			// BUSCA TODOS CLIENTES
 			String url = "http://localhost:8080/clients";
@@ -247,29 +249,38 @@ public class ClientesController {
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			JSONArray responseJson = new JSONArray(response.body());
 
-			Clients cliente;
-			List<Clients> clientes = new ArrayList<>();
+			Cliente cliente;
+			List<Cliente> clientes = new ArrayList<>();
+			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+
 
 			// LOOP CONVERTE JSON EM CLIENTS
 			for (int i = 0; i < responseJson.length(); i++) {
 				JSONObject jsonObj = responseJson.getJSONObject(i);
-				cliente = new Clients();
+				String dataNascCont = jsonObj.getString("dateNasc_const").substring(0, 19).replaceAll("T", " ");
+				String dateExp = jsonObj.getString("dateExp").substring(0, 19).replaceAll("T", " ");
+
+				
+				
+				
+				cliente = new Cliente();
 				cliente.setId(jsonObj.getLong("id"));
-				cliente.setTipo(jsonObj.getString("tipo"));
-				cliente.setName(jsonObj.getString("name"));
-				cliente.setPhone(jsonObj.getString("phone"));
-				cliente.setEmail(jsonObj.getString("email"));
-				cliente.setCpf_cnpj(jsonObj.getString("cpf_cnpj"));
-				cliente.setRg_ie(jsonObj.getString("rg_ie"));
-				cliente.setDateNasc_const(jsonObj.getString("dateNasc_const"));
-				cliente.setDateExp(jsonObj.getString("dateExp"));
-				cliente.setAddress(jsonObj.getString("address"));
-				cliente.setAddressNumber(jsonObj.getString("addressNumber"));
-				cliente.setAddressComplement(jsonObj.getString("addressComplement"));
-				cliente.setCity(jsonObj.getString("city"));
+				cliente.setTipo(jsonObj.getString("tipo").length() > 11 ? "Jurídica" : "Física");
+				cliente.setName(jsonObj.getString("name").isEmpty() ? "" : jsonObj.getString("name"));
+				cliente.setPhone(jsonObj.getString("phone").isEmpty() ? "" : jsonObj.getString("phone") );
+				cliente.setEmail(jsonObj.getString("email").isEmpty() ? "" : jsonObj.getString("email"));
+				cliente.setCpf_cnpj(jsonObj.getString("cpf_cnpj").isEmpty() ? "" :jsonObj.getString("cpf_cnpj"));
+				cliente.setRg_ie(jsonObj.getString("rg_ie").isEmpty() ? "" : jsonObj.getString("rg_ie"));
+				cliente.setDateNasc_const(LocalDate.parse(dataNascCont, format).equals(null) ? LocalDate.of(1900, 1, 1) : LocalDate.parse(dataNascCont, format));
+				cliente.setDateExp(LocalDate.parse(dateExp, format).equals(null) ? LocalDate.of(1900, 1, 1) : LocalDate.parse(dateExp, format));
+				cliente.setAddress(jsonObj.getString("address").isEmpty() ? "" : jsonObj.getString("address"));
+				cliente.setAddressNumber(jsonObj.getString("addressNumber").isEmpty() ? "" : jsonObj.getString("addressNumber")); 
+				cliente.setAddressComplement(jsonObj.getString("addressComplement").isEmpty() ? "" : jsonObj.getString("addressComplement"));
+				cliente.setCity(jsonObj.getString("city").isEmpty() ? "" : jsonObj.getString("city"));
 				cliente.setUf(Uf_Enum.valueOf(jsonObj.getString("uf")));
-				cliente.setCep(jsonObj.getString("cep"));
-				cliente.setObs(jsonObj.getString("obs"));
+				cliente.setCep(jsonObj.getString("cep").isEmpty() ? "" : jsonObj.getString("cep"));
+				cliente.setObs(jsonObj.getString("obs").isEmpty() ? "" : jsonObj.getString("obs"));
 				clientes.add(cliente);
 			}
 			return clientes;

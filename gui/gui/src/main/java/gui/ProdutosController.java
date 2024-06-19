@@ -1,17 +1,20 @@
 package gui;
 
 import java.io.IOException;
+import java.lang.invoke.StringConcatException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.text.DecimalFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import gui.Models.Clients;
 import gui.Models.Produto;
 import gui.Models.Style;
 import javafx.collections.FXCollections;
@@ -26,25 +29,24 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 
 public class ProdutosController {
-	
+
 	private static String token = PrincipalController.getAccessToken();
-	
+
 	@FXML
 	private BorderPane telaBase;
-	
+
 	@FXML
 	private Button btnNovo;
 
 	@FXML
 	private Button btnEditar;
 
-	@FXML 
+	@FXML
 	private Button btnApagar;
-	
+
 	static TableView<Produto> tabelaprodutos = null;
 
 	static ObservableList<Produto> observableList;
-
 
 	public static TableView<Produto> getTabelaprodutos() {
 		return tabelaprodutos;
@@ -99,86 +101,100 @@ public class ProdutosController {
 		efeitos.hover(getBtnNovo());
 		efeitos.hover(getBtnEditar());
 		efeitos.hover(getBtnApagar());
-	
+
 	}
-	
-	 
+
 	@SuppressWarnings("unchecked")
-	
+
 	public TableView<Produto> construirTabela() throws Exception {
-		
+
 		setTabelaprodutos(new TableView<Produto>());
 
-		TableColumn<Produto, Integer> colunaID = new TableColumn<Produto, Integer>("ID");
-		colunaID.setCellValueFactory(new PropertyValueFactory<Produto, Integer>("id"));
-
-		TableColumn<Produto, String> colunaDesc = new TableColumn<Produto, String>("Descrição");
-		colunaDesc.setCellValueFactory(new PropertyValueFactory<Produto, String>("descricao"));
-		
 		TableColumn<Produto, String> colunaCod = new TableColumn<Produto, String>("Código");
 		colunaCod.setCellValueFactory(new PropertyValueFactory<Produto, String>("codigo"));
 		
+		TableColumn<Produto, String> colunaDesc = new TableColumn<Produto, String>("Descrição");
+		colunaDesc.setCellValueFactory(new PropertyValueFactory<Produto, String>("descricao"));
+
+
 		TableColumn<Produto, Integer> colunaEstoque = new TableColumn<Produto, Integer>("Estoque");
 		colunaEstoque.setCellValueFactory(new PropertyValueFactory<Produto, Integer>("estoque"));
+		colunaEstoque.setPrefWidth(100);
+
+		TableColumn<Produto, String> colunaCusto = new TableColumn<Produto, String>("Custo R$");
+		colunaCusto.setCellValueFactory(new PropertyValueFactory<Produto, String>("custo"));
+
+		TableColumn<Produto, String> colunaValor = new TableColumn<Produto, String>("Preço R$");
+		colunaValor.setCellValueFactory(new PropertyValueFactory<Produto, String>("valorVenda"));
 		
-
-		TableColumn<Produto, Double> colunaCusto = new TableColumn<Produto, Double>("Custo");
-		colunaCusto.setCellValueFactory(new PropertyValueFactory<Produto, Double>("custo"));
-
-
-		TableColumn<Produto, Double> colunaValor = new TableColumn<Produto, Double>("Valor");
-		colunaValor.setCellValueFactory(new PropertyValueFactory<Produto, Double>("valorVenda"));
+		TableColumn<Produto, String> colunaUni = new TableColumn<Produto, String>("Unidade");
+		colunaUni.setCellValueFactory(new PropertyValueFactory<Produto, String>("unidadeProduto"));
+		
+		TableColumn<Produto, String> colunaCateg = new TableColumn<Produto, String>("Categoria");
+		colunaCateg.setCellValueFactory(new PropertyValueFactory<Produto, String>("categoria"));
+		
 		
 		/*
-		TableColumn<Clients, String> colunaRg_Ie = new TableColumn<Clients, String>("Rg/Ie");
-		colunaRg_Ie.setCellValueFactory(new PropertyValueFactory<Clients, String>("rg_ie"));
-
-		TableColumn<Clients, LocalDate> colunaDateNasc_cons = new TableColumn<Clients, LocalDate>("Data Nasc/Const.");
-		colunaDateNasc_cons.setCellValueFactory(new PropertyValueFactory<Clients, LocalDate>("dateNasc_const"));
-
-		TableColumn<Clients, LocalDate> colunaDateExp = new TableColumn<Clients, LocalDate>("Data de Expedição");
-		colunaDateExp.setCellValueFactory(new PropertyValueFactory<Clients, LocalDate>("dateExp"));
-
-		TableColumn<Clients, String> colunaEndereco = new TableColumn<Clients, String>("Endereço");
-		colunaEndereco.setCellValueFactory(new PropertyValueFactory<Clients, String>("address"));
-
-		TableColumn<Clients, String> colunaNum = new TableColumn<Clients, String>("Número");
-		colunaNum.setCellValueFactory(new PropertyValueFactory<Clients, String>("addressNumber"));
-
-		TableColumn<Clients, String> colunaComplement = new TableColumn<Clients, String>("Complemento");
-		colunaComplement.setCellValueFactory(new PropertyValueFactory<Clients, String>("addressComplement"));
-
-		TableColumn<Clients, String> colunaCity = new TableColumn<Clients, String>("Cidade");
-		colunaCity.setCellValueFactory(new PropertyValueFactory<Clients, String>("city"));
-
-		TableColumn<Clients, String> colunaUf = new TableColumn<Clients, String>("UF");
-		colunaUf.setCellValueFactory(new PropertyValueFactory<Clients, String>("uf"));
-
-		TableColumn<Clients, String> colunaCep = new TableColumn<Clients, String>("Cep");
-		colunaCep.setCellValueFactory(new PropertyValueFactory<Clients, String>("cep"));
-
-		TableColumn<Clients, String> colunaObs = new TableColumn<Clients, String>("Obs");
-		colunaObs.setCellValueFactory(new PropertyValueFactory<Clients, String>("obs"));
+		 * TableColumn<Clients, String> colunaRg_Ie = new TableColumn<Clients,
+		 * String>("Rg/Ie"); colunaRg_Ie.setCellValueFactory(new
+		 * PropertyValueFactory<Clients, String>("rg_ie"));
+		 * 
+		 * TableColumn<Clients, LocalDate> colunaDateNasc_cons = new
+		 * TableColumn<Clients, LocalDate>("Data Nasc/Const.");
+		 * colunaDateNasc_cons.setCellValueFactory(new PropertyValueFactory<Clients,
+		 * LocalDate>("dateNasc_const"));
+		 * 
+		 * TableColumn<Clients, LocalDate> colunaDateExp = new TableColumn<Clients,
+		 * LocalDate>("Data de Expedição"); colunaDateExp.setCellValueFactory(new
+		 * PropertyValueFactory<Clients, LocalDate>("dateExp"));
+		 * 
+		 * TableColumn<Clients, String> colunaEndereco = new TableColumn<Clients,
+		 * String>("Endereço"); colunaEndereco.setCellValueFactory(new
+		 * PropertyValueFactory<Clients, String>("address"));
+		 * 
+		 * TableColumn<Clients, String> colunaNum = new TableColumn<Clients,
+		 * String>("Número"); colunaNum.setCellValueFactory(new
+		 * PropertyValueFactory<Clients, String>("addressNumber"));
+		 * 
+		 * TableColumn<Clients, String> colunaComplement = new TableColumn<Clients,
+		 * String>("Complemento"); colunaComplement.setCellValueFactory(new
+		 * PropertyValueFactory<Clients, String>("addressComplement"));
+		 * 
+		 * TableColumn<Clients, String> colunaCity = new TableColumn<Clients,
+		 * String>("Cidade"); colunaCity.setCellValueFactory(new
+		 * PropertyValueFactory<Clients, String>("city"));
+		 * 
+		 * TableColumn<Clients, String> colunaUf = new TableColumn<Clients,
+		 * String>("UF"); colunaUf.setCellValueFactory(new PropertyValueFactory<Clients,
+		 * String>("uf"));
+		 * 
+		 * TableColumn<Clients, String> colunaCep = new TableColumn<Clients,
+		 * String>("Cep"); colunaCep.setCellValueFactory(new
+		 * PropertyValueFactory<Clients, String>("cep"));
+		 * 
+		 * TableColumn<Clients, String> colunaObs = new TableColumn<Clients,
+		 * String>("Obs"); colunaObs.setCellValueFactory(new
+		 * PropertyValueFactory<Clients, String>("obs"));
 		 */
 		// POPULA A TABELA
 		popularTabela();
-		
 
 		// ADICIONA AS COLUNAS
-		getTabelaprodutos().getColumns().addAll(colunaID, colunaDesc,colunaCod, colunaEstoque, colunaCusto, colunaValor);
+		getTabelaprodutos().getColumns().addAll( colunaCod, colunaDesc, colunaEstoque, colunaCusto,
+				colunaValor, colunaUni , colunaCateg);
 
 		if (getTabelaprodutos() == null) {
 			getTabelaprodutos().setPlaceholder(new Label("Nenhum Produto Cadastrado."));
 		}
 		return getTabelaprodutos();
-		
+
 	}
 
 	public static void popularTabela() throws Exception {
 		List<Produto> produtos = getAllProducts();
 		setObservableList(FXCollections.observableArrayList(produtos));
 		getTabelaprodutos().setItems(observableList);
-		
+
 	}
 
 	private static List<Produto> getAllProducts() throws Exception {
@@ -191,43 +207,53 @@ public class ProdutosController {
 					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			JSONArray responseJson = new JSONArray(response.body());
-			Produto produto;
+			Produto produto; 
 			List<Produto> produtos = new ArrayList<>();
+			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+			
 
 			// LOOP CONVERTE JSON EM CLIENTS
 			for (int i = 0; i < responseJson.length(); i++) {
+
 				JSONObject jsonObj = responseJson.getJSONObject(i);
-				produto = new Produto();  
+				String dataInclusao = jsonObj.getString("dataInclusao").substring(0, 19).replaceAll("T", " ");
+
+				produto = new Produto();
 				produto.setId(jsonObj.getLong("id"));
-				produto.setCodigo(jsonObj.getString("codigo"));
 				produto.setDescricao(jsonObj.getString("descricao"));
-				produto.setEstoque(jsonObj.getInt("estoque"));
+				produto.setCodigo(jsonObj.getString("codigo"));
 				produto.setValorVenda(jsonObj.getDouble("valorVenda"));
-				produto.setCusto((jsonObj.getDouble("custo") == 0 ? jsonObj.getDouble("custo"): 0));
+				produto.setCusto(jsonObj.getDouble("custo"));
+				produto.setEstoque(jsonObj.getInt("estoque"));
+				produto.setUnidadeProduto(jsonObj.getString("unidadeProduto"));
+				produto.setCategoria(jsonObj.getString("categoria"));
+				produto.setFornecedor(jsonObj.getString("fornecedor"));
+				produto.setTributacao(jsonObj.getString("tributacao"));
+				produto.setNcm(jsonObj.getInt("ncm"));
+				produto.setDescNcm(jsonObj.getString("descNcm"));
+				produto.setCest(jsonObj.getString("cest"));
+				produto.setDataInclusao(LocalDateTime.parse(dataInclusao, format));
+				produto.setEAN_GTIN(jsonObj.getString("ean_GTIN"));
 				produtos.add(produto);
+
 			}
-			System.out.println(produtos);
-			
-			
 			return produtos;
 		} catch (Exception e) {
 			throw new Exception(e.getMessage() + e.getCause());
 		}
-		
+
 	}
 
 	@SuppressWarnings("exports")
 	public void novo(ActionEvent action) throws IOException {
 	}
-	
+
 	@SuppressWarnings("exports")
 	public void editar(ActionEvent action) throws IOException {
 	}
-	
+
 	@SuppressWarnings("exports")
 	public void apagar(ActionEvent action) throws IOException {
 	}
-	
-	
-	
+
 }

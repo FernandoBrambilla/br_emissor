@@ -15,7 +15,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-import gui.Models.Clients;
+import gui.Models.Cliente;
 import gui.Models.Login;
 import gui.Models.Produto;
 import gui.Models.Style;
@@ -47,7 +47,7 @@ public class PrincipalController {
 
 	static TableView<User> tabelaUsuarios = null; 
 
-	static TableView<Clients> tabelaClients = null;
+	static TableView<Cliente> tabelaClients = null;
 
 	static TableView<Produto> tabelaprodutos = null;
 
@@ -85,18 +85,12 @@ public class PrincipalController {
 	private Label usuario;
 
 	@FXML
-	private Label licenca;
+	private Label plano;
 
 	@FXML
-	private Label secao;
+	private Label emissor;
 
-	public Label getSecao() {
-		return secao;
-	}
-
-	public void setSecao(Label secao) {
-		this.secao = secao;
-	}
+	
 
 	public static Login getUsuarioLogado() {
 		return usuarioLogado;
@@ -126,7 +120,7 @@ public class PrincipalController {
 		return tabelaUsuarios;
 	}
 
-	public static TableView<Clients> getTabelaClients() {
+	public static TableView<Cliente> getTabelaClients() {
 		return tabelaClients;
 	}
 
@@ -215,7 +209,7 @@ public class PrincipalController {
 		PrincipalController.tabelaUsuarios = tabelaUsuarios;
 	}
 
-	public static void setTabelaClients(TableView<Clients> tabelaClients) {
+	public static void setTabelaClients(TableView<Cliente> tabelaClients) {
 		PrincipalController.tabelaClients = tabelaClients;
 	}
 
@@ -278,10 +272,6 @@ public class PrincipalController {
 		return usuario;
 	}
 
-	@SuppressWarnings("exports")
-	public Label getLicenca() {
-		return licenca;
-	}
 
 	@SuppressWarnings("exports")
 	public void setBtnConfiguracoes(Button btnConfiguracoes) {
@@ -293,9 +283,21 @@ public class PrincipalController {
 		this.usuario = usuario;
 	}
 
-	@SuppressWarnings("exports")
-	public void setLicenca(Label licenca) {
-		this.licenca = licenca;
+	
+	public Label getPlano() {
+		return plano;
+	}
+
+	public Label getEmissor() {
+		return emissor;
+	}
+
+	public void setPlano(Label plano) {
+		this.plano = plano;
+	}
+
+	public void setEmissor(Label emissor) {
+		this.emissor = emissor;
 	}
 
 	public void aplicaEfeitos() {
@@ -333,6 +335,10 @@ public class PrincipalController {
 	@SuppressWarnings({ "static-access" })
 	@FXML
 	private void initialize() throws IOException, ParseException{
+		getUsuario().setText("Usuário: " +getUsuarioLogado().getUserName());
+		getPlano().setText("Plano: Free");
+		getEmissor().setText("Emissor: Brambilla Informática");
+		
 		getBtnUsuarios().setOnAction((event) -> {
 			try {
 				setUsuariosController(new UsuariosController());

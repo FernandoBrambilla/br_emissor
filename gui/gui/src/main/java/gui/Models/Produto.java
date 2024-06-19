@@ -24,7 +24,7 @@ public class Produto {
     
     private String tributacao;
     
-    private String ncm;
+    private Integer ncm;
     
     private String descNcm;
     
@@ -74,7 +74,7 @@ public class Produto {
 		return tributacao;
 	}
 
-	public String getNcm() {
+	public Integer getNcm() {
 		return ncm;
 	}
 
@@ -134,7 +134,7 @@ public class Produto {
 		this.tributacao = tributacao;
 	}
 
-	public void setNcm(String ncm) {
+	public void setNcm(Integer ncm) {
 		this.ncm = ncm;
 	}
 

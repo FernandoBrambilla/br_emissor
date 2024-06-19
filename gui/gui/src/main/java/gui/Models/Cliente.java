@@ -1,6 +1,8 @@
 package gui.Models;
 
-public class Clients {
+import java.time.LocalDate;
+
+public class Cliente {
 	
 	private Long id;
 	
@@ -16,9 +18,9 @@ public class Clients {
 	
 	private String rg_ie;
 	
-	private String dateNasc_const;
+	private LocalDate dateNasc_const;
 	
-	private String dateExp;
+	private LocalDate dateExp;
 	
 	private String address;
 	
@@ -62,11 +64,11 @@ public class Clients {
 		return rg_ie;
 	}
 
-	public String getDateNasc_const() {
+	public LocalDate getDateNasc_const() {
 		return dateNasc_const;
 	}
 
-	public String getDateExp() {
+	public LocalDate getDateExp() {
 		return dateExp;
 	}
 
@@ -126,11 +128,11 @@ public class Clients {
 		this.rg_ie = rg_ie;
 	}
 
-	public void setDateNasc_const(String dateNasc_const) {
+	public void setDateNasc_const(LocalDate dateNasc_const) {
 		this.dateNasc_const = dateNasc_const;
 	}
 
-	public void setDateExp(String dateExp) {
+	public void setDateExp(LocalDate dateExp) {
 		this.dateExp = dateExp;
 	}
 
