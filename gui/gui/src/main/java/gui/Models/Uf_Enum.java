@@ -30,7 +30,7 @@ public enum Uf_Enum {
 		SE("Sergipe"),
 		DF("Distrito Federal");
 
-		private String descricao; 
+		public String descricao; 
 		
 		Uf_Enum(String descricao) {
 			this.descricao = descricao;
@@ -43,6 +43,6 @@ public enum Uf_Enum {
 		public String getDescricao() {
 			return descricao;
 		}
-
-}
+		
+	}
 

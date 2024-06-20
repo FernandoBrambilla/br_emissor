@@ -80,6 +80,9 @@ public class EditarClienteController {
 	private TextField num;
 
 	@FXML
+	private TextField bairro;
+	
+	@FXML
 	private TextField compl;
 
 	@FXML
@@ -191,6 +194,16 @@ public class EditarClienteController {
 	@SuppressWarnings("exports")
 	public TextField getNum() {
 		return num;
+	}
+
+	@SuppressWarnings("exports")
+	public TextField getBairro() {
+		return bairro;
+	}
+
+	@SuppressWarnings("exports")
+	public void setBairro(TextField bairro) {
+		this.bairro = bairro;
 	}
 
 	@SuppressWarnings("exports")
@@ -414,6 +427,7 @@ public class EditarClienteController {
 		getNum().setText(getCliente().getAddressNumber());
 		getCompl().setText(getCliente().getAddressComplement());
 		getCity().setText(getCliente().getCity());
+		getBairro().setText(getCliente().getBairro());
 		getCep().setText(getCliente().getCep());
 		getUf().setValue(getCliente().getUf());
 		getObs().setText(getCliente().getObs());
@@ -449,12 +463,13 @@ public class EditarClienteController {
 				json.put("dateExp", dateExp.format(formatter));
 				json.put("address", getAdress().getText());
 				json.put("addressNumber", getNum().getText());
+				json.put("bairro", getBairro().getText());
 				json.put("addressComplement", getCompl().getText());
 				json.put("city", getCity().getText());
 				json.put("uf", getUf().getValue());
 				json.put("cep", getCep().getText());
 				json.put("obs", getObs().getText());
-				
+				 
 				// REQUIÇÃO PARA ATUALIZAR
 				String urlUpdate = "http://localhost:8080/clients";
 				HttpClient client = HttpClient.newHttpClient();

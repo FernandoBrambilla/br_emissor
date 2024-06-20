@@ -81,6 +81,9 @@ public class NovoClienteController {
 
 	@FXML
 	private TextField city;
+	
+	@FXML
+	private TextField bairro;
 
 	@FXML
 	private TextField cep;
@@ -189,6 +192,16 @@ public class NovoClienteController {
 	@SuppressWarnings("exports")
 	public TextField getCompl() {
 		return compl;
+	}
+	
+	@SuppressWarnings("exports")
+	public TextField getBairro() {
+		return bairro;
+	}
+
+	@SuppressWarnings("exports")
+	public void setBairro(TextField bairro) {
+		this.bairro = bairro;
 	}
 
 	@SuppressWarnings("exports")
@@ -419,8 +432,7 @@ public class NovoClienteController {
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
 				// SETA DATA ATUAL CASO NÃO SEJA INFORMADA (DATA DEEXPEDIÇÃO E NASCIMENTO)
-				LocalDate dateNascConst = getDataNasc_Const().getValue() == null ? LocalDate.now()
-						: getDataNasc_Const().getValue();
+				LocalDate dateNascConst = getDataNasc_Const().getValue() == null ? LocalDate.now(): getDataNasc_Const().getValue();
 				LocalDate dateExp = getDataEmis().getValue() == null ? LocalDate.now() : getDataEmis().getValue();
 				String tipo = getPf().isSelected() ? "Física" : "Jurídica";
 
@@ -437,6 +449,7 @@ public class NovoClienteController {
 				json.put("addressNumber", getNum().getText());
 				json.put("addressComplement", getCompl().getText());
 				json.put("city", getCity().getText());
+				json.put("bairro" , getBairro().getText());
 				json.put("uf", getUf().getValue());
 				json.put("cep", getCep().getText());
 				json.put("obs", getObs().getText());

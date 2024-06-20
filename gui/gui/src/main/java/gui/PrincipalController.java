@@ -416,7 +416,7 @@ public class PrincipalController {
 				
 				
 				FXMLLoader loader = new FXMLLoader();
-				loader.setLocation(getClass().getResource("ProdutoViews/Produtos.fxml"));
+				loader.setLocation(getClass().getResource("ProdutoViews/MenuProdutos.fxml"));
 				getMenu().setTop(loader.load());
 
 				setTabelaprodutos(produtosController.construirTabela());

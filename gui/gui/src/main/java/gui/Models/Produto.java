@@ -18,7 +18,7 @@ public class Produto {
     
     private String unidadeProduto;
     
-    private String categoria;
+    private CategoriaProduto categoria;
     
     private String fornecedor;
     
@@ -33,6 +33,28 @@ public class Produto {
     private LocalDateTime dataInclusao;
    
     private String EAN_GTIN;
+
+	public Produto(Produto p) {
+		this.id = p.getId();
+		this.descricao = p.getDescricao();
+		this.codigo = p.getCodigo();
+		this.valorVenda = p.getValorVenda();
+		this.custo = p.getCusto();
+		this.estoque = p.getEstoque();
+		this.unidadeProduto = p.getUnidadeProduto();
+		this.categoria = p.getCategoria();
+		this.fornecedor = p.getFornecedor();
+		this.tributacao = p.getTributacao();
+		this.ncm = p.getNcm();
+		this.descNcm = p.getDescNcm();
+		this.cest = p.getCest();
+		this.dataInclusao = p.getDataInclusao();
+		this.EAN_GTIN = p.getEAN_GTIN();
+	}
+
+	public Produto() {
+		super();
+	}
 
 	public Long getId() {
 		return id;
@@ -62,7 +84,7 @@ public class Produto {
 		return unidadeProduto;
 	}
 
-	public String getCategoria() {
+	public CategoriaProduto getCategoria() {
 		return categoria;
 	}
 
@@ -123,7 +145,7 @@ public class Produto {
 	}
 
 	public void setCategoria(String categoria) {
-		this.categoria = categoria;
+		this.categoria.setDescricao(categoria);
 	}
 
 	public void setFornecedor(String fornecedor) {

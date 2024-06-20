@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane fx:id="telaBase" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.NovoProdutoController">
+   <top>
+      <Pane cacheShape="false" prefHeight="170.0" prefWidth="800.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fx:id="imagem" fitHeight="102.0" fitWidth="157.0" layoutX="35.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" style="-fx-image: black;">
+               <image>
+                  <Image url="@../img/editarL.png" />
+               </image>
+            </ImageView>
+            <Label fx:id="titulo" alignment="CENTER" layoutX="10.0" layoutY="42.0" prefHeight="22.0" prefWidth="800.0" text="Editar Produto">
+               <font>
+                  <Font name="Calibri" size="18.0" />
+               </font>
+            </Label>
+            <Button fx:id="btnCadastro" layoutX="10.0" layoutY="130.0" mnemonicParsing="false" onAction="#btnCadastro" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: white;" text="Cadastro">
+               <font>
+                  <Font name="Calibri" size="15.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="btnTributacao" layoutX="105.0" layoutY="130.0" mnemonicParsing="false" onAction="#btnTributacao" prefHeight="28.0" prefWidth="90.0" style="-fx-background-color: white;" text="Tributação">
+               <font>
+                  <Font name="Calibri" size="15.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="btnFornecedor" layoutX="207.0" layoutY="130.0" mnemonicParsing="false" onAction="#btnFornecedor" prefHeight="30.0" prefWidth="95.0" style="-fx-background-color: white;" text="Fornecedor">
+               <font>
+                  <Font name="Calibri" size="15.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button fx:id="btnOpcoes" layoutX="299.0" layoutY="130.0" mnemonicParsing="false" onAction="#btnOpcoes" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: white;" text="Opções">
+               <font>
+                  <Font name="Calibri" size="15.0" />
+               </font>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Separator layoutX="4.0" layoutY="153.0" prefHeight="18.0" prefWidth="792.0" />
+         </children>
+      </Pane>
+   </top>
+</BorderPane>

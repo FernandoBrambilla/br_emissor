@@ -3,38 +3,48 @@ package gui.Models;
 import java.time.LocalDate;
 
 public class Cliente {
-	
+
 	private Long id;
-	
+
 	private String tipo;
-	
+
 	private String name;
-	
+
 	private String phone;
-	
+
 	private String email;
-	
+
 	private String cpf_cnpj;
-	
+
 	private String rg_ie;
-	
+
 	private LocalDate dateNasc_const;
-	
+
 	private LocalDate dateExp;
-	
+
 	private String address;
-	
+
 	private String addressNumber;
-	
+
 	private String addressComplement;
-	
+
+	private String bairro;
+
 	private String city;
-	
+
 	private Uf_Enum uf;
-	
+
 	private String cep;
-	
+
 	private String obs;
+
+	public String getBairro() {
+		return bairro;
+	}
+
+	public void setBairro(String bairro) {
+		this.bairro = bairro;
+	}
 
 	public Long getId() {
 		return id;
@@ -152,8 +162,94 @@ public class Cliente {
 		this.city = city;
 	}
 
-	public void setUf(Uf_Enum uf) {
-		this.uf = uf;
+	public void setUf(String uf) {
+		switch (uf) {
+		case "Amazonas":
+			this.uf = Uf_Enum.AM;
+			break;
+		case "Alagoas":
+			this.uf = Uf_Enum.AL;
+			break;
+		case "Acre":
+			this.uf = Uf_Enum.AC;
+			break;
+		case "Amapá":
+			this.uf = Uf_Enum.AP;
+			break;
+		case "Bahia":
+			this.uf = Uf_Enum.BH;
+			break;
+		case "Pará":
+			this.uf = Uf_Enum.PA;
+			break;
+		case "Mato Grosso":
+			this.uf = Uf_Enum.MT;
+			break;
+		case "Minas Gerais":
+			this.uf = Uf_Enum.MG;
+			break;
+		case "Mato Grosso do Sul":
+			this.uf = Uf_Enum.MS;
+			break;
+		case "Goiás":
+			this.uf = Uf_Enum.GO;
+			break;
+		case "Maranhão":
+			this.uf = Uf_Enum.MA;
+			break;
+		case "Rio Grande do Sul":
+			this.uf = Uf_Enum.RS;
+			break;
+		case "Tocantins":
+			this.uf = Uf_Enum.TO;
+			break;
+		case "Piauí":
+			this.uf = Uf_Enum.PI;
+			break;
+		case "São Paulo":
+			this.uf = Uf_Enum.SP;
+			break;
+		case "Rondônia":
+			this.uf = Uf_Enum.RO;
+			break;
+		case "Roraima":
+			this.uf = Uf_Enum.RR;
+			break;
+		case "Paraná":
+			this.uf = Uf_Enum.PR;
+			break;
+		case "Ceará":
+			this.uf = Uf_Enum.CE;
+			break;
+		case "Pernambuco":
+			this.uf = Uf_Enum.PE;
+			break;
+		case "Santa Catarina":
+			this.uf = Uf_Enum.SC;
+			break;
+		case "Paraíba":
+			this.uf = Uf_Enum.PB;
+			break;
+		case "Rio Grande do Norte":
+			this.uf = Uf_Enum.RN;
+			break;
+		case "Espírito Santo":
+			this.uf = Uf_Enum.ES;
+			break;
+		case "Rio de Janeiro":
+			this.uf = Uf_Enum.RJ;
+			break;
+		case "ergipe":
+			this.uf = Uf_Enum.SE;
+			break;
+		case "Distrito Federal":
+			this.uf = Uf_Enum.DF;
+			break;
+
+		default:
+			this.uf = Uf_Enum.PR;
+			break;
+		}
 	}
 
 	public void setCep(String cep) {

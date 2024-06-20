@@ -15,18 +15,25 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import gui.Models.CategoriaProduto;
 import gui.Models.Produto;
 import gui.Models.Style;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
+import javafx.stage.Stage;
 
 public class ProdutosController {
 
@@ -116,7 +123,6 @@ public class ProdutosController {
 		TableColumn<Produto, String> colunaDesc = new TableColumn<Produto, String>("Descrição");
 		colunaDesc.setCellValueFactory(new PropertyValueFactory<Produto, String>("descricao"));
 
-
 		TableColumn<Produto, Integer> colunaEstoque = new TableColumn<Produto, Integer>("Estoque");
 		colunaEstoque.setCellValueFactory(new PropertyValueFactory<Produto, Integer>("estoque"));
 		colunaEstoque.setPrefWidth(100);
@@ -133,6 +139,8 @@ public class ProdutosController {
 		TableColumn<Produto, String> colunaCateg = new TableColumn<Produto, String>("Categoria");
 		colunaCateg.setCellValueFactory(new PropertyValueFactory<Produto, String>("categoria"));
 		
+		TableColumn<Produto, String> colunaFornecedor= new TableColumn<Produto, String>("Fornecedor");
+		colunaFornecedor.setCellValueFactory(new PropertyValueFactory<Produto, String>("fornecedor"));
 		
 		/*
 		 * TableColumn<Clients, String> colunaRg_Ie = new TableColumn<Clients,
@@ -181,7 +189,7 @@ public class ProdutosController {
 
 		// ADICIONA AS COLUNAS
 		getTabelaprodutos().getColumns().addAll( colunaCod, colunaDesc, colunaEstoque, colunaCusto,
-				colunaValor, colunaUni , colunaCateg);
+				colunaValor, colunaUni , colunaCateg, colunaFornecedor);
 
 		if (getTabelaprodutos() == null) {
 			getTabelaprodutos().setPlaceholder(new Label("Nenhum Produto Cadastrado."));
@@ -224,9 +232,9 @@ public class ProdutosController {
 				produto.setCodigo(jsonObj.getString("codigo"));
 				produto.setValorVenda(jsonObj.getDouble("valorVenda"));
 				produto.setCusto(jsonObj.getDouble("custo"));
-				produto.setEstoque(jsonObj.getInt("estoque"));
+				produto.setEstoque(jsonObj.getInt("estoque")); 
 				produto.setUnidadeProduto(jsonObj.getString("unidadeProduto"));
-				produto.setCategoria(jsonObj.getString("categoria"));
+				//produto.setCategoria(jsonObj.getString("categoria").isEmpty() ? "" : jsonObj.getString("categoria"));
 				produto.setFornecedor(jsonObj.getString("fornecedor"));
 				produto.setTributacao(jsonObj.getString("tributacao"));
 				produto.setNcm(jsonObj.getInt("ncm"));
@@ -246,11 +254,42 @@ public class ProdutosController {
 
 	@SuppressWarnings("exports")
 	public void novo(ActionEvent action) throws IOException {
+		NovoProdutoController novoProduto = new NovoProdutoController();
+		Stage stage = new Stage();
+		Parent painel = FXMLLoader.load(getClass().getResource("ProdutoViews/NovoProduto.fxml"));
+		Scene scene = new Scene(painel, 800, 680);
+		stage.setTitle("Cadasto de Usuários");
+		stage.setScene(scene);
+		stage.show();
+
 	}
 
 	@SuppressWarnings("exports")
 	public void editar(ActionEvent action) throws IOException {
+		// VERIFICA SE FOIS SELECIONADO UM CLIENTE PARA EDITAR
+		if (ProdutosController.getTabelaprodutos().getSelectionModel().isEmpty()) {
+			Alert alert = new Alert(Alert.AlertType.ERROR);
+			alert.setHeaderText(null);
+			alert.setContentText("Selecione um Produto para editar.");
+			alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+			alert.showAndWait();
+			return;
+		}
+
+		else {
+			Stage stage = new Stage();
+			Parent painel = FXMLLoader.load(getClass().getResource("ProdutoViews/NovoProduto.fxml"));
+			Scene scene = new Scene(painel, 800, 680);
+			stage.setTitle("Editar Produto");
+			stage.setScene(scene);
+			stage.show();
+	
+
+		}
+
 	}
+		
+		
 
 	@SuppressWarnings("exports")
 	public void apagar(ActionEvent action) throws IOException {

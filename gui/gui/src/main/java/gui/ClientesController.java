@@ -6,7 +6,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,6 @@ import org.json.JSONObject;
 
 import gui.Models.Cliente;
 import gui.Models.Style;
-import gui.Models.Uf_Enum;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -58,9 +56,6 @@ public class ClientesController {
 
 	@FXML
 	private Button btnApagar;
-
-	@FXML
-	private Button btnInativar;
 
 	public static EditarClienteController getEditarClient() {
 		return editarClient;
@@ -106,11 +101,6 @@ public class ClientesController {
 		return btnApagar;
 	}
 
-	@SuppressWarnings("exports")
-	public Button getBtnInativar() {
-		return btnInativar;
-	}
-
 	public static void setToken(String token) {
 		ClientesController.token = token;
 	}
@@ -147,10 +137,6 @@ public class ClientesController {
 		this.btnApagar = btnApagar;
 	}
 
-	@SuppressWarnings("exports")
-	public void setBtnInativar(Button btnInativar) {
-		this.btnInativar = btnInativar;
-	}
 
 	public void initialize() {
 
@@ -161,18 +147,14 @@ public class ClientesController {
 		efeitos.hover(getBtnNovo());
 		efeitos.hover(getBtnEditar());
 		efeitos.hover(getBtnApagar());
-		efeitos.hover(getBtnInativar());
 	}
 
 	@SuppressWarnings("unchecked")
 	public TableView<Cliente> construirTabela() throws Exception {
-		setTabelaClientes(new TableView<Cliente>()); 
+		setTabelaClientes(new TableView<Cliente>());
 
 		TableColumn<Cliente, Integer> colunaID = new TableColumn<Cliente, Integer>("ID");
 		colunaID.setCellValueFactory(new PropertyValueFactory<Cliente, Integer>("id"));
-
-		TableColumn<Cliente, String> colunaTipo = new TableColumn<Cliente, String>("Pessoa");
-		colunaTipo.setCellValueFactory(new PropertyValueFactory<Cliente, String>("tipo"));
 
 		TableColumn<Cliente, String> colunaName = new TableColumn<Cliente, String>("Nome");
 		colunaName.setCellValueFactory(new PropertyValueFactory<Cliente, String>("name"));
@@ -207,6 +189,9 @@ public class ClientesController {
 		TableColumn<Cliente, String> colunaComplement = new TableColumn<Cliente, String>("Complemento");
 		colunaComplement.setCellValueFactory(new PropertyValueFactory<Cliente, String>("addressComplement"));
 
+		TableColumn<Cliente, String> colunaBairro = new TableColumn<Cliente, String>("Bairro");
+		colunaBairro.setCellValueFactory(new PropertyValueFactory<Cliente, String>("bairro"));
+
 		TableColumn<Cliente, String> colunaCity = new TableColumn<Cliente, String>("Cidade");
 		colunaCity.setCellValueFactory(new PropertyValueFactory<Cliente, String>("city"));
 
@@ -216,6 +201,9 @@ public class ClientesController {
 		TableColumn<Cliente, String> colunaCep = new TableColumn<Cliente, String>("Cep");
 		colunaCep.setCellValueFactory(new PropertyValueFactory<Cliente, String>("cep"));
 
+		TableColumn<Cliente, String> colunaTipo = new TableColumn<Cliente, String>("Pessoa");
+		colunaTipo.setCellValueFactory(new PropertyValueFactory<Cliente, String>("tipo"));
+		
 		TableColumn<Cliente, String> colunaObs = new TableColumn<Cliente, String>("Obs");
 		colunaObs.setCellValueFactory(new PropertyValueFactory<Cliente, String>("obs"));
 
@@ -223,9 +211,9 @@ public class ClientesController {
 		popularTabela();
 
 		// ADICIONA AS COLUNAS
-		getTabelaClientes().getColumns().addAll(colunaID, colunaTipo, colunaName, colunaEmail, colunaPhone,
-				colunaCpf_Cnpj, colunaRg_Ie, colunaDateNasc_cons, colunaDateExp, colunaEndereco, colunaNum,
-				colunaComplement, colunaCity, colunaUf, colunaCep, colunaObs);
+		getTabelaClientes().getColumns().addAll(colunaID, colunaName, colunaEmail, colunaPhone,
+				colunaCpf_Cnpj, colunaRg_Ie, colunaEndereco, colunaNum, colunaComplement, colunaCity, 
+				colunaUf, colunaBairro, colunaCep, colunaDateNasc_cons, colunaDateExp, colunaTipo,  colunaObs);
 
 		if (getTabelaClientes() == null) {
 			getTabelaClientes().setPlaceholder(new Label("Nenhum Cliente Cadastrado."));
@@ -237,7 +225,7 @@ public class ClientesController {
 		List<Cliente> clientes = getAllClients();
 		setObservableList(FXCollections.observableArrayList(clientes));
 		getTabelaClientes().setItems(observableList);
-	} 
+	}
 
 	private static List<Cliente> getAllClients() throws Exception {
 		try {
@@ -251,37 +239,64 @@ public class ClientesController {
 
 			Cliente cliente;
 			List<Cliente> clientes = new ArrayList<>();
-			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-
+			DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
 			// LOOP CONVERTE JSON EM CLIENTS
 			for (int i = 0; i < responseJson.length(); i++) {
 				JSONObject jsonObj = responseJson.getJSONObject(i);
-				String dataNascCont = jsonObj.getString("dateNasc_const").substring(0, 19).replaceAll("T", " ");
-				String dateExp = jsonObj.getString("dateExp").substring(0, 19).replaceAll("T", " ");
+				String dateNasc_const = jsonObj.getString("dateNasc_const");
+				String dateExp = jsonObj.getString("dateExp");
 
-				
-				
-				
 				cliente = new Cliente();
 				cliente.setId(jsonObj.getLong("id"));
-				cliente.setTipo(jsonObj.getString("tipo").length() > 11 ? "Jurídica" : "Física");
-				cliente.setName(jsonObj.getString("name").isEmpty() ? "" : jsonObj.getString("name"));
-				cliente.setPhone(jsonObj.getString("phone").isEmpty() ? "" : jsonObj.getString("phone") );
-				cliente.setEmail(jsonObj.getString("email").isEmpty() ? "" : jsonObj.getString("email"));
-				cliente.setCpf_cnpj(jsonObj.getString("cpf_cnpj").isEmpty() ? "" :jsonObj.getString("cpf_cnpj"));
-				cliente.setRg_ie(jsonObj.getString("rg_ie").isEmpty() ? "" : jsonObj.getString("rg_ie"));
-				cliente.setDateNasc_const(LocalDate.parse(dataNascCont, format).equals(null) ? LocalDate.of(1900, 1, 1) : LocalDate.parse(dataNascCont, format));
-				cliente.setDateExp(LocalDate.parse(dateExp, format).equals(null) ? LocalDate.of(1900, 1, 1) : LocalDate.parse(dateExp, format));
-				cliente.setAddress(jsonObj.getString("address").isEmpty() ? "" : jsonObj.getString("address"));
-				cliente.setAddressNumber(jsonObj.getString("addressNumber").isEmpty() ? "" : jsonObj.getString("addressNumber")); 
-				cliente.setAddressComplement(jsonObj.getString("addressComplement").isEmpty() ? "" : jsonObj.getString("addressComplement"));
-				cliente.setCity(jsonObj.getString("city").isEmpty() ? "" : jsonObj.getString("city"));
-				cliente.setUf(Uf_Enum.valueOf(jsonObj.getString("uf")));
-				cliente.setCep(jsonObj.getString("cep").isEmpty() ? "" : jsonObj.getString("cep"));
-				cliente.setObs(jsonObj.getString("obs").isEmpty() ? "" : jsonObj.getString("obs"));
+				cliente.setTipo(jsonObj.getString("tipo"));
+				cliente.setName(jsonObj.getString("name"));
+				cliente.setPhone(jsonObj.getString("phone"));
+				cliente.setEmail(jsonObj.getString("email"));
+				cliente.setCpf_cnpj(jsonObj.getString("cpf_cnpj"));
+				cliente.setRg_ie(jsonObj.getString("rg_ie"));
+				cliente.setDateNasc_const(LocalDate.parse(dateNasc_const, format));
+				cliente.setDateExp(LocalDate.parse(dateExp, format));
+				cliente.setAddress(jsonObj.getString("address"));
+				cliente.setAddressNumber(jsonObj.getString("addressNumber"));
+				cliente.setAddressComplement(jsonObj.getString("addressComplement"));
+				cliente.setBairro(jsonObj.getString("bairro"));
+				cliente.setCity(jsonObj.getString("city"));
+				cliente.setUf(jsonObj.getString("uf"));
+				cliente.setCep(jsonObj.getString("cep"));
+				cliente.setObs(jsonObj.getString("obs"));
 				clientes.add(cliente);
+
+				/*
+				JSONObject json = new JSONObject();
+				json.put("id", cliente.getId());
+				json.put("name", cliente.getName());
+				json.put("tipo", cliente.getCpf_cnpj().length() > 11 ? "Jurídica" : "Física");
+				json.put("phone", cliente.getPhone());
+				json.put("email", cliente.getEmail());
+				json.put("cpf_cnpj", cliente.getCpf_cnpj());
+				json.put("rg_ie", cliente.getRg_ie());
+				json.put("dateNasc_const", format.format(LocalDate.of(1900, 1, 1)));
+				json.put("dateExp", format.format(LocalDate.of(1900, 1, 1)));
+				json.put("address", cliente.getAddress());
+				json.put("addressNumber", cliente.getAddressNumber());
+				json.put("addressComplement", cliente.getAddressComplement());
+				json.put("bairro", cliente.getBairro());
+				json.put("city", cliente.getCity());
+				json.put("uf", cliente.getUf().getDescricao());
+				json.put("cep", cliente.getCep());
+				json.put("obs", cliente.getObs());
+
+				System.out.println(json);
+
+				String urlUpdate = "http://localhost:8080/clients";
+				HttpClient clients = HttpClient.newHttpClient();
+				HttpRequest requests = HttpRequest.newBuilder().uri(URI.create(urlUpdate))
+						.header("Authorization", "Bearer " + token).header("Content-Type", "application/json")
+						.PUT(HttpRequest.BodyPublishers.ofString(json.toString())).build();
+				HttpResponse<String> responses = clients.send(requests, HttpResponse.BodyHandlers.ofString());
+				System.out.println(responses.body());
+				*/
 			}
 			return clientes;
 		} catch (Exception e) {
@@ -377,10 +392,4 @@ public class ClientesController {
 		}
 
 	}
-
-	@SuppressWarnings("exports")
-	public void inativar(ActionEvent action) throws IOException {
-
-	}
-
 }
