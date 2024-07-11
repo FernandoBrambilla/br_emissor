@@ -1,0 +1,36 @@
+CONFIGURAR MYSQL
+
+-- BAIXAR E INSTALAR O MYSQL SERVER --
+
+https://dev.mysql.com/downloads/mysql/
+-na instalação, abrir configuração:
+	-config Type: Server Computer;
+	-TCP/IP PORT 3306
+	-addiconar password no usuario padrão root
+ 	-passord: bremissor_db
+	-windows service name: BrEmissor_DB
+	-Standard System Account
+-finalizar instalação.
+
+
+--- CONFIGURAR VARIÁVEIS DE AMBIENTE--
+
+-configurações avançadas do sistema;
+-variávies de ambiente;
+-variáveis do sistema;
+-Path; 
+-editar;
+-novo
+-colocar o caminho da pasta "bin", ex: C:\Program Files\MySQL\MySQL Server 8.3\bin;
+
+
+--- VIA CMD ---
+
+-para conferir a instalação: mysql --version
+-para acessar banco:
+ -mysql -h localhost -u root -p
+ -Password root: (foi solicitato no momento da instalação);
+-crie do banco:
+ -create database gerenciador_db; *exatamente como está escrito, e com o ponto e vírgula
+ -show databases; (lista os bancos criados)
+

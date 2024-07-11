@@ -1,0 +1,188 @@
+package com.fernando.Entities;
+
+import java.io.Serializable;
+import java.util.Date;
+import org.springframework.hateoas.RepresentationModel;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+
+
+@Entity 
+@Table(name = "clients")
+public class Clients extends RepresentationModel<Bank> implements Serializable{
+	private static final long serialVersionUID = 1L;
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY) 
+	private Long id;
+	
+	@Column (nullable = false)
+	private String name;
+	
+	@Column (nullable = false)
+	private String phone;
+	
+	@Column (nullable = false)
+	private String email;
+	
+        
+	@Column (nullable = false, unique = true, name = "cpf/cnpj")
+	private String cpf_cnpj;
+	
+        
+	@Column (nullable = false, name = "rg/ie")
+	private String rg_ie;
+	
+	@Column (name = "date_nasc/const")
+	@Temporal(TemporalType.DATE)
+	private Date dateNasc_const;
+	
+	@Column (name = "date_exp")
+	@Temporal(TemporalType.DATE)
+	private Date dateExp;
+	
+	@Column (nullable = false)
+	private String address;
+	
+	@Column (nullable = false, name = "address_number")
+	private String addressNumber;
+	
+	@Column (name = "address_complement")
+	private String addressComplement;
+	
+	@Column (nullable = false)
+	private String city;
+	
+	@Column (nullable = false)
+	private String uf;
+	
+	@Column (nullable = false)
+	private String cep;	
+
+    public Clients() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getCpf_cnpj() {
+        return cpf_cnpj;
+    }
+
+    public void setCpf_cnpj(String cpf_cnpj) {
+        this.cpf_cnpj = cpf_cnpj;
+    }
+
+    public String getRg_ie() {
+        return rg_ie;
+    }
+
+    public void setRg_ie(String rg_ie) {
+        this.rg_ie = rg_ie;
+    }
+
+    public Date getDateNasc_const() {
+        return dateNasc_const;
+    }
+
+    public void setDateNasc_const(Date dateNasc_const) {
+        this.dateNasc_const = dateNasc_const;
+    }
+
+    public Date getDateExp() {
+        return dateExp;
+    }
+
+    public void setDateExp(Date dateExp) {
+        this.dateExp = dateExp;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getAddressNumber() {
+        return addressNumber;
+    }
+
+    public void setAddressNumber(String addressNumber) {
+        this.addressNumber = addressNumber;
+    }
+
+    public String getAddressComplement() {
+        return addressComplement;
+    }
+
+    public void setAddressComplement(String addressComplement) {
+        this.addressComplement = addressComplement;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getUf() {
+        return uf;
+    }
+
+    public void setUf(String uf) {
+        this.uf = uf;
+    }
+
+    public String getCep() {
+        return cep;
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
+    }
+	
+	
+
+	
+	
+
+}
