@@ -111,9 +111,6 @@ public class EditarUsuarioController {
 	}
 
 	public void initialize() throws Exception {
-		getFullName().setText(PrincipalController.tabelaUsuarios.getSelectionModel().getSelectedItem().getFullName());
-		getUsername().setText(PrincipalController.tabelaUsuarios.getSelectionModel().getSelectedItem().getUserName());
-		getEmail().setText(PrincipalController.tabelaUsuarios.getSelectionModel().getSelectedItem().getEmail());
 		user = PrincipalController.tabelaUsuarios.getSelectionModel().getSelectedItem();
 
 	}

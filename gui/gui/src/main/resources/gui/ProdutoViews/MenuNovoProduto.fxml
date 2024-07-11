@@ -10,16 +10,16 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="telaBase" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.NovoProdutoController">
+<BorderPane fx:id="telaBase" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.MenuNovoProdutoController">
    <top>
       <Pane cacheShape="false" prefHeight="170.0" prefWidth="800.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
             <ImageView fx:id="imagem" fitHeight="102.0" fitWidth="157.0" layoutX="35.0" layoutY="13.0" pickOnBounds="true" preserveRatio="true" style="-fx-image: black;">
                <image>
-                  <Image url="@../img/editarL.png" />
+                  <Image url="@../img/adicionarL.png" />
                </image>
             </ImageView>
-            <Label fx:id="titulo" alignment="CENTER" layoutX="10.0" layoutY="42.0" prefHeight="22.0" prefWidth="800.0" text="Editar Produto">
+            <Label fx:id="titulo" alignment="CENTER" layoutX="10.0" layoutY="42.0" prefHeight="22.0" prefWidth="800.0" text="Novo Produto">
                <font>
                   <Font name="Calibri" size="18.0" />
                </font>

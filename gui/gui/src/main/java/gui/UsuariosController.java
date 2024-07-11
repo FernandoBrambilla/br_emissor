@@ -37,7 +37,7 @@ public class UsuariosController extends Application {
 
 	PrincipalController principalController;
 
-	static EditarUsuarioController editar = null;
+	static EditarUsuarioController editar;
 
 	static User user;
 
@@ -338,7 +338,7 @@ public class UsuariosController extends Application {
 			getTabelaUsuarios().setPlaceholder(new Label("Nenhum usuário cadastrado."));
 
 		}
-		return getTabelaUsuarios();
+		return getTabelaUsuarios();                
 
 	}
 

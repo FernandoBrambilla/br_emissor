@@ -37,13 +37,13 @@ public class ClientesController {
 
 	private static String token = PrincipalController.getAccessToken();
 
-	static TableView<Cliente> tabelaClientes = null;
+	static TableView<Cliente> tabelaClientes;
 
 	static ObservableList<Cliente> observableList;
 
-	static NovoClienteController novoClient = null;
+	static NovoClienteController novoClient;
 
-	static EditarClienteController editarClient = null;
+	static EditarClienteController editarClient;
 
 	@FXML
 	private BorderPane telaBase;

@@ -1,12 +1,10 @@
 package gui;
 
 import java.io.IOException;
-import java.lang.invoke.StringConcatException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -15,7 +13,6 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import gui.Models.CategoriaProduto;
 import gui.Models.Produto;
 import gui.Models.Style;
 import javafx.collections.FXCollections;
@@ -39,6 +36,10 @@ public class ProdutosController {
 
 	private static String token = PrincipalController.getAccessToken();
 
+	public static TableView<Produto> tabelaprodutos;
+
+	public static ObservableList<Produto> observableList;
+
 	@FXML
 	private BorderPane telaBase;
 
@@ -50,10 +51,6 @@ public class ProdutosController {
 
 	@FXML
 	private Button btnApagar;
-
-	static TableView<Produto> tabelaprodutos = null;
-
-	static ObservableList<Produto> observableList;
 
 	public static TableView<Produto> getTabelaprodutos() {
 		return tabelaprodutos;
@@ -101,6 +98,7 @@ public class ProdutosController {
 
 	public void setBtnApagar(Button btnApagar) {
 		this.btnApagar = btnApagar;
+
 	}
 
 	public void aplicaEfeitos() {
@@ -108,6 +106,31 @@ public class ProdutosController {
 		efeitos.hover(getBtnNovo());
 		efeitos.hover(getBtnEditar());
 		efeitos.hover(getBtnApagar());
+
+	}
+
+	public static List<String> buscarTodasCategoriasProduto() throws Exception {
+		try {
+			String url = "http://localhost:8080/category";
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(url))
+					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			JSONArray responseJson = new JSONArray(response.body());
+			List<String> listaCategorias = new ArrayList<>();
+
+			for (int i = 0; i < responseJson.length(); i++) {
+				JSONObject jsonObj = responseJson.getJSONObject(i);
+				listaCategorias.add(jsonObj.getString("descricao"));
+			}
+			return listaCategorias;
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+
+	}
+
+	public void initialize() throws IOException, InterruptedException {
 
 	}
 
@@ -119,7 +142,7 @@ public class ProdutosController {
 
 		TableColumn<Produto, String> colunaCod = new TableColumn<Produto, String>("Código");
 		colunaCod.setCellValueFactory(new PropertyValueFactory<Produto, String>("codigo"));
-		
+
 		TableColumn<Produto, String> colunaDesc = new TableColumn<Produto, String>("Descrição");
 		colunaDesc.setCellValueFactory(new PropertyValueFactory<Produto, String>("descricao"));
 
@@ -132,16 +155,16 @@ public class ProdutosController {
 
 		TableColumn<Produto, String> colunaValor = new TableColumn<Produto, String>("Preço R$");
 		colunaValor.setCellValueFactory(new PropertyValueFactory<Produto, String>("valorVenda"));
-		
+
 		TableColumn<Produto, String> colunaUni = new TableColumn<Produto, String>("Unidade");
 		colunaUni.setCellValueFactory(new PropertyValueFactory<Produto, String>("unidadeProduto"));
-		
+
 		TableColumn<Produto, String> colunaCateg = new TableColumn<Produto, String>("Categoria");
 		colunaCateg.setCellValueFactory(new PropertyValueFactory<Produto, String>("categoria"));
-		
-		TableColumn<Produto, String> colunaFornecedor= new TableColumn<Produto, String>("Fornecedor");
+
+		TableColumn<Produto, String> colunaFornecedor = new TableColumn<Produto, String>("Fornecedor");
 		colunaFornecedor.setCellValueFactory(new PropertyValueFactory<Produto, String>("fornecedor"));
-		
+
 		/*
 		 * TableColumn<Clients, String> colunaRg_Ie = new TableColumn<Clients,
 		 * String>("Rg/Ie"); colunaRg_Ie.setCellValueFactory(new
@@ -188,8 +211,8 @@ public class ProdutosController {
 		popularTabela();
 
 		// ADICIONA AS COLUNAS
-		getTabelaprodutos().getColumns().addAll( colunaCod, colunaDesc, colunaEstoque, colunaCusto,
-				colunaValor, colunaUni , colunaCateg, colunaFornecedor);
+		getTabelaprodutos().getColumns().addAll(colunaCod, colunaDesc, colunaEstoque, colunaCusto, colunaValor,
+				colunaUni, colunaCateg, colunaFornecedor);
 
 		if (getTabelaprodutos() == null) {
 			getTabelaprodutos().setPlaceholder(new Label("Nenhum Produto Cadastrado."));
@@ -215,10 +238,9 @@ public class ProdutosController {
 					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			JSONArray responseJson = new JSONArray(response.body());
-			Produto produto; 
+			Produto produto;
 			List<Produto> produtos = new ArrayList<>();
 			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-			
 
 			// LOOP CONVERTE JSON EM CLIENTS
 			for (int i = 0; i < responseJson.length(); i++) {
@@ -232,9 +254,10 @@ public class ProdutosController {
 				produto.setCodigo(jsonObj.getString("codigo"));
 				produto.setValorVenda(jsonObj.getDouble("valorVenda"));
 				produto.setCusto(jsonObj.getDouble("custo"));
-				produto.setEstoque(jsonObj.getInt("estoque")); 
+				produto.setEstoque(jsonObj.getInt("estoque"));
 				produto.setUnidadeProduto(jsonObj.getString("unidadeProduto"));
-				//produto.setCategoria(jsonObj.getString("categoria").isEmpty() ? "" : jsonObj.getString("categoria"));
+				// produto.setCategoria(jsonObj.getString("categoria").isEmpty() ? "" :
+				// jsonObj.getString("categoria"));
 				produto.setFornecedor(jsonObj.getString("fornecedor"));
 				produto.setTributacao(jsonObj.getString("tributacao"));
 				produto.setNcm(jsonObj.getInt("ncm"));
@@ -254,11 +277,10 @@ public class ProdutosController {
 
 	@SuppressWarnings("exports")
 	public void novo(ActionEvent action) throws IOException {
-		NovoProdutoController novoProduto = new NovoProdutoController();
 		Stage stage = new Stage();
-		Parent painel = FXMLLoader.load(getClass().getResource("ProdutoViews/NovoProduto.fxml"));
+		Parent painel = FXMLLoader.load(getClass().getResource("ProdutoViews/MenuNovoProduto.fxml"));
 		Scene scene = new Scene(painel, 800, 680);
-		stage.setTitle("Cadasto de Usuários");
+		stage.setTitle("Cadasto de Produtos");
 		stage.setScene(scene);
 		stage.show();
 
@@ -278,21 +300,18 @@ public class ProdutosController {
 
 		else {
 			Stage stage = new Stage();
-			Parent painel = FXMLLoader.load(getClass().getResource("ProdutoViews/NovoProduto.fxml"));
+			Parent painel = FXMLLoader.load(getClass().getResource("ProdutoViews/MenuEditarProduto.fxml"));
 			Scene scene = new Scene(painel, 800, 680);
 			stage.setTitle("Editar Produto");
 			stage.setScene(scene);
 			stage.show();
-	
 
 		}
 
 	}
-		
-		
 
-	@SuppressWarnings("exports")
 	public void apagar(ActionEvent action) throws IOException {
+
 	}
 
 }
