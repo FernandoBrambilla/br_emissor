@@ -1,6 +1,6 @@
-package gui.Models;
+package gui.Dtos;
 
-public enum RegimeTributario {
+public enum RegimeTributarioDto {
 	
 	
 	MEI("MEI - Micro Empreendedor Individual"),
@@ -10,7 +10,7 @@ public enum RegimeTributario {
 
 	private String descricao; 
 	
-	RegimeTributario(String descricao) {
+	RegimeTributarioDto(String descricao) {
 		this.descricao = descricao;
 	}
 

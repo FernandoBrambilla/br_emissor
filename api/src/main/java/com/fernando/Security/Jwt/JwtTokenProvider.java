@@ -22,6 +22,8 @@ import com.fernando.services.UserService;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 @Service
 public class JwtTokenProvider {
@@ -29,14 +31,16 @@ public class JwtTokenProvider {
 	@Value("${security.jwt.token.secret-key:secret}")
 	private String secretKey = "secret";
 	
-	@Value("${security.jwt.token.expire-length:3600000}")
-	private long validityInMilliseconds = 10800000; //3 hour
+	@Value("${security.jwt.token.expire-length:36000}")
+	private final long validityInSeconds= 36000 ; //1 hour
 	
 	@Autowired
 	private UserService userService;
 	
 	Algorithm algorithm = null;
 	
+       
+        
 	@PostConstruct
 	protected void init() {
 		secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes());
@@ -44,8 +48,8 @@ public class JwtTokenProvider {
 	}
 	
 	public Token createAccessToken(String userName, List<String> roles) {
-		Date  now = new Date();
-		Date vality = new Date(now.getTime() + validityInMilliseconds);
+		LocalDateTime  now = LocalDateTime.now();
+		LocalDateTime vality = now.plusSeconds(validityInSeconds);
 		var accessToken = getAccessToken(userName, roles, now, vality);
 		var refreshToken = getRefreshToken(userName, roles, now);
 		return new Token(userName, true, now, vality, accessToken, refreshToken);
@@ -62,25 +66,24 @@ public class JwtTokenProvider {
 		return createAccessToken(userName, roles);
 	}
 	
-	private String getAccessToken(String userName, List<String> roles, Date now, Date vality) {
+	private String getAccessToken(String userName, List<String> roles, LocalDateTime now, LocalDateTime vality) {
 		String issuerUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
 				.build().toUriString();
 		return JWT.create()
 				.withClaim("roles", roles)
-				.withIssuedAt(now)
-				.withExpiresAt(vality)
+				.withIssuedAt(now.toInstant(ZoneOffset.UTC))
+				.withExpiresAt(vality.toInstant(ZoneOffset.UTC))
 				.withSubject(userName)
 				.withIssuer(issuerUrl)
-				.sign(algorithm);
-				
+				.sign(algorithm);			
 	}
 	
-private String getRefreshToken(String userName, List<String> roles, Date now) {
-		Date valityRefreshToken = new Date(now.getTime() + validityInMilliseconds * 3);
+private String getRefreshToken(String userName, List<String> roles, LocalDateTime now) {
+		LocalDateTime valityRefreshToken = now.plusSeconds(validityInSeconds);
 		return JWT.create()
 				.withClaim("roles", roles)
-				.withIssuedAt(now)
-				.withExpiresAt(valityRefreshToken)
+				.withIssuedAt(now.toInstant(ZoneOffset.UTC))
+				.withExpiresAt(valityRefreshToken.toInstant(ZoneOffset.UTC))
 				.withSubject(userName)
 				.sign(algorithm);
 				

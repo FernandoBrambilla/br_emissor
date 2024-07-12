@@ -15,8 +15,8 @@ import org.json.JSONObject;
 
 import gui.App;
 import gui.Controllers.PrincipalControllers.PrincipalController;
-import gui.Models.Cliente;
-import gui.Models.Style;
+import gui.Dtos.ClienteDto;
+import gui.Dtos.Style;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -39,9 +39,9 @@ public class ClientesController {
 
 	private static String token = PrincipalController.getAccessToken();
 
-	static TableView<Cliente> tabelaClientes;
+	static TableView<ClienteDto> tabelaClientes;
 
-	static ObservableList<Cliente> observableList;
+	static ObservableList<ClienteDto> observableList;
 
 	static NovoClienteController novoClient;
 
@@ -71,11 +71,11 @@ public class ClientesController {
 		return token;
 	}
 
-	public static TableView<Cliente> getTabelaClientes() {
+	public static TableView<ClienteDto> getTabelaClientes() {
 		return tabelaClientes;
 	}
 
-	public static ObservableList<Cliente> getObservableList() {
+	public static ObservableList<ClienteDto> getObservableList() {
 		return observableList;
 	}
 
@@ -107,11 +107,11 @@ public class ClientesController {
 		ClientesController.token = token;
 	}
 
-	public static void setTabelaClientes(TableView<Cliente> tabelaClientes) {
+	public static void setTabelaClientes(TableView<ClienteDto> tabelaClientes) {
 		ClientesController.tabelaClientes = tabelaClientes;
 	}
 
-	public static void setObservableList(ObservableList<Cliente> observableList) {
+	public static void setObservableList(ObservableList<ClienteDto> observableList) {
 		ClientesController.observableList = observableList;
 	}
 
@@ -152,62 +152,62 @@ public class ClientesController {
 	}
 
 	@SuppressWarnings("unchecked")
-	public TableView<Cliente> construirTabela() throws Exception {
-		setTabelaClientes(new TableView<Cliente>());
+	public TableView<ClienteDto> construirTabela() throws Exception {
+		setTabelaClientes(new TableView<ClienteDto>());
 
-		TableColumn<Cliente, Integer> colunaID = new TableColumn<Cliente, Integer>("ID");
-		colunaID.setCellValueFactory(new PropertyValueFactory<Cliente, Integer>("id"));
+		TableColumn<ClienteDto, Integer> colunaID = new TableColumn<ClienteDto, Integer>("ID");
+		colunaID.setCellValueFactory(new PropertyValueFactory<ClienteDto, Integer>("id"));
 
-		TableColumn<Cliente, String> colunaName = new TableColumn<Cliente, String>("Nome");
-		colunaName.setCellValueFactory(new PropertyValueFactory<Cliente, String>("name"));
+		TableColumn<ClienteDto, String> colunaName = new TableColumn<ClienteDto, String>("Nome");
+		colunaName.setCellValueFactory(new PropertyValueFactory<ClienteDto, String>("name"));
 		colunaName.setMinWidth(300);
 
-		TableColumn<Cliente, String> colunaEmail = new TableColumn<Cliente, String>("Email");
-		colunaEmail.setCellValueFactory(new PropertyValueFactory<Cliente, String>("email"));
+		TableColumn<ClienteDto, String> colunaEmail = new TableColumn<ClienteDto, String>("Email");
+		colunaEmail.setCellValueFactory(new PropertyValueFactory<ClienteDto, String>("email"));
 		colunaEmail.setMinWidth(300);
 
-		TableColumn<Cliente, String> colunaPhone = new TableColumn<Cliente, String>("Telefone");
-		colunaPhone.setCellValueFactory(new PropertyValueFactory<Cliente, String>("phone"));
+		TableColumn<ClienteDto, String> colunaPhone = new TableColumn<ClienteDto, String>("Telefone");
+		colunaPhone.setCellValueFactory(new PropertyValueFactory<ClienteDto, String>("phone"));
 		colunaPhone.setMinWidth(120);
 
-		TableColumn<Cliente, String> colunaCpf_Cnpj = new TableColumn<Cliente, String>("Cpf/Cnpj");
-		colunaCpf_Cnpj.setCellValueFactory(new PropertyValueFactory<Cliente, String>("cpf_cnpj"));
+		TableColumn<ClienteDto, String> colunaCpf_Cnpj = new TableColumn<ClienteDto, String>("Cpf/Cnpj");
+		colunaCpf_Cnpj.setCellValueFactory(new PropertyValueFactory<ClienteDto, String>("cpf_cnpj"));
 
-		TableColumn<Cliente, String> colunaRg_Ie = new TableColumn<Cliente, String>("Rg/Ie");
-		colunaRg_Ie.setCellValueFactory(new PropertyValueFactory<Cliente, String>("rg_ie"));
+		TableColumn<ClienteDto, String> colunaRg_Ie = new TableColumn<ClienteDto, String>("Rg/Ie");
+		colunaRg_Ie.setCellValueFactory(new PropertyValueFactory<ClienteDto, String>("rg_ie"));
 
-		TableColumn<Cliente, LocalDate> colunaDateNasc_cons = new TableColumn<Cliente, LocalDate>("Data Nasc/Const.");
-		colunaDateNasc_cons.setCellValueFactory(new PropertyValueFactory<Cliente, LocalDate>("dateNasc_const"));
+		TableColumn<ClienteDto, LocalDate> colunaDateNasc_cons = new TableColumn<ClienteDto, LocalDate>("Data Nasc/Const.");
+		colunaDateNasc_cons.setCellValueFactory(new PropertyValueFactory<ClienteDto, LocalDate>("dateNasc_const"));
 
-		TableColumn<Cliente, LocalDate> colunaDateExp = new TableColumn<Cliente, LocalDate>("Data de Expedição");
-		colunaDateExp.setCellValueFactory(new PropertyValueFactory<Cliente, LocalDate>("dateExp"));
+		TableColumn<ClienteDto, LocalDate> colunaDateExp = new TableColumn<ClienteDto, LocalDate>("Data de Expedição");
+		colunaDateExp.setCellValueFactory(new PropertyValueFactory<ClienteDto, LocalDate>("dateExp"));
 
-		TableColumn<Cliente, String> colunaEndereco = new TableColumn<Cliente, String>("Endereço");
-		colunaEndereco.setCellValueFactory(new PropertyValueFactory<Cliente, String>("address"));
+		TableColumn<ClienteDto, String> colunaEndereco = new TableColumn<ClienteDto, String>("Endereço");
+		colunaEndereco.setCellValueFactory(new PropertyValueFactory<ClienteDto, String>("address"));
 
-		TableColumn<Cliente, String> colunaNum = new TableColumn<Cliente, String>("Número");
-		colunaNum.setCellValueFactory(new PropertyValueFactory<Cliente, String>("addressNumber"));
+		TableColumn<ClienteDto, String> colunaNum = new TableColumn<ClienteDto, String>("Número");
+		colunaNum.setCellValueFactory(new PropertyValueFactory<ClienteDto, String>("addressNumber"));
 
-		TableColumn<Cliente, String> colunaComplement = new TableColumn<Cliente, String>("Complemento");
-		colunaComplement.setCellValueFactory(new PropertyValueFactory<Cliente, String>("addressComplement"));
+		TableColumn<ClienteDto, String> colunaComplement = new TableColumn<ClienteDto, String>("Complemento");
+		colunaComplement.setCellValueFactory(new PropertyValueFactory<ClienteDto, String>("addressComplement"));
 
-		TableColumn<Cliente, String> colunaBairro = new TableColumn<Cliente, String>("Bairro");
-		colunaBairro.setCellValueFactory(new PropertyValueFactory<Cliente, String>("bairro"));
+		TableColumn<ClienteDto, String> colunaBairro = new TableColumn<ClienteDto, String>("Bairro");
+		colunaBairro.setCellValueFactory(new PropertyValueFactory<ClienteDto, String>("bairro"));
 
-		TableColumn<Cliente, String> colunaCity = new TableColumn<Cliente, String>("Cidade");
-		colunaCity.setCellValueFactory(new PropertyValueFactory<Cliente, String>("city"));
+		TableColumn<ClienteDto, String> colunaCity = new TableColumn<ClienteDto, String>("Cidade");
+		colunaCity.setCellValueFactory(new PropertyValueFactory<ClienteDto, String>("city"));
 
-		TableColumn<Cliente, String> colunaUf = new TableColumn<Cliente, String>("UF");
-		colunaUf.setCellValueFactory(new PropertyValueFactory<Cliente, String>("uf"));
+		TableColumn<ClienteDto, String> colunaUf = new TableColumn<ClienteDto, String>("UF");
+		colunaUf.setCellValueFactory(new PropertyValueFactory<ClienteDto, String>("uf"));
 
-		TableColumn<Cliente, String> colunaCep = new TableColumn<Cliente, String>("Cep");
-		colunaCep.setCellValueFactory(new PropertyValueFactory<Cliente, String>("cep"));
+		TableColumn<ClienteDto, String> colunaCep = new TableColumn<ClienteDto, String>("Cep");
+		colunaCep.setCellValueFactory(new PropertyValueFactory<ClienteDto, String>("cep"));
 
-		TableColumn<Cliente, String> colunaTipo = new TableColumn<Cliente, String>("Pessoa");
-		colunaTipo.setCellValueFactory(new PropertyValueFactory<Cliente, String>("tipo"));
+		TableColumn<ClienteDto, String> colunaTipo = new TableColumn<ClienteDto, String>("Pessoa");
+		colunaTipo.setCellValueFactory(new PropertyValueFactory<ClienteDto, String>("tipo"));
 		
-		TableColumn<Cliente, String> colunaObs = new TableColumn<Cliente, String>("Obs");
-		colunaObs.setCellValueFactory(new PropertyValueFactory<Cliente, String>("obs"));
+		TableColumn<ClienteDto, String> colunaObs = new TableColumn<ClienteDto, String>("Obs");
+		colunaObs.setCellValueFactory(new PropertyValueFactory<ClienteDto, String>("obs"));
 
 		// POPULA A TABELA
 		popularTabela();
@@ -224,12 +224,12 @@ public class ClientesController {
 	}
 
 	public static void popularTabela() throws Exception {
-		List<Cliente> clientes = getAllClients();
+		List<ClienteDto> clientes = getAllClients();
 		setObservableList(FXCollections.observableArrayList(clientes));
 		getTabelaClientes().setItems(observableList);
 	}
 
-	private static List<Cliente> getAllClients() throws Exception {
+	private static List<ClienteDto> getAllClients() throws Exception {
 		try {
 			// BUSCA TODOS CLIENTES
 			String url = "http://localhost:8080/clients";
@@ -239,8 +239,8 @@ public class ClientesController {
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			JSONArray responseJson = new JSONArray(response.body());
 
-			Cliente cliente;
-			List<Cliente> clientes = new ArrayList<>();
+			ClienteDto cliente;
+			List<ClienteDto> clientes = new ArrayList<>();
 			DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 
 			// LOOP CONVERTE JSON EM CLIENTS
@@ -249,7 +249,7 @@ public class ClientesController {
 				String dateNasc_const = jsonObj.getString("dateNasc_const");
 				String dateExp = jsonObj.getString("dateExp");
 
-				cliente = new Cliente();
+				cliente = new ClienteDto();
 				cliente.setId(jsonObj.getLong("id"));
 				cliente.setTipo(jsonObj.getString("tipo"));
 				cliente.setName(jsonObj.getString("name"));

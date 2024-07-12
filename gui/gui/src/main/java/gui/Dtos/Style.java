@@ -1,4 +1,4 @@
-package gui.Models;
+package gui.Dtos;
 
 import java.math.BigDecimal;
 

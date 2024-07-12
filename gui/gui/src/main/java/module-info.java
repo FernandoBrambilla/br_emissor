@@ -25,7 +25,7 @@ module gui{
 	opens gui.Controllers.VendaControllers;
 	
     exports gui;
-    exports gui.Models;
+    exports gui.Dtos;
     exports gui.Controllers.LoginControllers;
 
     exports gui.Controllers.PrincipalControllers;

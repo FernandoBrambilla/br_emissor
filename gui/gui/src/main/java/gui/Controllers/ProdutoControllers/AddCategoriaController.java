@@ -10,7 +10,7 @@ import java.util.List;
 import org.json.JSONObject;
 
 import gui.Controllers.PrincipalControllers.PrincipalController;
-import gui.Models.Style;
+import gui.Dtos.Style;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

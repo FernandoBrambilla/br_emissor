@@ -1,6 +1,6 @@
-package gui.Models;
+package gui.Dtos;
 
-public class CategoriaProduto {
+public class CategoriaProdutoDto {
 
 	private Integer id;
 	

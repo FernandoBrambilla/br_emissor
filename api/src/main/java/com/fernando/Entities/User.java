@@ -23,7 +23,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table (name = "users")
-public class User extends RepresentationModel<Bank> implements UserDetails, Serializable {
+public class User extends RepresentationModel<User> implements UserDetails, Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -54,10 +54,7 @@ public class User extends RepresentationModel<Bank> implements UserDetails, Seri
 	@Column (name = "enable")
 	private Boolean enabled;
         
-        
-        
-	 //CAMPOS COMENTADOS - HABILITAR QUANDO INSERIR CONTROLE DE PERMISSÕES DE USUÁRIOS
-        
+                       
 	@ManyToMany (fetch = FetchType.EAGER)
 	@JoinTable (name= "user_permission", joinColumns = {@JoinColumn (name="id_user")},
 	inverseJoinColumns = {@JoinColumn (name="id_permission")})

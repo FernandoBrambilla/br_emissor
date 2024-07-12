@@ -8,8 +8,8 @@ import java.net.http.HttpResponse;
 import org.json.JSONObject;
 
 import gui.Controllers.PrincipalControllers.PrincipalController;
-import gui.Models.Style;
-import gui.Models.User;
+import gui.Dtos.Style;
+import gui.Dtos.UserDto;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -25,7 +25,7 @@ public class EditarUsuarioController {
 
 	private String token = PrincipalController.getAccessToken();
 
-	static User user = null;
+	static UserDto user = null;
 
 	@FXML
 	private TextField fullName;
@@ -113,7 +113,9 @@ public class EditarUsuarioController {
 
 	public void initialize() throws Exception {
 		user = PrincipalController.tabelaUsuarios.getSelectionModel().getSelectedItem();
-
+		getFullName().setText(user.getFullName());
+		getEmail().setText(user.getEmail());
+		getUsername().setText(user.getUserName());
 	}
 
 	public boolean isNull() {
@@ -171,7 +173,7 @@ public class EditarUsuarioController {
 
 	}
 
-	private void fazerRequisicao(User user) {
+	private void fazerRequisicao(UserDto user) {
 		String permissions[] = {};
 		String authorities[] = {};
 		String roles[] = {};

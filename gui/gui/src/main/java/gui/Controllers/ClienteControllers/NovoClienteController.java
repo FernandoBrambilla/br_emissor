@@ -11,8 +11,8 @@ import java.time.format.DateTimeFormatter;
 import org.json.JSONObject;
 
 import gui.Controllers.PrincipalControllers.PrincipalController;
-import gui.Models.Style;
-import gui.Models.Uf_Enum;
+import gui.Dtos.Style;
+import gui.Dtos.Uf_Enum;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -382,7 +382,7 @@ public class NovoClienteController {
 		getDataNasc_Const().setVisible(false);
 		getIeIsento().setVisible(true);
 		getLabelEmissRg().setText("Data de Cadastro");
-		getPf().setSelected(false);
+		getPf().setSelected(false); 
 	}
 
 	@SuppressWarnings({ "exports" })

@@ -1,7 +1,7 @@
 package com.fernando.Security;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Token implements Serializable{
@@ -9,13 +9,13 @@ public class Token implements Serializable{
 	
 	private String userName;
 	private Boolean authenticated;
-	private Date create;
-	private Date expiration;
+	private LocalDateTime create;
+	private LocalDateTime expiration;
 	private String accessToken;
 	private String refreshToken;
 	
 	//CONSTUCTOR
-	public Token(String userName, Boolean authenticated, Date create, Date expiration, String accessToken,
+	public Token(String userName, Boolean authenticated, LocalDateTime create, LocalDateTime expiration, String accessToken,
 			String refreshToken) {
 		super();
 		this.userName = userName;
@@ -47,19 +47,19 @@ public class Token implements Serializable{
 		this.authenticated = authenticated;
 	}
 
-	public Date getCreate() {
+	public LocalDateTime getCreate() {
 		return create;
 	}
 
-	public void setCreate(Date create) {
+	public void setCreate(LocalDateTime create) {
 		this.create = create;
 	}
 
-	public Date getExpiration() {
+	public LocalDateTime getExpiration() {
 		return expiration;
 	}
 
-	public void setExpiration(Date expiration) {
+	public void setExpiration(LocalDateTime expiration) {
 		this.expiration = expiration;
 	}
 

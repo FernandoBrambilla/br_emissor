@@ -11,9 +11,10 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import gui.App;
 import gui.Controllers.PrincipalControllers.PrincipalController;
-import gui.Models.Style;
-import gui.Models.User;
+import gui.Dtos.Style;
+import gui.Dtos.UserDto;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -40,13 +41,13 @@ public class UsuariosController extends Application {
 
 	static EditarUsuarioController editar;
 
-	static User user;
+	static UserDto user;
 
 	Style effects = new Style();
 
 	private static String token = PrincipalController.getAccessToken();
 
-	static ObservableList<User> observableList;
+	static ObservableList<UserDto> observableList;
 
 	@SuppressWarnings("rawtypes")
 	static TableView tabelaUsuarios = null;
@@ -101,7 +102,7 @@ public class UsuariosController extends Application {
 		return editar;
 	}
 
-	public static User getUser() {
+	public static UserDto getUser() {
 		return user;
 	}
 
@@ -113,7 +114,7 @@ public class UsuariosController extends Application {
 		return token;
 	}
 
-	public static ObservableList<User> getObservableList() {
+	public static ObservableList<UserDto> getObservableList() {
 		return observableList;
 	}
 
@@ -200,7 +201,7 @@ public class UsuariosController extends Application {
 		UsuariosController.editar = editar;
 	}
 
-	public static void setUser(User user) {
+	public static void setUser(UserDto user) {
 		UsuariosController.user = user;
 	}
 
@@ -212,7 +213,7 @@ public class UsuariosController extends Application {
 		UsuariosController.token = token;
 	}
 
-	public static void setObservableList(ObservableList<User> observableList) {
+	public static void setObservableList(ObservableList<UserDto> observableList) {
 		UsuariosController.observableList = observableList;
 	}
 
@@ -300,31 +301,31 @@ public class UsuariosController extends Application {
 	}
 
 	@SuppressWarnings({ "unchecked" })
-	public TableView<User> construirTabela() throws Exception {
-		setTabelaUsuarios(new TableView<User>());
+	public TableView<UserDto> construirTabela() throws Exception {
+		setTabelaUsuarios(new TableView<UserDto>());
 		getTabelaUsuarios().setMinWidth(1200);
 		
 
-		TableColumn<User, Integer> colunaID = new TableColumn<User, Integer>("ID");
-		colunaID.setCellValueFactory(new PropertyValueFactory<User, Integer>("id"));
+		TableColumn<UserDto, Integer> colunaID = new TableColumn<UserDto, Integer>("ID");
+		colunaID.setCellValueFactory(new PropertyValueFactory<UserDto, Integer>("id"));
 		colunaID.setMinWidth(50);
 
-		TableColumn<User, String> colunaName = new TableColumn<User, String>("Nome");
-		colunaName.setCellValueFactory(new PropertyValueFactory<User, String>("fullName"));
+		TableColumn<UserDto, String> colunaName = new TableColumn<UserDto, String>("Nome");
+		colunaName.setCellValueFactory(new PropertyValueFactory<UserDto, String>("fullName"));
 		colunaName.setMinWidth(350);
 		
-		TableColumn<User, String> colunaUsername = new TableColumn<User, String>("Usuário");
-		colunaUsername.setCellValueFactory(new PropertyValueFactory<User, String>("userName"));
+		TableColumn<UserDto, String> colunaUsername = new TableColumn<UserDto, String>("Usuário");
+		colunaUsername.setCellValueFactory(new PropertyValueFactory<UserDto, String>("userName"));
 		colunaUsername.setMinWidth(330);
 		
 		
-		TableColumn<User, String> colunaEmail = new TableColumn<User, String>("Email");
-		colunaEmail.setCellValueFactory(new PropertyValueFactory<User, String>("email"));
+		TableColumn<UserDto, String> colunaEmail = new TableColumn<UserDto, String>("Email");
+		colunaEmail.setCellValueFactory(new PropertyValueFactory<UserDto, String>("email"));
 		colunaEmail.setMinWidth(350);
 		
 
-		TableColumn<User, Boolean> colunaStatus = new TableColumn<User, Boolean>("Status");
-		colunaStatus.setCellValueFactory(new PropertyValueFactory<User, Boolean>("enabled"));
+		TableColumn<UserDto, Boolean> colunaStatus = new TableColumn<UserDto, Boolean>("Status");
+		colunaStatus.setCellValueFactory(new PropertyValueFactory<UserDto, Boolean>("enabled"));
 		colunaStatus.setMinWidth(148);
 
 		
@@ -345,12 +346,12 @@ public class UsuariosController extends Application {
 
 	@SuppressWarnings("unchecked")
 	public static void popularTabela() throws Exception {
-		List<User> users = getAllUsers();
+		List<UserDto> users = getAllUsers();
 		setObservableList(FXCollections.observableArrayList(users));
 		getTabelaUsuarios().setItems(observableList);
 	}
 
-	public static List<User> getAllUsers() throws Exception {
+	public static List<UserDto> getAllUsers() throws Exception {
 		try {
 			// BUSCA TODOS USUARIOS
 			String url = "http://localhost:8080/users";
@@ -359,13 +360,13 @@ public class UsuariosController extends Application {
 					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			JSONArray usuarios = new JSONArray(response.body());
-			User user;
-			List<User> users = new ArrayList<>();
+			UserDto user;
+			List<UserDto> users = new ArrayList<>();
 
 			// LOOP CONVERTE JSON EM USER
 			for (int i = 0; i < usuarios.length(); i++) {
 				JSONObject jsonObj = usuarios.getJSONObject(i);
-				user = new User();
+				user = new UserDto();
 				user.setCredentialsNonExpired(jsonObj.getBoolean("credentialsNonExpired"));
 				user.setFullName(jsonObj.getString("fullName"));
 				user.setUserName(jsonObj.getString("userName")); 
@@ -454,7 +455,7 @@ public class UsuariosController extends Application {
 						.POST(HttpRequest.BodyPublishers.ofString(json.toString())).build();
 				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 				String message = response.body().substring(83, 152);
-				int status = response.statusCode();
+				int status = response.statusCode(); 
 
 				if (status == 200) {
 					Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -500,7 +501,7 @@ public class UsuariosController extends Application {
 	@SuppressWarnings("exports")
 	public void novo(ActionEvent action) throws IOException {
 		Stage stage = new Stage();
-		Parent painel = FXMLLoader.load(getClass().getResource("UsuarioViews/NovoUsuario.fxml"));
+		Parent painel = FXMLLoader.load(App.class.getResource("UsuarioViews/NovoUsuario.fxml"));
 		Scene scene = new Scene(painel, 600, 450);
 		stage.setTitle("Cadasto de Usuários");
 		stage.setScene(scene);
@@ -524,7 +525,7 @@ public class UsuariosController extends Application {
 
 		else {
 			Stage stage = new Stage();
-			Parent painel = FXMLLoader.load(getClass().getResource("UsuarioViews/EditarUsuario.fxml"));
+			Parent painel = FXMLLoader.load(App.class.getResource("UsuarioViews/EditarUsuario.fxml"));
 			Scene scene = new Scene(painel, 600, 450);
 			stage.setTitle("Editar Usuário");
 			stage.setScene(scene);
@@ -688,7 +689,7 @@ public class UsuariosController extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(getClass().getResource("UsuarioViews/Usuarios.fxml"));
+		loader.setLocation(App.class.getResource("UsuarioViews/Usuarios.fxml"));
 		UsuariosController usuariosController = new UsuariosController();
 		getTelaBase().setCenter(usuariosController.construirTabela());
 

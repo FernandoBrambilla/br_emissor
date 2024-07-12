@@ -5,8 +5,8 @@ import java.awt.TextArea;
 import java.io.IOException;
 
 import gui.App;
-import gui.Models.CategoriaProduto;
-import gui.Models.Produto;
+import gui.Dtos.CategoriaProdutoDto;
+import gui.Dtos.ProdutoDto;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,7 +23,7 @@ import javafx.stage.Stage;
 
 public class EditarProdutoController {
 	
-	private static Produto produto = null;
+	private static ProdutoDto produto = null;
 	
 	@FXML
 	BorderPane telaBase;
@@ -56,7 +56,7 @@ public class EditarProdutoController {
 	private TextField descricao;
 	
 	@FXML
-	private ComboBox<CategoriaProduto> categoria;
+	private ComboBox<CategoriaProdutoDto> categoria;
 	
 	@FXML
 	private Button btnAddCategoria;
@@ -91,7 +91,7 @@ public class EditarProdutoController {
 		return descricao;
 	}
 
-	public ComboBox<CategoriaProduto> getCategoria() {
+	public ComboBox<CategoriaProdutoDto> getCategoria() {
 		return categoria;
 	}
 
@@ -135,7 +135,7 @@ public class EditarProdutoController {
 		this.descricao = descricao;
 	}
 
-	public void setCategoria(ComboBox<CategoriaProduto> categoria) {
+	public void setCategoria(ComboBox<CategoriaProdutoDto> categoria) {
 		this.categoria = categoria;
 	}
 
@@ -226,11 +226,11 @@ public class EditarProdutoController {
 	
 	
 
-	public Produto getProduto() {
+	public ProdutoDto getProduto() {
 		return produto;
 	}
 
-	public void setProduto(Produto produto) {
+	public void setProduto(ProdutoDto produto) {
 		this.produto = produto;
 	}
 
@@ -240,7 +240,7 @@ public class EditarProdutoController {
 		getTelaBase().setCenter(loader.load());
 		getBtnCadastro().setStyle("-fx-background-color:  deedfc; ");
 		
-		setProduto(new Produto(ProdutosController.getTabelaprodutos().getSelectionModel().getSelectedItem()));
+		setProduto(new ProdutoDto(ProdutosController.getTabelaprodutos().getSelectionModel().getSelectedItem()));
 		getId().setText(String.valueOf(getProduto().getId()));
 		getEan_getin().setText(getProduto().getEAN_GTIN());
 		getDescricao().setText(getProduto().getDescricao());

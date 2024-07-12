@@ -1,9 +1,9 @@
-package gui.Models;
+package gui.Dtos;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-public class Login {
+public class LoginDto {
 	
 	private String userName;
 	
@@ -18,11 +18,11 @@ public class Login {
 	private String refleshToken;
 	
 	
-	public Login() {
+	public LoginDto() {
 
 	}
 
-	public Login(Login login) {
+	public LoginDto(LoginDto login) {
 		
 	}
 	

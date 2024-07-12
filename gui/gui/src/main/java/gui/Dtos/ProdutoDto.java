@@ -1,8 +1,8 @@
-package gui.Models;
+package gui.Dtos;
 
 import java.time.LocalDateTime;
 
-public class Produto {
+public class ProdutoDto {
 	
 	private Long id;
     
@@ -18,7 +18,7 @@ public class Produto {
     
     private String unidadeProduto;
     
-    private CategoriaProduto categoria;
+    private CategoriaProdutoDto categoria;
     
     private String fornecedor;
     
@@ -34,7 +34,7 @@ public class Produto {
    
     private String EAN_GTIN;
 
-	public Produto(Produto p) {
+	public ProdutoDto(ProdutoDto p) {
 		this.id = p.getId();
 		this.descricao = p.getDescricao();
 		this.codigo = p.getCodigo();
@@ -52,7 +52,7 @@ public class Produto {
 		this.EAN_GTIN = p.getEAN_GTIN();
 	}
 
-	public Produto() {
+	public ProdutoDto() {
 		super();
 	}
 
@@ -84,7 +84,7 @@ public class Produto {
 		return unidadeProduto;
 	}
 
-	public CategoriaProduto getCategoria() {
+	public CategoriaProdutoDto getCategoria() {
 		return categoria;
 	}
 

@@ -2,12 +2,12 @@ debug: false
 security:
   jwt:
     token:
-      secret-key: 53cr37
+      secret-key: admin
       expire-length: 3600000
 spring:
   datasource:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/gerenciador_db?useTimeZone=true&serverTimezone=UTC
+      url: jdbc:mysql://localhost:3306/gerenciador_db?useTimeZone=false&serverTimezone=America/Sao_Paulo
       username: root
       password: bremissor_db
   jpa:

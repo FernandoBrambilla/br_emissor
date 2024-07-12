@@ -1,13 +1,8 @@
 package com.fernando;
 
-import java.util.HashMap;
-import java.util.Map;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.security.crypto.password.DelegatingPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder;
-import org.springframework.security.crypto.password.Pbkdf2PasswordEncoder.SecretKeyFactoryAlgorithm;
 
 @SpringBootApplication
 public class WebClientApiApplication {
@@ -16,7 +11,7 @@ public class WebClientApiApplication {
 		SpringApplication.run(WebClientApiApplication.class, args);
 		
 		
-	
+                /*
 		Pbkdf2PasswordEncoder pbkdf2Encoder = new Pbkdf2PasswordEncoder(
 		"", 8, 185000, SecretKeyFactoryAlgorithm.PBKDF2WithHmacSHA256);
 		
@@ -28,8 +23,8 @@ public class WebClientApiApplication {
 		
 		String result = passwordEncoder.encode("admin");
 		System.out.println("My Hash: " + result);
+                */
 	
-		
 		
 	
 		

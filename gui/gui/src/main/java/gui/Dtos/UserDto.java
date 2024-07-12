@@ -1,6 +1,6 @@
-package gui.Models;
+package gui.Dtos;
 
-public class User {
+public class UserDto {
 	
 	private Integer id;
 	

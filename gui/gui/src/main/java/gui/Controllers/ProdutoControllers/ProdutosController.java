@@ -15,8 +15,8 @@ import org.json.JSONObject;
 
 import gui.App;
 import gui.Controllers.PrincipalControllers.PrincipalController;
-import gui.Models.Produto;
-import gui.Models.Style;
+import gui.Dtos.ProdutoDto;
+import gui.Dtos.Style;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -38,9 +38,9 @@ public class ProdutosController {
 
 	private static String token = PrincipalController.getAccessToken();
 
-	public static TableView<Produto> tabelaprodutos;
+	public static TableView<ProdutoDto> tabelaprodutos;
 
-	public static ObservableList<Produto> observableList;
+	public static ObservableList<ProdutoDto> observableList;
 
 	@FXML
 	private BorderPane telaBase;
@@ -54,19 +54,19 @@ public class ProdutosController {
 	@FXML
 	private Button btnApagar;
 
-	public static TableView<Produto> getTabelaprodutos() {
+	public static TableView<ProdutoDto> getTabelaprodutos() {
 		return tabelaprodutos;
 	}
 
-	public static ObservableList<Produto> getObservableList() {
+	public static ObservableList<ProdutoDto> getObservableList() {
 		return observableList;
 	}
 
-	public static void setTabelaprodutos(TableView<Produto> tabelaprodutos) {
+	public static void setTabelaprodutos(TableView<ProdutoDto> tabelaprodutos) {
 		ProdutosController.tabelaprodutos = tabelaprodutos;
 	}
 
-	public static void setObservableList(ObservableList<Produto> observableList) {
+	public static void setObservableList(ObservableList<ProdutoDto> observableList) {
 		ProdutosController.observableList = observableList;
 	}
 
@@ -138,34 +138,34 @@ public class ProdutosController {
 
 	@SuppressWarnings("unchecked")
 
-	public TableView<Produto> construirTabela() throws Exception {
+	public TableView<ProdutoDto> construirTabela() throws Exception {
 
-		setTabelaprodutos(new TableView<Produto>());
+		setTabelaprodutos(new TableView<ProdutoDto>());
 
-		TableColumn<Produto, String> colunaCod = new TableColumn<Produto, String>("Código");
-		colunaCod.setCellValueFactory(new PropertyValueFactory<Produto, String>("codigo"));
+		TableColumn<ProdutoDto, String> colunaCod = new TableColumn<ProdutoDto, String>("Código");
+		colunaCod.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("codigo"));
 
-		TableColumn<Produto, String> colunaDesc = new TableColumn<Produto, String>("Descrição");
-		colunaDesc.setCellValueFactory(new PropertyValueFactory<Produto, String>("descricao"));
+		TableColumn<ProdutoDto, String> colunaDesc = new TableColumn<ProdutoDto, String>("Descrição");
+		colunaDesc.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("descricao"));
 
-		TableColumn<Produto, Integer> colunaEstoque = new TableColumn<Produto, Integer>("Estoque");
-		colunaEstoque.setCellValueFactory(new PropertyValueFactory<Produto, Integer>("estoque"));
+		TableColumn<ProdutoDto, Integer> colunaEstoque = new TableColumn<ProdutoDto, Integer>("Estoque");
+		colunaEstoque.setCellValueFactory(new PropertyValueFactory<ProdutoDto, Integer>("estoque"));
 		colunaEstoque.setPrefWidth(100);
 
-		TableColumn<Produto, String> colunaCusto = new TableColumn<Produto, String>("Custo R$");
-		colunaCusto.setCellValueFactory(new PropertyValueFactory<Produto, String>("custo"));
+		TableColumn<ProdutoDto, String> colunaCusto = new TableColumn<ProdutoDto, String>("Custo R$");
+		colunaCusto.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("custo"));
 
-		TableColumn<Produto, String> colunaValor = new TableColumn<Produto, String>("Preço R$");
-		colunaValor.setCellValueFactory(new PropertyValueFactory<Produto, String>("valorVenda"));
+		TableColumn<ProdutoDto, String> colunaValor = new TableColumn<ProdutoDto, String>("Preço R$");
+		colunaValor.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("valorVenda"));
 
-		TableColumn<Produto, String> colunaUni = new TableColumn<Produto, String>("Unidade");
-		colunaUni.setCellValueFactory(new PropertyValueFactory<Produto, String>("unidadeProduto"));
+		TableColumn<ProdutoDto, String> colunaUni = new TableColumn<ProdutoDto, String>("Unidade");
+		colunaUni.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("unidadeProduto"));
 
-		TableColumn<Produto, String> colunaCateg = new TableColumn<Produto, String>("Categoria");
-		colunaCateg.setCellValueFactory(new PropertyValueFactory<Produto, String>("categoria"));
+		TableColumn<ProdutoDto, String> colunaCateg = new TableColumn<ProdutoDto, String>("Categoria");
+		colunaCateg.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("categoria"));
 
-		TableColumn<Produto, String> colunaFornecedor = new TableColumn<Produto, String>("Fornecedor");
-		colunaFornecedor.setCellValueFactory(new PropertyValueFactory<Produto, String>("fornecedor"));
+		TableColumn<ProdutoDto, String> colunaFornecedor = new TableColumn<ProdutoDto, String>("Fornecedor");
+		colunaFornecedor.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("fornecedor"));
 
 		/*
 		 * TableColumn<Clients, String> colunaRg_Ie = new TableColumn<Clients,
@@ -224,13 +224,13 @@ public class ProdutosController {
 	}
 
 	public static void popularTabela() throws Exception {
-		List<Produto> produtos = getAllProducts();
+		List<ProdutoDto> produtos = getAllProducts();
 		setObservableList(FXCollections.observableArrayList(produtos));
 		getTabelaprodutos().setItems(observableList);
 
 	}
 
-	private static List<Produto> getAllProducts() throws Exception {
+	private static List<ProdutoDto> getAllProducts() throws Exception {
 
 		try {
 			// BUSCA TODOS PRODUTOS
@@ -240,8 +240,8 @@ public class ProdutosController {
 					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			JSONArray responseJson = new JSONArray(response.body());
-			Produto produto;
-			List<Produto> produtos = new ArrayList<>();
+			ProdutoDto produto;
+			List<ProdutoDto> produtos = new ArrayList<>();
 			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
 			// LOOP CONVERTE JSON EM CLIENTS
@@ -250,7 +250,7 @@ public class ProdutosController {
 				JSONObject jsonObj = responseJson.getJSONObject(i);
 				String dataInclusao = jsonObj.getString("dataInclusao").substring(0, 19).replaceAll("T", " ");
 
-				produto = new Produto();
+				produto = new ProdutoDto();
 				produto.setId(jsonObj.getLong("id"));
 				produto.setDescricao(jsonObj.getString("descricao"));
 				produto.setCodigo(jsonObj.getString("codigo"));

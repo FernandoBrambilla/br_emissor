@@ -9,9 +9,9 @@ import java.util.Map;
 
 import org.yaml.snakeyaml.Yaml;
 
-import gui.Models.RegimeTributario;
-import gui.Models.Style;
-import gui.Models.Uf_Enum;
+import gui.Dtos.RegimeTributarioDto;
+import gui.Dtos.Style;
+import gui.Dtos.Uf_Enum;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -193,10 +193,10 @@ public class IdentificacaoController {
 
 	public void initialize() {
 		getUf().getItems().setAll(Uf_Enum.values());
-		getRegime().setValue(RegimeTributario.MEI.getDescricao());
-		getRegime().getItems().add(RegimeTributario.MEI.getDescricao());
-		getRegime().getItems().add(RegimeTributario.RN.getDescricao());
-		getRegime().getItems().add(RegimeTributario.SN.getDescricao());
+		getRegime().setValue(RegimeTributarioDto.MEI.getDescricao());
+		getRegime().getItems().add(RegimeTributarioDto.MEI.getDescricao());
+		getRegime().getItems().add(RegimeTributarioDto.RN.getDescricao());
+		getRegime().getItems().add(RegimeTributarioDto.SN.getDescricao());
 
 	}
 

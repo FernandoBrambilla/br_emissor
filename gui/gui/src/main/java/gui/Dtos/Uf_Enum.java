@@ -1,4 +1,4 @@
-package gui.Models;
+package gui.Dtos;
 
 public enum Uf_Enum {
 

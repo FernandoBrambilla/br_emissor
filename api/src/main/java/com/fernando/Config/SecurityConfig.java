@@ -44,28 +44,33 @@ public class SecurityConfig {
 			throws Exception {
 		return authenticationConfiguration.getAuthenticationManager();
 	}
+        
+        
 
 	@Bean
 	SecurityFilterChain secureFilterChain(HttpSecurity http) throws Exception {
 		http
+                    
 		.httpBasic(AbstractHttpConfigurer::disable)
 		.csrf(AbstractHttpConfigurer::disable)
 		.sessionManagement(
 				session -> session.sessionCreationPolicy(
 						SessionCreationPolicy.STATELESS))
 		 .authorizeHttpRequests(
-                 authorizeHttpRequests -> authorizeHttpRequests
-                         .requestMatchers("/auth/**", "/swagger-ui/**", "/api-docs/**").permitAll()
+                 authorizeHttpRequests -> authorizeHttpRequests 
+                         .requestMatchers("/auth/**", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                         
                          .requestMatchers("/**",
-                        		 "/banks/**",
-                        		 "/clientspf/**",
-                        		 "/clientspj/**").authenticated()
+                        		 "/clients/**",
+                        		 "/category/**",
+                        		 "/products/**")
+                         .authenticated()
                          .requestMatchers("/users").denyAll()
+                         
          )
          .apply(new JwtConfigurer(jwtTokenProvider));
          
          return http.build();
 
-	}
-
+    }
 }

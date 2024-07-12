@@ -12,8 +12,8 @@ import org.json.JSONObject;
 
 import gui.App;
 import gui.Controllers.PrincipalControllers.PrincipalController;
-import gui.Models.Login;
-import gui.Models.Style;
+import gui.Dtos.LoginDto;
+import gui.Dtos.Style;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -27,7 +27,7 @@ import javafx.scene.layout.BorderPane;
 
 public class LoginController extends AnchorPane {
 
-	private Login login = new Login();
+	private LoginDto login = new LoginDto();
 
 	@FXML
 	BorderPane telaBase;
@@ -53,7 +53,7 @@ public class LoginController extends AnchorPane {
 	@FXML
 	private Button btnEntrar;
 
-	public Login getLogin() {
+	public LoginDto getLogin() {
 		return login;
 	}
 
@@ -97,7 +97,7 @@ public class LoginController extends AnchorPane {
 		return btnEntrar;
 	}
 
-	public void setLogin(Login login) {
+	public void setLogin(LoginDto login) {
 		this.login = login;
 	}
 
@@ -175,7 +175,7 @@ public class LoginController extends AnchorPane {
 	 * retornando autenticação.
 	 */
 	@FXML
-	private Login fazerLogin() {
+	private LoginDto fazerLogin() {
 		Style efeito = new Style();
 		
 		if (checarParametrosNull()) {

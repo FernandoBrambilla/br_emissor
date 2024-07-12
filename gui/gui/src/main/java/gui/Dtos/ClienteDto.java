@@ -1,8 +1,8 @@
-package gui.Models;
+package gui.Dtos;
 
 import java.time.LocalDate;
 
-public class Cliente {
+public class ClienteDto {
 
 	private Long id;
 

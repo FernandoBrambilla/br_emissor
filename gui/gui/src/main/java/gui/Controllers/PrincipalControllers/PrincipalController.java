@@ -7,11 +7,11 @@ import gui.App;
 import gui.Controllers.ClienteControllers.ClientesController;
 import gui.Controllers.ProdutoControllers.ProdutosController;
 import gui.Controllers.UsuarioControllers.UsuariosController;
-import gui.Models.Cliente;
-import gui.Models.Login;
-import gui.Models.Produto;
-import gui.Models.Style;
-import gui.Models.User;
+import gui.Dtos.ClienteDto;
+import gui.Dtos.LoginDto;
+import gui.Dtos.ProdutoDto;
+import gui.Dtos.Style;
+import gui.Dtos.UserDto;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,11 +24,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class PrincipalController {
+	
+	static final String url = "http://localhost:8080/";
 
-	static Login usuarioLogado = null;
+	static LoginDto usuarioLogado = null;
 
-	static String accessToken = null;
-
+	static String accessToken;
+	
 	static ConfiguracoesController configuracoes = null;
 
 	static UsuariosController usuariosController = null;
@@ -37,11 +39,13 @@ public class PrincipalController {
 
 	static ProdutosController produtosController = null;
 
-	public static TableView<User> tabelaUsuarios = null; 
+	public static TableView<UserDto> tabelaUsuarios = null; 
 
-	static TableView<Cliente> tabelaClients = null;
+	static TableView<ClienteDto> tabelaClients = null;
 
-	static TableView<Produto> tabelaprodutos = null;
+	static TableView<ProdutoDto> tabelaprodutos = null;
+	
+	
 
 	@FXML
 	private BorderPane menu;
@@ -82,9 +86,12 @@ public class PrincipalController {
 	@FXML
 	private Label emissor;
 
-	
 
-	public static Login getUsuarioLogado() {
+	public static String getUrl() {
+		return url;
+	}
+
+	public static LoginDto getUsuarioLogado() {
 		return usuarioLogado;
 	}
 
@@ -108,11 +115,11 @@ public class PrincipalController {
 		return clientesController;
 	}
 
-	public static TableView<User> getTabelaUsuarios() {
+	public static TableView<UserDto> getTabelaUsuarios() {
 		return tabelaUsuarios;
 	}
 
-	public static TableView<Cliente> getTabelaClients() {
+	public static TableView<ClienteDto> getTabelaClients() {
 		return tabelaClients;
 	}
 
@@ -120,7 +127,7 @@ public class PrincipalController {
 		return produtosController;
 	}
 
-	public static TableView<Produto> getTabelaprodutos() {
+	public static TableView<ProdutoDto> getTabelaprodutos() {
 		return tabelaprodutos;
 	}
 
@@ -128,7 +135,7 @@ public class PrincipalController {
 		PrincipalController.produtosController = produtosController;
 	}
 
-	public static void setTabelaprodutos(TableView<Produto> tabelaprodutos) {
+	public static void setTabelaprodutos(TableView<ProdutoDto> tabelaprodutos) {
 		PrincipalController.tabelaprodutos = tabelaprodutos;
 	}
 
@@ -181,7 +188,7 @@ public class PrincipalController {
 		return style;
 	}
 
-	public static void setUsuarioLogado(Login usuarioLogado) {
+	public static void setUsuarioLogado(LoginDto usuarioLogado) {
 		PrincipalController.usuarioLogado = usuarioLogado;
 	}
 
@@ -197,11 +204,11 @@ public class PrincipalController {
 		PrincipalController.clientesController = clientesController;
 	}
 
-	public static void setTabelaUsuarios(TableView<User> tabelaUsuarios) {
+	public static void setTabelaUsuarios(TableView<UserDto> tabelaUsuarios) {
 		PrincipalController.tabelaUsuarios = tabelaUsuarios;
 	}
 
-	public static void setTabelaClients(TableView<Cliente> tabelaClients) {
+	public static void setTabelaClients(TableView<ClienteDto> tabelaClients) {
 		PrincipalController.tabelaClients = tabelaClients;
 	}
 
@@ -304,7 +311,7 @@ public class PrincipalController {
 		efeitos.hover(getBtnConfiguracoes());
 	}
 
-	public void getLogin(Login login) throws IOException {
+	public void getLogin(LoginDto login) throws IOException {
 		setUsuarioLogado(login);
 		setAccessToken(login.getAccessToken());
 

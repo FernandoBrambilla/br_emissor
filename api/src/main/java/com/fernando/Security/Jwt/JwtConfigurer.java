@@ -11,6 +11,7 @@ SecurityConfigurerAdapter<DefaultSecurityFilterChain, HttpSecurity> {
 	
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
+      
 
 	public JwtConfigurer(JwtTokenProvider jwtTokenProvider) {
 		this.jwtTokenProvider = jwtTokenProvider;

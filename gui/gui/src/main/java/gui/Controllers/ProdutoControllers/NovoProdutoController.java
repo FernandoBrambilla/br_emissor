@@ -1,16 +1,13 @@
 package gui.Controllers.ProdutoControllers;
 
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.List;
 
 import gui.App;
-import gui.Models.CategoriaProduto;
-import gui.Models.Style;
+import gui.Dtos.CategoriaProdutoDto;
+import gui.Dtos.Markup;
+import gui.Dtos.Style;
 import gui.Utilities.Mascaras;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -28,7 +25,7 @@ import javafx.stage.Stage;
 
 public class NovoProdutoController {
 
-	static ObservableList<CategoriaProduto> listCategorias;
+	static ObservableList<CategoriaProdutoDto> listCategorias;
 
 	@FXML
 	private Button btnSalvar;
@@ -72,11 +69,11 @@ public class NovoProdutoController {
 	@FXML
 	private Label info;
 
-	public static ObservableList<CategoriaProduto> getListCategorias() {
+	public static ObservableList<CategoriaProdutoDto> getListCategorias() {
 		return listCategorias;
 	}
 
-	public static void setListCategorias(ObservableList<CategoriaProduto> listCategorias) {
+	public static void setListCategorias(ObservableList<CategoriaProdutoDto> listCategorias) {
 		NovoProdutoController.listCategorias = listCategorias;
 	}
 
@@ -196,11 +193,14 @@ public class NovoProdutoController {
 		getCategoria().setItems(preencherListaDeCategorias());
 		Mascaras.monetaryField(getCusto());
 		Mascaras.monetaryField(getValor());
-
-		
+		MarkupPadraoController markupController = new MarkupPadraoController();
+		Markup markup = new Markup(markupController.buscarMarkup());
+		if(getMarkupPadrao().isSelected()) {
+		getMarkup().setText(markup.getMarkup().toString());
+		}
 	}
 	 
-
+ 
 	public static ObservableList<String> preencherListaDeCategorias() throws Exception {
 		List<String> list = ProdutosController.buscarTodasCategoriasProduto();
 		ObservableList<String> listaCategorias = FXCollections.observableArrayList(list);

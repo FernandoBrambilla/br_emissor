@@ -11,9 +11,9 @@ import java.time.format.DateTimeFormatter;
 import org.json.JSONObject;
 
 import gui.Controllers.PrincipalControllers.PrincipalController;
-import gui.Models.Cliente;
-import gui.Models.Style;
-import gui.Models.Uf_Enum;
+import gui.Dtos.ClienteDto;
+import gui.Dtos.Style;
+import gui.Dtos.Uf_Enum;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -29,7 +29,7 @@ import javafx.stage.Stage;
 
 public class EditarClienteController {
 
-	static Cliente cliente = null;
+	static ClienteDto cliente = null;
 
 	private String token = PrincipalController.getAccessToken();
 
@@ -110,7 +110,7 @@ public class EditarClienteController {
 	@FXML
 	private Label labelEmissRg;
 
-	public static Cliente getCliente() {
+	public static ClienteDto getCliente() {
 		return cliente;
 	}
 
@@ -251,7 +251,7 @@ public class EditarClienteController {
 		return labelEmissRg;
 	}
 
-	public static void setCliente(Cliente cliente) {
+	public static void setCliente(ClienteDto cliente) {
 		EditarClienteController.cliente = cliente;
 	}
 
@@ -410,7 +410,7 @@ public class EditarClienteController {
 			getLabelRgIe().setText("IE");
 			getRg_ie().setPromptText("Insc. Estadual");
 			getLabelDataNascConst().setVisible(false);
-			getDataNasc_Const().setVisible(false);
+			getDataNasc_Const().setVisible(false); 
 			getIeIsento().setVisible(true);
 			getLabelEmissRg().setText("Data de Cadastro");
 			getPf().setSelected(false);
