@@ -258,9 +258,7 @@ public class ProdutosController {
 				produto.setCusto(jsonObj.getDouble("custo"));
 				produto.setEstoque(jsonObj.getInt("estoque"));
 				produto.setUnidadeProduto(jsonObj.getString("unidadeProduto"));
-				// produto.setCategoria(jsonObj.getString("categoria").isEmpty() ? "" :
-				// jsonObj.getString("categoria"));
-				produto.setFornecedor(jsonObj.getString("fornecedor"));
+				//produto.setCategoria(jsonObj.get("categoria") isEmpty() ? "" : produto.setCategoria(jsonObj.getString("categoria"));
 				produto.setTributacao(jsonObj.getString("tributacao"));
 				produto.setNcm(jsonObj.getInt("ncm"));
 				produto.setDescNcm(jsonObj.getString("descNcm"));
@@ -302,11 +300,20 @@ public class ProdutosController {
 
 		else {
 			Stage stage = new Stage();
+			Parent painel = FXMLLoader.load(App.class.getResource("ProdutoViews/MenuNovoProduto.fxml"));
+			Scene scene = new Scene(painel, 800, 680);
+			stage.setTitle("Cadasto de Produtos");
+			stage.setScene(scene);
+			stage.show();
+			
+			/*
+			Stage stage = new Stage();
 			Parent painel = FXMLLoader.load(App.class.getResource("ProdutoViews/MenuEditarProduto.fxml"));
 			Scene scene = new Scene(painel, 800, 680);
 			stage.setTitle("Editar Produto");
 			stage.setScene(scene);
 			stage.show();
+			*/
 
 		}
 

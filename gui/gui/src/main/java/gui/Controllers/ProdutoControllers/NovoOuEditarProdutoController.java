@@ -1,11 +1,19 @@
 package gui.Controllers.ProdutoControllers;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.util.List;
 
+import org.json.JSONObject;
+
 import gui.App;
+import gui.Controllers.PrincipalControllers.PrincipalController;
 import gui.Dtos.CategoriaProdutoDto;
 import gui.Dtos.Markup;
+import gui.Dtos.ProdutoDto;
 import gui.Dtos.Style;
 import gui.Utilities.Mascaras;
 import javafx.collections.FXCollections;
@@ -23,9 +31,13 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class NovoProdutoController {
+public class NovoOuEditarProdutoController {
 
-	static ObservableList<CategoriaProdutoDto> listCategorias;
+	private static String token = PrincipalController.getAccessToken();
+
+	private static String url = PrincipalController.getUrl();
+
+	private static ObservableList<CategoriaProdutoDto> listCategorias;
 
 	@FXML
 	private Button btnSalvar;
@@ -74,7 +86,7 @@ public class NovoProdutoController {
 	}
 
 	public static void setListCategorias(ObservableList<CategoriaProdutoDto> listCategorias) {
-		NovoProdutoController.listCategorias = listCategorias;
+		NovoOuEditarProdutoController.listCategorias = listCategorias;
 	}
 
 	public Button getBtnAddCategoria() {
@@ -190,56 +202,100 @@ public class NovoProdutoController {
 	}
 
 	public void initialize() throws Exception {
-		getCategoria().setItems(preencherListaDeCategorias());
 		Mascaras.monetaryField(getCusto());
 		Mascaras.monetaryField(getValor());
-		MarkupPadraoController markupController = new MarkupPadraoController();
-		Markup markup = new Markup(markupController.buscarMarkup());
-		if(getMarkupPadrao().isSelected()) {
-		getMarkup().setText(markup.getMarkup().toString());
+		
+
+		// EXECUTADO SOMENTE SE FOR SELECIONADO UM PRODUTO
+		if (ProdutosController.tabelaprodutos.getSelectionModel().getSelectedItem() != null) {
+			ProdutoDto produtoParaEditar = new ProdutoDto(
+					ProdutosController.tabelaprodutos.getSelectionModel().getSelectedItem());
+			getEan_getin().setText(produtoParaEditar.getEAN_GTIN());
+			getDescricao().setText(produtoParaEditar.getDescricao());
+			//produtoParaEditar.getCategoria().getDescricao().equals(null) ? criarNovaCategoriaProduto("")	: produtoParaEditar.getCategoria().getDescricao());
+			getValor().setText(produtoParaEditar.getValorVenda().toString());
+			getCusto().setText(produtoParaEditar.getCusto().toString());
+			getDescricao().setText(produtoParaEditar.getDescricao());
+
+		} else {
+			getCategoria().setItems(preencherListaDeCategorias());
+
+			getMarkupPadrao().setSelected(getMarkupSalvo().isUtilizar());
+			getMarkup();
 		}
 	}
-	 
- 
+
+	private void criarNovaCategoriaProduto(String descricao) throws Exception {
+		CategoriaProdutoDto novaCategoria = new CategoriaProdutoDto(descricao);
+		try {
+			JSONObject json = new JSONObject();
+			json.put("descricao", novaCategoria.getDescricao());
+			String endpoint = url + "category";
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(endpoint))
+					.header("Authorization", "Bearer " + token).header("Content-Type", "application/json")
+					.POST(HttpRequest.BodyPublishers.ofString(json.toString())).build();
+			client.send(request, HttpResponse.BodyHandlers.ofString());
+		} catch (Exception e) {
+			throw new Exception("Não foi possível salvar a nova Categoria do produto!");
+		}
+	}
+
+	private Markup getMarkupSalvo() throws Exception {
+
+		try {
+			MarkupPadraoController markupController = new MarkupPadraoController();
+			Markup markup = markupController.buscarMarkup();
+			if (markup.equals(null)) {
+				return null;
+			} else {
+				return markup;
+			}
+		} catch (Exception e) {
+			throw new Exception("Não foi localizado o Markup padrão!");
+		}
+
+	}
+
 	public static ObservableList<String> preencherListaDeCategorias() throws Exception {
 		List<String> list = ProdutosController.buscarTodasCategoriasProduto();
 		ObservableList<String> listaCategorias = FXCollections.observableArrayList(list);
 		return listaCategorias;
 
 	}
-	
+
 	@SuppressWarnings("exports")
 	public void seguirMarkupPadrao(ActionEvent action) throws IOException {
-		if(getMarkupPadrao().isSelected()) {
+		if (getMarkupPadrao().isSelected()) {
 			Stage stage = new Stage();
 			Parent painel = FXMLLoader.load(App.class.getResource("ProdutoViews/MarkupPadrao.fxml"));
 			Scene scene = new Scene(painel, 450, 300);
 			stage.setTitle("Margem de Lucro");
 			stage.setScene(scene);
 			stage.show();
-			
-			
+
 		}
-		
+
 	}
-	
+
 	@SuppressWarnings("exports")
 	public void calcularValorVendaAutomatico(ActionEvent action) {
-		if(getMarkup().getText().isEmpty() && getCusto().getText().isEmpty()) {
-			getInfo().setText("Para calcular o valor de venda automaticamente é obrigatório fornecer o custo e o % markup!");
+		if (getMarkup().getText().isEmpty() && getCusto().getText().isEmpty()) {
+			getInfo().setText(
+					"Para calcular o valor de venda automaticamente é obrigatório fornecer o custo e o % markup!");
 			Style style = new Style();
 			style.campoObrigatorio(getCusto());
 			style.campoObrigatorio(getMarkup());
 			return;
 		}
-		if(getAuto().isSelected()) {
+		if (getAuto().isSelected()) {
 			Double markup = Double.parseDouble(getMarkup().getText());
 			Double custo = Double.parseDouble(getCusto().getText());
-			Double venda = custo += custo*(markup/100);
+			Double venda = custo += custo * (markup / 100);
 			getValor().setText(venda.toString());
-			
+
 		}
-		
+
 	}
 
 	@SuppressWarnings("exports")

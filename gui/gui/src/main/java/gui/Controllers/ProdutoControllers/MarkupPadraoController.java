@@ -84,7 +84,10 @@ public class MarkupPadraoController {
 			markup.setId(1);
 			markup.setMarkup(new BigDecimal(0));
 			markup.setUtilizar(false);
-			salvarNovoMarkup(markup);
+			criarNovoMarkup(markup);
+			getMarkup().setText(markup.getMarkup().toString());
+			getUtilizar().setSelected(false);
+		
 		} else {
 			Markup markup = new Markup(buscarMarkup());
 			getMarkup().setText(markup.getMarkup().toString());
@@ -115,7 +118,7 @@ public class MarkupPadraoController {
 
 	}
 
-	private void salvarNovoMarkup(Markup markup) throws Exception {
+	private void criarNovoMarkup(Markup markup) throws Exception {
 		try {
 			JSONObject json = new JSONObject();
 			json.put("id", 1);

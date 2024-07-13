@@ -26,7 +26,7 @@ public class AddCategoriaController {
 	
 	private static String token = PrincipalController.getAccessToken();
 	
-	private static NovoProdutoController novoProduto;
+	private static NovoOuEditarProdutoController novoProduto;
 
 	@FXML
 	private TextField categoria;
@@ -105,7 +105,7 @@ public class AddCategoriaController {
 					alert.showAndWait();
 					Stage stage = (Stage) getBtnCancelar().getScene().getWindow();
 					stage.close();
-					NovoProdutoController.preencherListaDeCategorias();
+					NovoOuEditarProdutoController.preencherListaDeCategorias();
 					
 				}
 			}

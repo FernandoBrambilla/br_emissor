@@ -7,11 +7,10 @@ import java.io.IOException;
 import gui.App;
 import gui.Dtos.CategoriaProdutoDto;
 import gui.Dtos.ProdutoDto;
+import gui.Dtos.Style;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
@@ -19,14 +18,13 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
 
 public class EditarProdutoController {
 	
-	private static ProdutoDto produto = null;
+	private ProdutoDto produto;
 	
 	@FXML
-	BorderPane telaBase;
+	private BorderPane telaBase;
 
 	@FXML
 	private ImageView imagem;
@@ -79,6 +77,17 @@ public class EditarProdutoController {
 	@FXML
 	private TextArea obs;
 	
+	@FXML
+	private Label info;
+	
+	public Label getInfo() {
+		return info;
+	}
+
+	public void setInfo(Label info) {
+		this.info = info;
+	}
+
 	public TextField getId() {
 		return id;
 	}
@@ -236,18 +245,35 @@ public class EditarProdutoController {
 
 	public void initialize() throws IOException {
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(App.class.getResource("ProdutoViews/Cadastro.fxml"));
+		loader.setLocation(App.class.getResource("ProdutoViews/EditarProduto.fxml"));
 		getTelaBase().setCenter(loader.load());
 		getBtnCadastro().setStyle("-fx-background-color:  deedfc; ");
-		
 		setProduto(new ProdutoDto(ProdutosController.getTabelaprodutos().getSelectionModel().getSelectedItem()));
-		getId().setText(String.valueOf(getProduto().getId()));
-		getEan_getin().setText(getProduto().getEAN_GTIN());
-		getDescricao().setText(getProduto().getDescricao());
-		getCategoria().setValue(produto.getCategoria());
+		getDescricao().setText("fffffff");
 		
-	
 	}
+	
+	@SuppressWarnings("exports")
+	public void calcularValorVendaAutomatico(ActionEvent action) {
+		if (getMarkup().getText().isEmpty() && getCusto().getText().isEmpty()) {
+			getInfo().setText(
+					"Para calcular o valor de venda automaticamente é obrigatório fornecer o custo e o % markup!");
+			Style style = new Style();
+			style.campoObrigatorio(getCusto());
+			style.campoObrigatorio(getMarkup());
+			return;
+		}
+		if (getAuto().isSelected()) {
+			Double markup = Double.parseDouble(getMarkup().getText());
+			Double custo = Double.parseDouble(getCusto().getText());
+			Double venda = custo += custo * (markup / 100);
+			getValor().setText(venda.toString());
+
+		}
+
+	}
+	
+	
 	
 	@SuppressWarnings("exports")
 	public void btnCadastro(ActionEvent action) throws IOException {

@@ -1,14 +1,18 @@
 
 package com.fernando.Entities;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
+import org.springframework.hateoas.RepresentationModel;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import java.io.Serializable;
-import java.time.LocalDateTime;
-import org.springframework.hateoas.RepresentationModel;
 
 @Entity 
 @Table(name = "products")
@@ -31,7 +35,8 @@ public class Product extends RepresentationModel<Product> implements Serializabl
     
     private String unidadeProduto;
     
-    private String categoria;
+    @OneToOne(cascade = CascadeType.ALL)
+    private ProductCategory categoria;
     
     private String fornecedor;
     
@@ -47,16 +52,15 @@ public class Product extends RepresentationModel<Product> implements Serializabl
    
     private String EAN_GTIN;
 
+    public ProductCategory getCategoria() {
+		return categoria;
+	}
 
-    public String getCategoria() {
-        return categoria;
-    }
+	public void setCategoria(ProductCategory categoria) {
+		this.categoria = categoria;
+	}
 
-    public void setCategoria(String categoria) {
-        this.categoria = categoria;
-    }
-
-    public Long getId() {
+	public Long getId() {
         return id;
     }
 

@@ -6,6 +6,11 @@ public class CategoriaProdutoDto {
 	
 	private String descricao;
 
+	public CategoriaProdutoDto(String descricao) {
+	
+		this.descricao = descricao;
+	}
+
 	public Integer getId() {
 		return id;
 	}
