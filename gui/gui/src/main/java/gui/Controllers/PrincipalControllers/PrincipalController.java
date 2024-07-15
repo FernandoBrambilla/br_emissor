@@ -210,7 +210,7 @@ public class PrincipalController {
 
 	public static void setTabelaClients(TableView<ClienteDto> tabelaClients) {
 		PrincipalController.tabelaClients = tabelaClients;
-	}
+	} 
 
 	@SuppressWarnings("exports")
 	public void setMenu(BorderPane menu) {

@@ -87,10 +87,10 @@ public class ProductService {
                 entity.setEstoque(product.getEstoque());
                 entity.setUnidadeProduto(product.getUnidadeProduto());
                 entity.setCategoria(product.getCategoria());
+                entity.setMarkup(product.getMarkup());
                 entity.setFornecedor(product.getFornecedor());
                 entity.setTributacao(product.getTributacao());
                 entity.setNcm(product.getNcm());
-                entity.setDescNcm(product.getDescNcm());
                 entity.setCest(product.getCest());
                 entity.setDataInclusao(product.getDataInclusao());
                 entity.setEAN_GTIN(product.getEAN_GTIN());

@@ -13,7 +13,11 @@ import java.io.Serializable;
 public class ProductCategory implements Serializable{
     private static final long serialVersionUID = 1L;
     
-    @Id
+    public ProductCategory(String descricao) {
+		this.descricao = descricao;
+	}
+
+	@Id
     @GeneratedValue(strategy=GenerationType.IDENTITY) 
     private Integer id;
     

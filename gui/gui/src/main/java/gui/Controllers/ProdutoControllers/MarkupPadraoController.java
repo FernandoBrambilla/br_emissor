@@ -9,11 +9,15 @@ import java.net.http.HttpResponse;
 
 import org.json.JSONObject;
 
+import gui.App;
 import gui.Controllers.PrincipalControllers.PrincipalController;
 import gui.Dtos.Markup;
 import gui.Utilities.Mascaras;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
@@ -63,7 +67,7 @@ public class MarkupPadraoController {
 	}
 
 	@SuppressWarnings("exports")
-	public void setUtilizar(CheckBox utilizar) {
+	public void setUtilizar(CheckBox utilizar) { 
 		this.utilizar = utilizar;
 	}
 
@@ -79,23 +83,13 @@ public class MarkupPadraoController {
 
 	public void initialize() throws Exception {
 		Mascaras.numericField(getMarkup());
-		if (buscarMarkup() == null) {
-			Markup markup = new Markup();
-			markup.setId(1);
-			markup.setMarkup(new BigDecimal(0));
-			markup.setUtilizar(false);
-			criarNovoMarkup(markup);
-			getMarkup().setText(markup.getMarkup().toString());
-			getUtilizar().setSelected(false);
-		
-		} else {
-			Markup markup = new Markup(buscarMarkup());
-			getMarkup().setText(markup.getMarkup().toString());
-			getUtilizar().setSelected(markup.isUtilizar() ? true : false);
-		}
+		Markup markup = new Markup(buscarMarkup());
+		getMarkup().setText(markup.getMarkup().toString());
+		getUtilizar().setSelected(markup.isUtilizar() ? true : false);
 	}
 
-	public Markup buscarMarkup() throws Exception {
+	public static Markup buscarMarkup() throws Exception {
+		
 		try {
 			String endpoint = url + "markup";
 			HttpClient client = HttpClient.newHttpClient();
@@ -103,22 +97,19 @@ public class MarkupPadraoController {
 					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			JSONObject responseJson = new JSONObject(response.body());
-			if (response.body().contains("No records found for this ID")) {
-				return null;
-			} else {
-				Markup markup = new Markup();
-				markup.setId(responseJson.getInt("id"));
-				markup.setMarkup(responseJson.getBigDecimal("markup"));
-				markup.setUtilizar(responseJson.getBoolean("utilizar"));
-				return markup;
-			}
+			System.out.println(response.body());
+			Markup markup = new Markup();
+			markup.setId(responseJson.getInt("id"));
+			markup.setMarkup(responseJson.getBigDecimal("markup"));
+			markup.setUtilizar(responseJson.getBoolean("utilizar"));
+			return markup;
+
 		} catch (Exception e) {
 			throw new Exception("Não foi localizado o Markup padrão!");
 		}
-
 	}
 
-	private void criarNovoMarkup(Markup markup) throws Exception {
+	public static void criarMarkup(Markup markup) throws Exception {
 		try {
 			JSONObject json = new JSONObject();
 			json.put("id", 1);
@@ -129,7 +120,8 @@ public class MarkupPadraoController {
 			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(endpoint))
 					.header("Authorization", "Bearer " + token).header("Content-Type", "application/json")
 					.POST(HttpRequest.BodyPublishers.ofString(json.toString())).build();
-			client.send(request, HttpResponse.BodyHandlers.ofString());
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			System.out.println(response.body());
 		} catch (Exception e) {
 			throw new Exception("Não foi possível salvar a operação!");
 		}
@@ -163,6 +155,11 @@ public class MarkupPadraoController {
 		markup.setMarkup(new BigDecimal(getMarkup().getText()));
 		markup.setUtilizar(getUtilizar().isSelected() ? true : false);
 		atualizarMarkup(markup);
+		Stage stage = (Stage) getBtnSalvar().getScene().getWindow();
+		stage.close();
+		
+		
+	
 	}
 
 	@SuppressWarnings("exports")

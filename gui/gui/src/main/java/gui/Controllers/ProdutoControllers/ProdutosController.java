@@ -1,6 +1,7 @@
 package gui.Controllers.ProdutoControllers;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -10,11 +11,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.plaf.synth.SynthOptionPaneUI;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import gui.App;
 import gui.Controllers.PrincipalControllers.PrincipalController;
+import gui.Dtos.Markup;
 import gui.Dtos.ProdutoDto;
 import gui.Dtos.Style;
 import javafx.collections.FXCollections;
@@ -36,6 +40,8 @@ import javafx.stage.Stage;
 
 public class ProdutosController {
 
+	private static String url = PrincipalController.getUrl();
+	
 	private static String token = PrincipalController.getAccessToken();
 
 	public static TableView<ProdutoDto> tabelaprodutos;
@@ -100,8 +106,25 @@ public class ProdutosController {
 
 	public void setBtnApagar(Button btnApagar) {
 		this.btnApagar = btnApagar;
+	}
+
+	public void initialize() throws Exception{
+		
+		//CRIA UM MARKUP PADRÃO CASO O BANCO SEJA NULL
+		if (MarkupPadraoController.buscarMarkup() == null) {
+			Markup markup = new Markup();
+			markup.setId(1);
+			markup.setMarkup(new BigDecimal(0));
+			markup.setUtilizar(false);
+			MarkupPadraoController.criarMarkup(markup);
+		}
+	
 
 	}
+	
+	
+ 
+	
 
 	public void aplicaEfeitos() {
 		Style efeitos = new Style();
@@ -132,12 +155,7 @@ public class ProdutosController {
 
 	}
 
-	public void initialize() throws IOException, InterruptedException {
-
-	}
-
 	@SuppressWarnings("unchecked")
-
 	public TableView<ProdutoDto> construirTabela() throws Exception {
 
 		setTabelaprodutos(new TableView<ProdutoDto>());
@@ -258,7 +276,8 @@ public class ProdutosController {
 				produto.setCusto(jsonObj.getDouble("custo"));
 				produto.setEstoque(jsonObj.getInt("estoque"));
 				produto.setUnidadeProduto(jsonObj.getString("unidadeProduto"));
-				//produto.setCategoria(jsonObj.get("categoria") isEmpty() ? "" : produto.setCategoria(jsonObj.getString("categoria"));
+				// produto.setCategoria(jsonObj.get("categoria") isEmpty() ? "" :
+				// produto.setCategoria(jsonObj.getString("categoria"));
 				produto.setTributacao(jsonObj.getString("tributacao"));
 				produto.setNcm(jsonObj.getInt("ncm"));
 				produto.setDescNcm(jsonObj.getString("descNcm"));
@@ -282,9 +301,11 @@ public class ProdutosController {
 		Scene scene = new Scene(painel, 800, 680);
 		stage.setTitle("Cadasto de Produtos");
 		stage.setScene(scene);
-		stage.show();
+		stage.showAndWait();
+		
 
 	}
+	
 
 	@SuppressWarnings("exports")
 	public void editar(ActionEvent action) throws IOException {
@@ -305,15 +326,13 @@ public class ProdutosController {
 			stage.setTitle("Cadasto de Produtos");
 			stage.setScene(scene);
 			stage.show();
-			
+
 			/*
-			Stage stage = new Stage();
-			Parent painel = FXMLLoader.load(App.class.getResource("ProdutoViews/MenuEditarProduto.fxml"));
-			Scene scene = new Scene(painel, 800, 680);
-			stage.setTitle("Editar Produto");
-			stage.setScene(scene);
-			stage.show();
-			*/
+			 * Stage stage = new Stage(); Parent painel =
+			 * FXMLLoader.load(App.class.getResource("ProdutoViews/MenuEditarProduto.fxml"))
+			 * ; Scene scene = new Scene(painel, 800, 680);
+			 * stage.setTitle("Editar Produto"); stage.setScene(scene); stage.show();
+			 */
 
 		}
 

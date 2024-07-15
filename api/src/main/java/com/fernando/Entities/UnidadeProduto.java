@@ -14,7 +14,11 @@ import org.springframework.hateoas.RepresentationModel;
 public class UnidadeProduto extends RepresentationModel<UnidadeProduto> implements Serializable{
     private static final long serialVersionUID = 1L;
     
-    @Id
+    public UnidadeProduto(String descricao) {
+		this.descricao = descricao;
+	}
+
+	@Id
     @GeneratedValue(strategy=GenerationType.IDENTITY) 
     private Integer id;
     

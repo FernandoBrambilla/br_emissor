@@ -54,7 +54,7 @@ public class ClientesController {
 	private Button btnNovo;
 
 	@FXML
-	private Button btnEditar;
+	private Button btnEditar; 
 
 	@FXML
 	private Button btnApagar;
@@ -209,7 +209,7 @@ public class ClientesController {
 		TableColumn<ClienteDto, String> colunaObs = new TableColumn<ClienteDto, String>("Obs");
 		colunaObs.setCellValueFactory(new PropertyValueFactory<ClienteDto, String>("obs"));
 
-		// POPULA A TABELA
+		// POPULA A TABELA 
 		popularTabela();
 
 		// ADICIONA AS COLUNAS

@@ -1,5 +1,6 @@
 package gui.Controllers.ProdutoControllers;
 
+import java.awt.Event;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -7,18 +8,20 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.List;
 
+import javax.swing.Action;
+
 import org.json.JSONObject;
 
 import gui.App;
 import gui.Controllers.PrincipalControllers.PrincipalController;
 import gui.Dtos.CategoriaProdutoDto;
 import gui.Dtos.Markup;
-import gui.Dtos.ProdutoDto;
 import gui.Dtos.Style;
-import gui.Utilities.Mascaras;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -29,6 +32,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class NovoOuEditarProdutoController {
@@ -39,6 +46,9 @@ public class NovoOuEditarProdutoController {
 
 	private static ObservableList<CategoriaProdutoDto> listCategorias;
 
+	@FXML
+	private BorderPane campoBtnMarkup;
+	
 	@FXML
 	private Button btnSalvar;
 
@@ -70,10 +80,10 @@ public class NovoOuEditarProdutoController {
 	private TextField custo;
 
 	@FXML
-	private TextField markup;
+	private TextField markupText;
 
 	@FXML
-	private CheckBox markupPadrao;
+	private Button btnMarkup;
 
 	@FXML
 	private TextArea obs;
@@ -87,14 +97,6 @@ public class NovoOuEditarProdutoController {
 
 	public static void setListCategorias(ObservableList<CategoriaProdutoDto> listCategorias) {
 		NovoOuEditarProdutoController.listCategorias = listCategorias;
-	}
-
-	public Button getBtnAddCategoria() {
-		return btnAddCategoria;
-	}
-
-	public void setBtnAddCategoria(Button btnAddCategoria) {
-		this.btnAddCategoria = btnAddCategoria;
 	}
 
 	public Button getBtnSalvar() {
@@ -121,6 +123,10 @@ public class NovoOuEditarProdutoController {
 		return categoria;
 	}
 
+	public Button getBtnAddCategoria() {
+		return btnAddCategoria;
+	}
+
 	public TextField getValor() {
 		return valor;
 	}
@@ -133,12 +139,16 @@ public class NovoOuEditarProdutoController {
 		return custo;
 	}
 
-	public TextField getMarkup() {
-		return markup;
+	public TextField getMarkupText() {
+		return markupText;
 	}
 
-	public CheckBox getMarkupPadrao() {
-		return markupPadrao;
+	public Button getBtnMarkup() {
+		return btnMarkup;
+	}
+
+	public void setBtnMarkup(Button btnMarkup) {
+		this.btnMarkup = btnMarkup;
 	}
 
 	public TextArea getObs() {
@@ -173,6 +183,10 @@ public class NovoOuEditarProdutoController {
 		this.categoria = categoria;
 	}
 
+	public void setBtnAddCategoria(Button btnAddCategoria) {
+		this.btnAddCategoria = btnAddCategoria;
+	}
+
 	public void setValor(TextField valor) {
 		this.valor = valor;
 	}
@@ -185,12 +199,8 @@ public class NovoOuEditarProdutoController {
 		this.custo = custo;
 	}
 
-	public void setMarkup(TextField markup) {
-		this.markup = markup;
-	}
-
-	public void setMarkupPadrao(CheckBox markupPadrao) {
-		this.markupPadrao = markupPadrao;
+	public void setMarkupText(TextField markupText) {
+		this.markupText = markupText;
 	}
 
 	public void setObs(TextArea obs) {
@@ -200,31 +210,55 @@ public class NovoOuEditarProdutoController {
 	public void setInfo(Label info) {
 		this.info = info;
 	}
-
+	
 	public void initialize() throws Exception {
-		Mascaras.monetaryField(getCusto());
-		Mascaras.monetaryField(getValor());
+		Button button = criarBtnMarkup();
+		campoBtnMarkup.setCenter(button);
+		button.setOnAction(seguirMarkupPadrao());
 		
+		 
+		
+		/*
+		 * // EXECUTADO SOMENTE SE FOR SELECIONADO UM PRODUTO if
+		 * (ProdutosController.tabelaprodutos.getSelectionModel().getSelectedItem() !=
+		 * null) { ProdutoDto produtoParaEditar = new ProdutoDto(
+		 * ProdutosController.tabelaprodutos.getSelectionModel().getSelectedItem());
+		 * getEan_getin().setText(produtoParaEditar.getEAN_GTIN());
+		 * getDescricao().setText(produtoParaEditar.getDescricao());
+		 * //produtoParaEditar.getCategoria().getDescricao().equals(null) ?
+		 * criarNovaCategoriaProduto("") :
+		 * produtoParaEditar.getCategoria().getDescricao());
+		 * getValor().setText(produtoParaEditar.getValorVenda().toString());
+		 * getCusto().setText(produtoParaEditar.getCusto().toString());
+		 * getDescricao().setText(produtoParaEditar.getDescricao());
+		 * 
+		 * } else { /* getCategoria().setItems(preencherListaDeCategorias());
+		 * 
+		 * getMarkupPadrao().setSelected(getMarkupSalvo().isUtilizar()); getMarkup();
+		 */
 
-		// EXECUTADO SOMENTE SE FOR SELECIONADO UM PRODUTO
-		if (ProdutosController.tabelaprodutos.getSelectionModel().getSelectedItem() != null) {
-			ProdutoDto produtoParaEditar = new ProdutoDto(
-					ProdutosController.tabelaprodutos.getSelectionModel().getSelectedItem());
-			getEan_getin().setText(produtoParaEditar.getEAN_GTIN());
-			getDescricao().setText(produtoParaEditar.getDescricao());
-			//produtoParaEditar.getCategoria().getDescricao().equals(null) ? criarNovaCategoriaProduto("")	: produtoParaEditar.getCategoria().getDescricao());
-			getValor().setText(produtoParaEditar.getValorVenda().toString());
-			getCusto().setText(produtoParaEditar.getCusto().toString());
-			getDescricao().setText(produtoParaEditar.getDescricao());
-
-		} else {
-			getCategoria().setItems(preencherListaDeCategorias());
-
-			getMarkupPadrao().setSelected(getMarkupSalvo().isUtilizar());
-			getMarkup();
-		}
+	}
+	
+	
+	private static Button criarBtnMarkup() throws Exception {
+		Button button = new Button();
+		button.setId("btnMarkup");
+		button.setLayoutX(340);
+		button.setLayoutY(275);
+		button.setMnemonicParsing(false);
+		button.setPrefHeight(30);
+		button.setPrefWidth(187);
+		button.setStyle("-fx-background-color: white;");
+		button.setText("Seguir Markup Padrão");
+		button.setFont(new Font("Calibri", 15));
+		CheckBox checkBox = new CheckBox();
+		checkBox.setSelected(MarkupPadraoController.buscarMarkup().isUtilizar() ? true : false);
+		button.setGraphic(checkBox);
+		return button;
 	}
 
+
+	@SuppressWarnings("unused")
 	private void criarNovaCategoriaProduto(String descricao) throws Exception {
 		CategoriaProdutoDto novaCategoria = new CategoriaProdutoDto(descricao);
 		try {
@@ -241,22 +275,6 @@ public class NovoOuEditarProdutoController {
 		}
 	}
 
-	private Markup getMarkupSalvo() throws Exception {
-
-		try {
-			MarkupPadraoController markupController = new MarkupPadraoController();
-			Markup markup = markupController.buscarMarkup();
-			if (markup.equals(null)) {
-				return null;
-			} else {
-				return markup;
-			}
-		} catch (Exception e) {
-			throw new Exception("Não foi localizado o Markup padrão!");
-		}
-
-	}
-
 	public static ObservableList<String> preencherListaDeCategorias() throws Exception {
 		List<String> list = ProdutosController.buscarTodasCategoriasProduto();
 		ObservableList<String> listaCategorias = FXCollections.observableArrayList(list);
@@ -264,32 +282,29 @@ public class NovoOuEditarProdutoController {
 
 	}
 
-	@SuppressWarnings("exports")
-	public void seguirMarkupPadrao(ActionEvent action) throws IOException {
-		if (getMarkupPadrao().isSelected()) {
-			Stage stage = new Stage();
-			Parent painel = FXMLLoader.load(App.class.getResource("ProdutoViews/MarkupPadrao.fxml"));
-			Scene scene = new Scene(painel, 450, 300);
-			stage.setTitle("Margem de Lucro");
-			stage.setScene(scene);
-			stage.show();
-
-		}
-
+	public static EventHandler<ActionEvent> seguirMarkupPadrao() throws IOException {
+		Stage stage = new Stage();
+		Parent painel = FXMLLoader.load(App.class.getResource("ProdutoViews/MarkupPadrao.fxml"));
+		Scene scene = new Scene(painel, 450, 300);
+		stage.setTitle("Margem de Lucro");
+		stage.setScene(scene);
+		stage.show();
+		return null;
+		
 	}
 
 	@SuppressWarnings("exports")
 	public void calcularValorVendaAutomatico(ActionEvent action) {
-		if (getMarkup().getText().isEmpty() && getCusto().getText().isEmpty()) {
+		if (getMarkupText().getText().isEmpty() && getCusto().getText().isEmpty()) {
 			getInfo().setText(
 					"Para calcular o valor de venda automaticamente é obrigatório fornecer o custo e o % markup!");
 			Style style = new Style();
 			style.campoObrigatorio(getCusto());
-			style.campoObrigatorio(getMarkup());
+			style.campoObrigatorio(getMarkupText());
 			return;
 		}
 		if (getAuto().isSelected()) {
-			Double markup = Double.parseDouble(getMarkup().getText());
+			Double markup = Double.parseDouble(getMarkupText().getText());
 			Double custo = Double.parseDouble(getCusto().getText());
 			Double venda = custo += custo * (markup / 100);
 			getValor().setText(venda.toString());

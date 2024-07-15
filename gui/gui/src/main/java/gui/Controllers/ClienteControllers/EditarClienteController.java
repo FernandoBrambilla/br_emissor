@@ -398,7 +398,7 @@ public class EditarClienteController {
 	}
 
 	public void initialize() {
-		getPf().setDisable(true);
+		getPf().setDisable(true); 
 		getPj().setDisable(true);
 		getUf().getItems().setAll(Uf_Enum.values());
 		//DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");

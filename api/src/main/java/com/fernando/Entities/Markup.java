@@ -1,11 +1,14 @@
 
 package com.fernando.Entities;
 
+import java.math.BigDecimal;
+
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.math.BigDecimal;
 
 /**
  *
@@ -14,13 +17,17 @@ import java.math.BigDecimal;
 @Entity
 public class Markup {
     
-    @Id
+   	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     
-    private BigDecimal markup;
+	
+	@Column(nullable = false, columnDefinition="Decimal(5,2) default '0.00'")
     
-    private boolean utilizar;
+    private BigDecimal markup = BigDecimal.ZERO;
+    
+	@Column(nullable = false)
+    private boolean utilizar = false;
 
 	public Integer getId() {
 		return id;
