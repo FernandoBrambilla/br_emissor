@@ -45,9 +45,15 @@ public class NovoOuEditarProdutoController {
 	private static String url = PrincipalController.getUrl();
 
 	private static ObservableList<CategoriaProdutoDto> listCategorias;
-
+	
+	private static BorderPane checkBoxMarkup;
+	
+	private static CheckBox checkBox;
+	
+	private static NovoOuEditarProdutoController novoOuEditarProdutoController;
+	
 	@FXML
-	private BorderPane campoBtnMarkup;
+	private Pane root;
 	
 	@FXML
 	private Button btnSalvar;
@@ -90,13 +96,42 @@ public class NovoOuEditarProdutoController {
 
 	@FXML
 	private Label info;
+	
+	
+	public static CheckBox getCheckBox() {
+		return checkBox;
+	}
+
+	public static void setCheckBox(CheckBox checkBox) {
+		NovoOuEditarProdutoController.checkBox = checkBox;
+	}
+
+	public static NovoOuEditarProdutoController getNovoOuEditarProdutoController() {
+		return novoOuEditarProdutoController;
+	}
+
+	public static void setNovoOuEditarProdutoController(NovoOuEditarProdutoController novoOuEditarProdutoController) {
+		NovoOuEditarProdutoController.novoOuEditarProdutoController = novoOuEditarProdutoController;
+	}
+
+	public static String getToken() {
+		return token;
+	}
+
+	public static String getUrl() {
+		return url;
+	}
 
 	public static ObservableList<CategoriaProdutoDto> getListCategorias() {
 		return listCategorias;
 	}
 
-	public static void setListCategorias(ObservableList<CategoriaProdutoDto> listCategorias) {
-		NovoOuEditarProdutoController.listCategorias = listCategorias;
+	public static BorderPane getCheckBoxMarkup() {
+		return checkBoxMarkup;
+	}
+
+	public Pane getRoot() {
+		return root;
 	}
 
 	public Button getBtnSalvar() {
@@ -147,16 +182,33 @@ public class NovoOuEditarProdutoController {
 		return btnMarkup;
 	}
 
-	public void setBtnMarkup(Button btnMarkup) {
-		this.btnMarkup = btnMarkup;
-	}
-
 	public TextArea getObs() {
 		return obs;
 	}
 
 	public Label getInfo() {
 		return info;
+	}
+
+
+	public static void setToken(String token) {
+		NovoOuEditarProdutoController.token = token;
+	}
+
+	public static void setUrl(String url) {
+		NovoOuEditarProdutoController.url = url;
+	}
+
+	public static void setListCategorias(ObservableList<CategoriaProdutoDto> listCategorias) {
+		NovoOuEditarProdutoController.listCategorias = listCategorias;
+	}
+
+	public static void setCheckBoxMarkup(BorderPane checkBoxMarkup) {
+		NovoOuEditarProdutoController.checkBoxMarkup = checkBoxMarkup;
+	}
+
+	public void setRoot(Pane root) {
+		this.root = root;
 	}
 
 	public void setBtnSalvar(Button btnSalvar) {
@@ -203,6 +255,10 @@ public class NovoOuEditarProdutoController {
 		this.markupText = markupText;
 	}
 
+	public void setBtnMarkup(Button btnMarkup) {
+		this.btnMarkup = btnMarkup;
+	}
+
 	public void setObs(TextArea obs) {
 		this.obs = obs;
 	}
@@ -210,11 +266,11 @@ public class NovoOuEditarProdutoController {
 	public void setInfo(Label info) {
 		this.info = info;
 	}
-	
+
 	public void initialize() throws Exception {
-		Button button = criarBtnMarkup();
-		campoBtnMarkup.setCenter(button);
-		button.setOnAction(seguirMarkupPadrao());
+		getRoot().getChildren().add(criarCheckBoxMarkup());
+		
+		
 		
 		 
 		
@@ -239,22 +295,30 @@ public class NovoOuEditarProdutoController {
 
 	}
 	
+	@SuppressWarnings("exports")
+	public void mostrarTelaMarkup(ActionEvent action) throws IOException {
+		Stage stage = new Stage();
+		Parent painel = FXMLLoader.load(App.class.getResource("ProdutoViews/MarkupPadrao.fxml"));
+		Scene scene = new Scene(painel, 450, 300);
+		stage.setTitle("Margem de Lucro");
+		stage.setScene(scene);
+		stage.show();
+		
+	}
 	
-	private static Button criarBtnMarkup() throws Exception {
-		Button button = new Button();
-		button.setId("btnMarkup");
-		button.setLayoutX(340);
-		button.setLayoutY(275);
-		button.setMnemonicParsing(false);
-		button.setPrefHeight(30);
-		button.setPrefWidth(187);
-		button.setStyle("-fx-background-color: white;");
-		button.setText("Seguir Markup Padrão");
-		button.setFont(new Font("Calibri", 15));
-		CheckBox checkBox = new CheckBox();
-		checkBox.setSelected(MarkupPadraoController.buscarMarkup().isUtilizar() ? true : false);
-		button.setGraphic(checkBox);
-		return button;
+	
+	public static BorderPane criarCheckBoxMarkup() throws Exception {
+		setCheckBox(new CheckBox());
+		getCheckBox().setSelected(MarkupPadraoController.buscarMarkup().isUtilizar() ? true : false);
+		getCheckBox().setFont(new Font("Calibri", 15));
+		setCheckBoxMarkup(new BorderPane());
+		getCheckBoxMarkup().setLayoutX(330);
+		getCheckBoxMarkup().setLayoutY(275);
+		getCheckBoxMarkup().setPrefHeight(30);
+		getCheckBoxMarkup().setPrefWidth(40);
+		getCheckBoxMarkup().setVisible(true);
+		getCheckBoxMarkup().setCenter(checkBox);
+		return getCheckBoxMarkup();
 	}
 
 
@@ -280,17 +344,6 @@ public class NovoOuEditarProdutoController {
 		ObservableList<String> listaCategorias = FXCollections.observableArrayList(list);
 		return listaCategorias;
 
-	}
-
-	public static EventHandler<ActionEvent> seguirMarkupPadrao() throws IOException {
-		Stage stage = new Stage();
-		Parent painel = FXMLLoader.load(App.class.getResource("ProdutoViews/MarkupPadrao.fxml"));
-		Scene scene = new Scene(painel, 450, 300);
-		stage.setTitle("Margem de Lucro");
-		stage.setScene(scene);
-		stage.show();
-		return null;
-		
 	}
 
 	@SuppressWarnings("exports")

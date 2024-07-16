@@ -9,15 +9,11 @@ import java.net.http.HttpResponse;
 
 import org.json.JSONObject;
 
-import gui.App;
 import gui.Controllers.PrincipalControllers.PrincipalController;
 import gui.Dtos.Markup;
 import gui.Utilities.Mascaras;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
@@ -67,7 +63,7 @@ public class MarkupPadraoController {
 	}
 
 	@SuppressWarnings("exports")
-	public void setUtilizar(CheckBox utilizar) { 
+	public void setUtilizar(CheckBox utilizar) {
 		this.utilizar = utilizar;
 	}
 
@@ -89,7 +85,7 @@ public class MarkupPadraoController {
 	}
 
 	public static Markup buscarMarkup() throws Exception {
-		
+
 		try {
 			String endpoint = url + "markup";
 			HttpClient client = HttpClient.newHttpClient();
@@ -97,7 +93,6 @@ public class MarkupPadraoController {
 					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			JSONObject responseJson = new JSONObject(response.body());
-			System.out.println(response.body());
 			Markup markup = new Markup();
 			markup.setId(responseJson.getInt("id"));
 			markup.setMarkup(responseJson.getBigDecimal("markup"));
@@ -121,7 +116,6 @@ public class MarkupPadraoController {
 					.header("Authorization", "Bearer " + token).header("Content-Type", "application/json")
 					.POST(HttpRequest.BodyPublishers.ofString(json.toString())).build();
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-			System.out.println(response.body());
 		} catch (Exception e) {
 			throw new Exception("Não foi possível salvar a operação!");
 		}
@@ -157,9 +151,7 @@ public class MarkupPadraoController {
 		atualizarMarkup(markup);
 		Stage stage = (Stage) getBtnSalvar().getScene().getWindow();
 		stage.close();
-		
-		
-	
+		NovoOuEditarProdutoController.getCheckBox().setSelected(buscarMarkup().isUtilizar() ? true : false);
 	}
 
 	@SuppressWarnings("exports")

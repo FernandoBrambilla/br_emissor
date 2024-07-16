@@ -239,7 +239,7 @@ public class ProdutosController {
 		}
 		return getTabelaprodutos();
 
-	}
+	} 
 
 	public static void popularTabela() throws Exception {
 		List<ProdutoDto> produtos = getAllProducts();

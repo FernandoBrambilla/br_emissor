@@ -14,9 +14,9 @@ import javafx.stage.Stage;
  */
 public class App extends Application {
 
-    private static Scene scene;
+    public static Scene scene;
     Parent root;
-    Stage stage;
+    public static Stage stage;
     
  
 
@@ -24,7 +24,7 @@ public class App extends Application {
 	@Override
     public void start(@SuppressWarnings("exports") Stage primaryStage) throws IOException {
 		TimeZone.setDefault(TimeZone.getTimeZone("America/Sao_Paulo"));
-		
+		 
 		root = loadFXML("LoginViews/login");
     	stage = primaryStage;
     	stage.setTitle("Br Sistemas de Gestão");
