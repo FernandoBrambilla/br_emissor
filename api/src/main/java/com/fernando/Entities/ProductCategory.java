@@ -12,10 +12,6 @@ import java.io.Serializable;
 @Table(name = "product_category")
 public class ProductCategory implements Serializable{
     private static final long serialVersionUID = 1L;
-    
-    public ProductCategory(String descricao) {
-		this.descricao = descricao;
-	}
 
 	@Id
     @GeneratedValue(strategy=GenerationType.IDENTITY) 

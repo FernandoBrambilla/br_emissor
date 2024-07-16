@@ -460,7 +460,7 @@ public class NovoClienteController {
 				HttpClient client = HttpClient.newHttpClient();
 				HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url))
 						.header("Authorization", "Bearer " + token).header("Content-Type", "application/json")
-						.POST(HttpRequest.BodyPublishers.ofString(json.toString())).build();
+	 					.POST(HttpRequest.BodyPublishers.ofString(json.toString())).build();
 				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 				String message = response.body();
 				int status = response.statusCode();

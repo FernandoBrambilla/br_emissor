@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.fernando.Entities.Markup;
+import com.fernando.Exceptions.RequiredObjectIsNullException;
 import com.fernando.Exceptions.ResourceNotFoundException;
 import com.fernando.Repositories.MarkupRepository;
 
@@ -37,6 +38,8 @@ public class MarkupService {
 	 * @return
 	 */
 	public Markup save(Markup markup) {
+		if (markup == null)
+			throw new RequiredObjectIsNullException();
 		return repository.save(markup);
 	}
 

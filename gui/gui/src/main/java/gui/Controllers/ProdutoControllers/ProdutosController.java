@@ -18,6 +18,7 @@ import org.json.JSONObject;
 
 import gui.App;
 import gui.Controllers.PrincipalControllers.PrincipalController;
+import gui.Dtos.CategoriaProdutoDto;
 import gui.Dtos.Markup;
 import gui.Dtos.ProdutoDto;
 import gui.Dtos.Style;
@@ -41,7 +42,7 @@ import javafx.stage.Stage;
 public class ProdutosController {
 
 	private static String url = PrincipalController.getUrl();
-	
+
 	private static String token = PrincipalController.getAccessToken();
 
 	public static TableView<ProdutoDto> tabelaprodutos;
@@ -108,9 +109,16 @@ public class ProdutosController {
 		this.btnApagar = btnApagar;
 	}
 
-	public void initialize() throws Exception{
+	public void initialize() throws Exception {
+
+		// CRIA UMA CATEGORIA PADRÃO CASO O BANCO SEJA NULL
+		if (AddCategoriaController.buscarCategoriasProduto().isEmpty()) {
+			CategoriaProdutoDto categoria = new CategoriaProdutoDto();
+			categoria.setDescricao(" ");
+			AddCategoriaController.criarCategoria(categoria);
+		}
 		
-		//CRIA UM MARKUP PADRÃO CASO O BANCO SEJA NULL
+		// CRIA UM MARKUP PADRÃO CASO O BANCO SEJA NULL
 		if (MarkupPadraoController.buscarMarkup() == null) {
 			Markup markup = new Markup();
 			markup.setId(1);
@@ -118,40 +126,14 @@ public class ProdutosController {
 			markup.setUtilizar(false);
 			MarkupPadraoController.criarMarkup(markup);
 		}
-	
 
 	}
-	
-	
- 
-	
 
 	public void aplicaEfeitos() {
 		Style efeitos = new Style();
 		efeitos.hover(getBtnNovo());
 		efeitos.hover(getBtnEditar());
 		efeitos.hover(getBtnApagar());
-
-	}
-
-	public static List<String> buscarTodasCategoriasProduto() throws Exception {
-		try {
-			String url = "http://localhost:8080/category";
-			HttpClient client = HttpClient.newHttpClient();
-			HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(url))
-					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
-			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-			JSONArray responseJson = new JSONArray(response.body());
-			List<String> listaCategorias = new ArrayList<>();
-
-			for (int i = 0; i < responseJson.length(); i++) {
-				JSONObject jsonObj = responseJson.getJSONObject(i);
-				listaCategorias.add(jsonObj.getString("descricao"));
-			}
-			return listaCategorias;
-		} catch (Exception e) {
-			throw new Exception(e.getMessage());
-		}
 
 	}
 
@@ -239,7 +221,7 @@ public class ProdutosController {
 		}
 		return getTabelaprodutos();
 
-	} 
+	}
 
 	public static void popularTabela() throws Exception {
 		List<ProdutoDto> produtos = getAllProducts();
@@ -301,11 +283,9 @@ public class ProdutosController {
 		Scene scene = new Scene(painel, 800, 680);
 		stage.setTitle("Cadasto de Produtos");
 		stage.setScene(scene);
-		stage.showAndWait();
-		
+		stage.show();
 
 	}
-	
 
 	@SuppressWarnings("exports")
 	public void editar(ActionEvent action) throws IOException {

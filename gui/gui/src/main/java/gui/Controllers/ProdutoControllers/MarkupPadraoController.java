@@ -81,7 +81,7 @@ public class MarkupPadraoController {
 		Mascaras.numericField(getMarkup());
 		Markup markup = new Markup(buscarMarkup());
 		getMarkup().setText(markup.getMarkup().toString());
-		getUtilizar().setSelected(markup.isUtilizar() ? true : false);
+		getUtilizar().setSelected(markup.isUtilizar() ? true : false); 
 	}
 
 	public static Markup buscarMarkup() throws Exception {
@@ -105,7 +105,7 @@ public class MarkupPadraoController {
 	}
 
 	public static void criarMarkup(Markup markup) throws Exception {
-		try {
+		try { 
 			JSONObject json = new JSONObject();
 			json.put("id", 1);
 			json.put("markup", markup.getMarkup());
@@ -115,7 +115,7 @@ public class MarkupPadraoController {
 			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(endpoint))
 					.header("Authorization", "Bearer " + token).header("Content-Type", "application/json")
 					.POST(HttpRequest.BodyPublishers.ofString(json.toString())).build();
-			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			client.send(request, HttpResponse.BodyHandlers.ofString());
 		} catch (Exception e) {
 			throw new Exception("Não foi possível salvar a operação!");
 		}
@@ -128,7 +128,7 @@ public class MarkupPadraoController {
 			json.put("id", 1);
 			json.put("markup", markup.getMarkup());
 			json.put("utilizar", markup.isUtilizar());
-
+ 
 			String endpoint = url + "markup";
 			HttpClient client = HttpClient.newHttpClient();
 			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(endpoint))

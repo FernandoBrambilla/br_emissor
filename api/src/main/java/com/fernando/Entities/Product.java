@@ -47,7 +47,7 @@ public class Product extends RepresentationModel<Product> implements Serializabl
 	private Markup markup;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	private ProductCategory categoria = new ProductCategory("");
+	private ProductCategory categoria;
 
 	private String fornecedor;
 

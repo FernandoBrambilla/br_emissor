@@ -22,6 +22,22 @@ public class Style {
 			btn.setStyle("-fx-background-color:  #323639; ");
 	}
 	
+	public void hoverBtnsInternos(Button btn) {
+		btn.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent e) {
+				btn.setStyle("-fx-background-color: #D3D3D3; -fx-cursor: hand;");
+			}
+		});
+
+		btn.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent e) {
+				btn.setStyle("-fx-background-color:  white;");
+			}
+		});
+	}
+	
 
 	@SuppressWarnings("exports")
 	public void hover(Button btn) {

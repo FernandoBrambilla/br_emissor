@@ -65,8 +65,7 @@ public class ProductCategoryService {
 	public ProductCategory create(ProductCategory category) {
 		if (category == null)
 			throw new RequiredObjectIsNullException();
-		var categoryVO = repository.save(category);
-		return repository.save(categoryVO);
+		return repository.save(category);
 	}
 
 	// Update

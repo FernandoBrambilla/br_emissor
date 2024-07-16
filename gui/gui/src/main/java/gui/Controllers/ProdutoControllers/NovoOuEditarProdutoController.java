@@ -1,38 +1,29 @@
 package gui.Controllers.ProdutoControllers;
 
-import java.awt.Event;
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.util.List;
-
-import javax.swing.Action;
-
-import org.json.JSONObject;
 
 import gui.App;
 import gui.Controllers.PrincipalControllers.PrincipalController;
 import gui.Dtos.CategoriaProdutoDto;
-import gui.Dtos.Markup;
 import gui.Dtos.Style;
-import javafx.application.Platform;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.NodeOrientation;
+import javafx.scene.ImageCursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.skin.ComboBoxListViewSkin;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
@@ -45,16 +36,18 @@ public class NovoOuEditarProdutoController {
 	private static String url = PrincipalController.getUrl();
 
 	private static ObservableList<CategoriaProdutoDto> listCategorias;
-	
-	private static BorderPane checkBoxMarkup;
-	
+
+	private static BorderPane checkBoxMarkupPane;
+
 	private static CheckBox checkBox;
-	
-	private static NovoOuEditarProdutoController novoOuEditarProdutoController;
-	
+
+	private static BorderPane categoriaPane;
+
+	private static ComboBox<String> categoria;
+
 	@FXML
 	private Pane root;
-	
+
 	@FXML
 	private Button btnSalvar;
 
@@ -69,12 +62,6 @@ public class NovoOuEditarProdutoController {
 
 	@FXML
 	private TextField descricao;
-
-	@FXML
-	private ComboBox<String> categoria;
-
-	@FXML
-	private Button btnAddCategoria;
 
 	@FXML
 	private TextField valor;
@@ -96,38 +83,25 @@ public class NovoOuEditarProdutoController {
 
 	@FXML
 	private Label info;
-	
-	
-	public static CheckBox getCheckBox() {
-		return checkBox;
-	}
-
-	public static void setCheckBox(CheckBox checkBox) {
-		NovoOuEditarProdutoController.checkBox = checkBox;
-	}
-
-	public static NovoOuEditarProdutoController getNovoOuEditarProdutoController() {
-		return novoOuEditarProdutoController;
-	}
-
-	public static void setNovoOuEditarProdutoController(NovoOuEditarProdutoController novoOuEditarProdutoController) {
-		NovoOuEditarProdutoController.novoOuEditarProdutoController = novoOuEditarProdutoController;
-	}
-
-	public static String getToken() {
-		return token;
-	}
-
-	public static String getUrl() {
-		return url;
-	}
 
 	public static ObservableList<CategoriaProdutoDto> getListCategorias() {
 		return listCategorias;
 	}
 
-	public static BorderPane getCheckBoxMarkup() {
-		return checkBoxMarkup;
+	public static BorderPane getCheckBoxMarkupPane() {
+		return checkBoxMarkupPane;
+	}
+
+	public static CheckBox getCheckBox() {
+		return checkBox;
+	}
+
+	public static BorderPane getCategoriaPane() {
+		return categoriaPane;
+	}
+
+	public static ComboBox<String> getCategoria() {
+		return categoria;
 	}
 
 	public Pane getRoot() {
@@ -152,14 +126,6 @@ public class NovoOuEditarProdutoController {
 
 	public TextField getDescricao() {
 		return descricao;
-	}
-
-	public ComboBox<String> getCategoria() {
-		return categoria;
-	}
-
-	public Button getBtnAddCategoria() {
-		return btnAddCategoria;
 	}
 
 	public TextField getValor() {
@@ -190,21 +156,24 @@ public class NovoOuEditarProdutoController {
 		return info;
 	}
 
-
-	public static void setToken(String token) {
-		NovoOuEditarProdutoController.token = token;
-	}
-
-	public static void setUrl(String url) {
-		NovoOuEditarProdutoController.url = url;
-	}
-
 	public static void setListCategorias(ObservableList<CategoriaProdutoDto> listCategorias) {
 		NovoOuEditarProdutoController.listCategorias = listCategorias;
 	}
 
-	public static void setCheckBoxMarkup(BorderPane checkBoxMarkup) {
-		NovoOuEditarProdutoController.checkBoxMarkup = checkBoxMarkup;
+	public static void setCheckBoxMarkupPane(BorderPane checkBoxMarkupPane) {
+		NovoOuEditarProdutoController.checkBoxMarkupPane = checkBoxMarkupPane;
+	}
+
+	public static void setCheckBox(CheckBox checkBox) {
+		NovoOuEditarProdutoController.checkBox = checkBox;
+	}
+
+	public static void setCategoriaPane(BorderPane categoriaPane) {
+		NovoOuEditarProdutoController.categoriaPane = categoriaPane;
+	}
+
+	public static void setCategoria(ComboBox<String> categoria) {
+		NovoOuEditarProdutoController.categoria = categoria;
 	}
 
 	public void setRoot(Pane root) {
@@ -229,14 +198,6 @@ public class NovoOuEditarProdutoController {
 
 	public void setDescricao(TextField descricao) {
 		this.descricao = descricao;
-	}
-
-	public void setCategoria(ComboBox<String> categoria) {
-		this.categoria = categoria;
-	}
-
-	public void setBtnAddCategoria(Button btnAddCategoria) {
-		this.btnAddCategoria = btnAddCategoria;
 	}
 
 	public void setValor(TextField valor) {
@@ -269,32 +230,11 @@ public class NovoOuEditarProdutoController {
 
 	public void initialize() throws Exception {
 		getRoot().getChildren().add(criarCheckBoxMarkup());
-		
-		
-		
-		 
-		
-		/*
-		 * // EXECUTADO SOMENTE SE FOR SELECIONADO UM PRODUTO if
-		 * (ProdutosController.tabelaprodutos.getSelectionModel().getSelectedItem() !=
-		 * null) { ProdutoDto produtoParaEditar = new ProdutoDto(
-		 * ProdutosController.tabelaprodutos.getSelectionModel().getSelectedItem());
-		 * getEan_getin().setText(produtoParaEditar.getEAN_GTIN());
-		 * getDescricao().setText(produtoParaEditar.getDescricao());
-		 * //produtoParaEditar.getCategoria().getDescricao().equals(null) ?
-		 * criarNovaCategoriaProduto("") :
-		 * produtoParaEditar.getCategoria().getDescricao());
-		 * getValor().setText(produtoParaEditar.getValorVenda().toString());
-		 * getCusto().setText(produtoParaEditar.getCusto().toString());
-		 * getDescricao().setText(produtoParaEditar.getDescricao());
-		 * 
-		 * } else { /* getCategoria().setItems(preencherListaDeCategorias());
-		 * 
-		 * getMarkupPadrao().setSelected(getMarkupSalvo().isUtilizar()); getMarkup();
-		 */
+		getRoot().getChildren().add(criarComboBoxCategorias());
+		getCategoria().setSkin(criarSkin());
 
 	}
-	
+
 	@SuppressWarnings("exports")
 	public void mostrarTelaMarkup(ActionEvent action) throws IOException {
 		Stage stage = new Stage();
@@ -303,47 +243,99 @@ public class NovoOuEditarProdutoController {
 		stage.setTitle("Margem de Lucro");
 		stage.setScene(scene);
 		stage.show();
-		
+
 	}
 	
-	
+	public static ComboBoxListViewSkin<String> criarSkin() {
+		getCategoria().getItems().add(0, null);
+		ComboBoxListViewSkin<String> skin = new ComboBoxListViewSkin<String>(getCategoria());
+		skin.setHideOnClick(false);
+		getCategoria().setCellFactory(lv -> new ListCell<>() {
+			private ButtonBar buttons = criarButtonBar();
+			@Override
+			protected void updateItem(String item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty) {
+					setText("");
+					setGraphic(null);
+				} else if (item == null) {
+					setText("");
+					setGraphic(buttons);
+				} else {
+					setText(item);
+					setGraphic(null);
+				}
+			}
+		});
+		return skin;
+	}
+
+	public  static ComboBox<String> criarComboBoxCategorias() throws Exception {
+		setCategoria(new ComboBox<String>());
+		getCategoria().setLayoutX(140);
+		getCategoria().setLayoutY(125);
+		getCategoria().setPrefWidth(245);
+		getCategoria().setPrefHeight(30);
+		getCategoria().setItems(AddCategoriaController.buscarCategoriasProduto());
+		return getCategoria();
+	}
+
+	private static void estilizarButton(Button button) {
+		Style style = new Style();
+		style.hoverBtnsInternos(button);
+		Font font = new Font("Calibri", 14);
+		button.setFont(font);
+		button.setStyle("-fx-background-color: white; ");
+
+	}
+
+	private static ButtonBar criarButtonBar() {
+
+		ButtonBar buttonBar = new ButtonBar();
+		Button buttonNovo = new Button("Novo");
+		estilizarButton(buttonNovo);
+		Button buttonEditar = new Button("Editar");
+		estilizarButton(buttonEditar);
+		Button buttonApagar = new Button("Apagar");
+		estilizarButton(buttonApagar);
+		ButtonBar.setButtonData(buttonNovo, null);
+		ButtonBar.setButtonData(buttonEditar, null);
+		ButtonBar.setButtonData(buttonApagar, null);
+		buttonBar.getButtons().addAll(buttonNovo,buttonEditar, buttonApagar);
+		//buttonBar.setPrefHeight(40);
+		//buttonBar.setPrefWidth(110);
+		
+
+		buttonNovo.setOnAction(e -> {
+			Stage stage = new Stage();
+			Parent painel = null;
+			try {
+				painel = FXMLLoader.load(App.class.getResource("ProdutoViews/AddCategoria.fxml"));
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			Scene scene = new Scene(painel, 500, 200);
+			stage.setTitle("Cadasto de Categorias de Produtos");
+			stage.setScene(scene);
+			stage.show();
+		});
+
+		return buttonBar;
+	}
+
+	@SuppressWarnings("exports")
 	public static BorderPane criarCheckBoxMarkup() throws Exception {
 		setCheckBox(new CheckBox());
 		getCheckBox().setSelected(MarkupPadraoController.buscarMarkup().isUtilizar() ? true : false);
 		getCheckBox().setFont(new Font("Calibri", 15));
-		setCheckBoxMarkup(new BorderPane());
-		getCheckBoxMarkup().setLayoutX(330);
-		getCheckBoxMarkup().setLayoutY(275);
-		getCheckBoxMarkup().setPrefHeight(30);
-		getCheckBoxMarkup().setPrefWidth(40);
-		getCheckBoxMarkup().setVisible(true);
-		getCheckBoxMarkup().setCenter(checkBox);
-		return getCheckBoxMarkup();
-	}
-
-
-	@SuppressWarnings("unused")
-	private void criarNovaCategoriaProduto(String descricao) throws Exception {
-		CategoriaProdutoDto novaCategoria = new CategoriaProdutoDto(descricao);
-		try {
-			JSONObject json = new JSONObject();
-			json.put("descricao", novaCategoria.getDescricao());
-			String endpoint = url + "category";
-			HttpClient client = HttpClient.newHttpClient();
-			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(endpoint))
-					.header("Authorization", "Bearer " + token).header("Content-Type", "application/json")
-					.POST(HttpRequest.BodyPublishers.ofString(json.toString())).build();
-			client.send(request, HttpResponse.BodyHandlers.ofString());
-		} catch (Exception e) {
-			throw new Exception("Não foi possível salvar a nova Categoria do produto!");
-		}
-	}
-
-	public static ObservableList<String> preencherListaDeCategorias() throws Exception {
-		List<String> list = ProdutosController.buscarTodasCategoriasProduto();
-		ObservableList<String> listaCategorias = FXCollections.observableArrayList(list);
-		return listaCategorias;
-
+		setCheckBoxMarkupPane(new BorderPane());
+		getCheckBoxMarkupPane().setLayoutX(330);
+		getCheckBoxMarkupPane().setLayoutY(275);
+		getCheckBoxMarkupPane().setPrefHeight(30);
+		getCheckBoxMarkupPane().setPrefWidth(40);
+		getCheckBoxMarkupPane().setVisible(true);
+		getCheckBoxMarkupPane().setCenter(checkBox);
+		return getCheckBoxMarkupPane();
 	}
 
 	@SuppressWarnings("exports")
@@ -386,14 +378,6 @@ public class NovoOuEditarProdutoController {
 		stage.close();
 	}
 
-	public void btnAddCategoria(@SuppressWarnings("exports") ActionEvent action) throws IOException {
-		Stage stage = new Stage();
-		Parent painel = FXMLLoader.load(getClass().getResource("ProdutoViews/AddCategoria.fxml"));
-		Scene scene = new Scene(painel, 500, 200);
-		stage.setTitle("Cadasto de Categorias de Produtos");
-		stage.setScene(scene);
-		stage.show();
 
-	}
 
 }
