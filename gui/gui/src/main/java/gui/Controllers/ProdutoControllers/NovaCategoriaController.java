@@ -13,10 +13,7 @@ import org.json.JSONObject;
 
 import gui.Controllers.PrincipalControllers.PrincipalController;
 import gui.Dtos.CategoriaProdutoDto;
-import gui.Dtos.Markup;
 import gui.Dtos.Style;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -26,7 +23,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
-public class AddCategoriaController {
+public class NovaCategoriaController {
 
 	private static String url = PrincipalController.getUrl();
 
@@ -44,14 +41,17 @@ public class AddCategoriaController {
 	@FXML
 	private Button btnCancelar;
 
+	@SuppressWarnings("exports")
 	public TextField getCategoria() {
 		return categoria;
 	}
 
+	@SuppressWarnings("exports")
 	public Label getInfo() {
 		return info;
 	}
 
+	@SuppressWarnings("exports")
 	public void setInfo(Label info) {
 		this.info = info;
 	}
@@ -66,6 +66,7 @@ public class AddCategoriaController {
 		return btnCancelar;
 	}
 
+	@SuppressWarnings("exports")
 	public void setCategoria(TextField categoria) {
 		this.categoria = categoria;
 	}
@@ -80,7 +81,11 @@ public class AddCategoriaController {
 		this.btnCancelar = btnCancelar;
 	}
 
-	public static ObservableList<String> buscarCategoriasProduto() throws Exception {
+	public void initialize() throws Exception {
+
+	}
+
+	public static List<CategoriaProdutoDto> buscarCategoriasProduto() throws Exception {
 		try {
 			String endpoint = url + "category";
 			HttpClient client = HttpClient.newHttpClient();
@@ -88,15 +93,42 @@ public class AddCategoriaController {
 					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			JSONArray responseJson = new JSONArray(response.body());
-			List<String> listaCategorias = new ArrayList<>();
+
+			List<CategoriaProdutoDto> listaCategorias = new ArrayList<>();
+			CategoriaProdutoDto categoriaProdutoDto;
+
+			for (int i = 0; i < responseJson.length(); i++) {
+				categoriaProdutoDto = new CategoriaProdutoDto();
+				JSONObject jsonObj = responseJson.getJSONObject(i);
+				categoriaProdutoDto.setId(jsonObj.getInt("id"));
+				categoriaProdutoDto.setDescricao(jsonObj.getString("descricao"));
+				listaCategorias.add(categoriaProdutoDto);
+
+			}
+			return listaCategorias;
+
+		} catch (Exception e) {
+			throw new Exception(e.getMessage());
+		}
+	}
+
+	public static CategoriaProdutoDto buscarCategoriaProduto(int id) throws Exception {
+		try {
+			String endpoint = url + "category/" + id;
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(endpoint))
+					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			JSONArray responseJson = new JSONArray(response.body());
+			CategoriaProdutoDto categoriaProdutoDto = new CategoriaProdutoDto();
 
 			for (int i = 0; i < responseJson.length(); i++) {
 				JSONObject jsonObj = responseJson.getJSONObject(i);
-				listaCategorias.add(jsonObj.getString("descricao"));
+				categoriaProdutoDto.setId(jsonObj.getInt("id"));
+				categoriaProdutoDto.setDescricao(jsonObj.getString("descricao"));
 			}
+			return categoriaProdutoDto;
 
-			ObservableList<String> observableListaCategorias = FXCollections.observableArrayList(listaCategorias);
-			return observableListaCategorias;
 		} catch (Exception e) {
 			throw new Exception(e.getMessage());
 		}
@@ -105,6 +137,52 @@ public class AddCategoriaController {
 	public static int criarCategoria(CategoriaProdutoDto categoria) throws Exception {
 		try {
 			JSONObject json = new JSONObject();
+			json.put("descricao", categoria.getDescricao());
+			String endpoint = url + "category";
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(endpoint))
+					.header("Authorization", "Bearer " + token).header("Content-Type", "application/json")
+					.POST(HttpRequest.BodyPublishers.ofString(json.toString())).build();
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			int statusCode = response.statusCode();
+			return statusCode;
+		} catch (Exception e) {
+			throw new Exception("Não foi possível salvar a operação!");
+		}
+
+	}
+
+	public static void apagarCategoria(CategoriaProdutoDto categoria) {
+		try {
+			// REQUIÇÃO PARA DELETAR
+			String endpoint = url + "category/" + categoria.getId();
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder().header("Authorization", "Bearer " + token)
+					.header("Content-Type", "application/json").DELETE().uri(URI.create(endpoint)).build();
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			System.out.println(response.body());
+			if (response.statusCode() == 204) {
+				Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
+				alert1.setHeaderText(null);
+				alert1.setContentText("Categoria apagada com sucesso! ");
+				alert1.showAndWait();
+				NovoOuEditarProdutoController.getCategoria().getItems().remove(categoria);
+				NovoOuEditarProdutoController.getCategoria().show();
+			}
+
+		} catch (Exception e) {
+			Alert alert2 = new Alert(Alert.AlertType.ERROR);
+			alert2.setHeaderText(null);
+			alert2.setContentText("Erro. " + e.getMessage());
+			alert2.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+			alert2.showAndWait();
+		}
+	}
+
+	public static int atualizarCategoria(CategoriaProdutoDto categoria) throws Exception {
+		try {
+			JSONObject json = new JSONObject();
+			json.put("id", categoria.getId());
 			json.put("descricao", categoria.getDescricao());
 			String endpoint = url + "category";
 			HttpClient client = HttpClient.newHttpClient();
@@ -143,11 +221,8 @@ public class AddCategoriaController {
 					alert.showAndWait();
 					Stage stage = (Stage) getBtnSalvar().getScene().getWindow();
 					stage.close();
-					NovoOuEditarProdutoController.getCategoria().setSkin(null);
-					NovoOuEditarProdutoController.getCategoria().setItems(buscarCategoriasProduto());
-					NovoOuEditarProdutoController.getCategoria().setSkin(NovoOuEditarProdutoController.criarSkin());
-				
-					
+					NovoOuEditarProdutoController.atualizarLista();
+					NovoOuEditarProdutoController.getCategoria().show();
 				}
 			}
 

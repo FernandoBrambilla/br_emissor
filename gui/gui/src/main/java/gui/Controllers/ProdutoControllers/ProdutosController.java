@@ -112,11 +112,11 @@ public class ProdutosController {
 	public void initialize() throws Exception {
 
 		// CRIA UMA CATEGORIA PADRÃO CASO O BANCO SEJA NULL
-		if (AddCategoriaController.buscarCategoriasProduto().isEmpty()) {
+		if (NovaCategoriaController.buscarCategoriasProduto().isEmpty()) {
 			CategoriaProdutoDto categoria = new CategoriaProdutoDto();
 			categoria.setDescricao(" ");
-			AddCategoriaController.criarCategoria(categoria);
-		}
+			NovaCategoriaController.criarCategoria(categoria);
+		} 
 		
 		// CRIA UM MARKUP PADRÃO CASO O BANCO SEJA NULL
 		if (MarkupPadraoController.buscarMarkup() == null) {
@@ -126,7 +126,7 @@ public class ProdutosController {
 			markup.setUtilizar(false);
 			MarkupPadraoController.criarMarkup(markup);
 		}
-
+ 
 	}
 
 	public void aplicaEfeitos() {

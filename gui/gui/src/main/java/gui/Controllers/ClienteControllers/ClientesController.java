@@ -347,7 +347,7 @@ public class ClientesController {
 
 	@SuppressWarnings("exports")
 	public void apagar(ActionEvent action) throws IOException {
-
+ 
 		// VERIFICA SE FOI SELECIONADO UM CLIENTE PARA APAGAR
 		if (ClientesController.getTabelaClientes().getSelectionModel().isEmpty()) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);

@@ -44,7 +44,7 @@
             <Font size="15.0" />
          </font>
       </TextField>
-      <TextField fx:id="markup" layoutX="140.0" layoutY="275.0" prefHeight="30.0" prefWidth="190.0" promptText="100%">
+      <TextField fx:id="markupText" layoutX="140.0" layoutY="275.0" prefHeight="30.0" prefWidth="190.0" promptText="100%">
          <font>
             <Font size="15.0" />
          </font>

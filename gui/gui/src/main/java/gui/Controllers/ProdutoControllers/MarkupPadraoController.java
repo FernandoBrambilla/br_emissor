@@ -9,9 +9,11 @@ import java.net.http.HttpResponse;
 
 import org.json.JSONObject;
 
+import gui.App;
 import gui.Controllers.PrincipalControllers.PrincipalController;
 import gui.Dtos.Markup;
 import gui.Utilities.Mascaras;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -81,7 +83,7 @@ public class MarkupPadraoController {
 		Mascaras.numericField(getMarkup());
 		Markup markup = new Markup(buscarMarkup());
 		getMarkup().setText(markup.getMarkup().toString());
-		getUtilizar().setSelected(markup.isUtilizar() ? true : false); 
+		getUtilizar().setSelected(markup.isUtilizar() ? true : false);
 	}
 
 	public static Markup buscarMarkup() throws Exception {
@@ -105,7 +107,7 @@ public class MarkupPadraoController {
 	}
 
 	public static void criarMarkup(Markup markup) throws Exception {
-		try { 
+		try {
 			JSONObject json = new JSONObject();
 			json.put("id", 1);
 			json.put("markup", markup.getMarkup());
@@ -128,7 +130,7 @@ public class MarkupPadraoController {
 			json.put("id", 1);
 			json.put("markup", markup.getMarkup());
 			json.put("utilizar", markup.isUtilizar());
- 
+
 			String endpoint = url + "markup";
 			HttpClient client = HttpClient.newHttpClient();
 			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(endpoint))
@@ -152,6 +154,7 @@ public class MarkupPadraoController {
 		Stage stage = (Stage) getBtnSalvar().getScene().getWindow();
 		stage.close();
 		NovoOuEditarProdutoController.getCheckBox().setSelected(buscarMarkup().isUtilizar() ? true : false);
+		
 	}
 
 	@SuppressWarnings("exports")

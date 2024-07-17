@@ -179,7 +179,7 @@ public class LoginController extends AnchorPane {
 		Style efeito = new Style();
 		
 		if (checarParametrosNull()) {
-			try {
+			try { 
 				String username = getUserName().getText();
 				String password = null;
 				if (getPassword().isVisible()) {
