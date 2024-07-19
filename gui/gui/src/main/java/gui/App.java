@@ -1,5 +1,7 @@
 package gui;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.IOException;
 import java.util.TimeZone;
 
@@ -14,46 +16,37 @@ import javafx.stage.Stage;
  */
 public class App extends Application {
 
-    public static Scene scene;
-    Parent root;
-    public static Stage stage;
-    
- 
-
+	public static Scene scene;
+	Parent root;
+	public static Stage stage;
 
 	@Override
-    public void start(@SuppressWarnings("exports") Stage primaryStage) throws IOException {
+	public void start(@SuppressWarnings("exports") Stage primaryStage) throws IOException {
 		TimeZone.setDefault(TimeZone.getTimeZone("America/Sao_Paulo"));
-		 
-		root = loadFXML("LoginViews/login");
-    	stage = primaryStage;
-    	stage.setTitle("Br Sistemas de Gestão");
-    	scene = new Scene(root);
-    	scene.getStylesheets().add(getClass().getResource("Style/style.css").toExternalForm());
-        stage.setScene(scene);
-        stage.setMaximized(true);
-        stage.show();
-        
-        
-    }
-    
- 
-    public static void setRoot(String fxml) throws IOException {
-        scene.setRoot(loadFXML(fxml));
-    }
+		root = loadFXML("LoginViews/Root");
+		stage = primaryStage;
+		stage.setTitle("Br Sistemas de Gestão");
+		scene = new Scene(root);
+		scene.getStylesheets().add(getClass().getResource("Style/style.css").toExternalForm());
+		stage.setScene(scene);
+		stage.setMaximized(true); 
+		stage.show();
 
-    @SuppressWarnings("exports")
+	}
+
+	public static void setRoot(String fxml) throws IOException {
+		scene.setRoot(loadFXML(fxml));
+	}
+
+	@SuppressWarnings("exports")
 	public static Parent loadFXML(String fxml) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
-        return fxmlLoader.load();
-    }
-    
+		FXMLLoader fxmlLoader = new FXMLLoader(App.class.getResource(fxml + ".fxml"));
+		return fxmlLoader.load();
+	}
 
-    public static void main(String[] args) {
-        launch();   
-       
-       
-        		
-    }
+	public static void main(String[] args) {
+		launch();
+
+	}
 
 }

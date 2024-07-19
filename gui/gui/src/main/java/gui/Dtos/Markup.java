@@ -15,14 +15,8 @@ public class Markup {
 	}
 	
 	public Markup() {
-		super();
 	}
 
-	public Markup(int id, BigDecimal markup, boolean utilizar) {
-		this.id = id;
-		this.markup = markup;
-		this.utilizar = utilizar;
-	}
 
 	public int getId() {
 		return id;

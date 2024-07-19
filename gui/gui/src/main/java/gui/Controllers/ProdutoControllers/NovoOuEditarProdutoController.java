@@ -1,5 +1,6 @@
 package gui.Controllers.ProdutoControllers;
 
+import java.awt.Cursor;
 import java.io.IOException;
 
 import gui.App;
@@ -7,6 +8,7 @@ import gui.Controllers.PrincipalControllers.PrincipalController;
 import gui.Dtos.CategoriaProdutoDto;
 import gui.Dtos.Markup;
 import gui.Dtos.Style;
+import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -44,8 +46,8 @@ public class NovoOuEditarProdutoController {
 	private static BorderPane categoriaPane;
 
 	private static ComboBox<CategoriaProdutoDto> categoria;
-
-	public static NovoOuEditarProdutoController novoProdutoController;
+	
+	private static Markup markup = new Markup();
 
 	@FXML
 	private Pane root;
@@ -74,8 +76,8 @@ public class NovoOuEditarProdutoController {
 	@FXML
 	private TextField custo;
 
-	@FXML
-	private TextField markupText;
+	
+	private static TextField markupText;
 
 	@FXML
 	private Button btnMarkup;
@@ -155,13 +157,13 @@ public class NovoOuEditarProdutoController {
 	}
 
 	@SuppressWarnings("exports")
-	public TextField getMarkupText() {
-		return markupText;
+	public Button getBtnMarkup() {
+		return btnMarkup;
 	}
 
 	@SuppressWarnings("exports")
-	public Button getBtnMarkup() {
-		return btnMarkup;
+	public static TextField getMarkupText() {
+		return markupText;
 	}
 
 	@SuppressWarnings("exports")
@@ -178,16 +180,8 @@ public class NovoOuEditarProdutoController {
 		NovoOuEditarProdutoController.listCategorias = listCategorias;
 	}
 
-	public static NovoOuEditarProdutoController getNovoProdutoController() {
-		return novoProdutoController;
-	}
-
 	public static void setCheckBoxMarkupPane(BorderPane checkBoxMarkupPane) {
 		NovoOuEditarProdutoController.checkBoxMarkupPane = checkBoxMarkupPane;
-	}
-
-	public static void setNovoProdutoController(NovoOuEditarProdutoController novoProdutoController) {
-		NovoOuEditarProdutoController.novoProdutoController = novoProdutoController;
 	}
 
 	@SuppressWarnings("exports")
@@ -249,9 +243,8 @@ public class NovoOuEditarProdutoController {
 		this.custo = custo;
 	}
 
-	@SuppressWarnings("exports")
-	public void setMarkupText(TextField markupText) {
-		this.markupText = markupText;
+	public static void setMarkupText(TextField markupText) {
+		NovoOuEditarProdutoController.markupText = markupText;
 	}
 
 	@SuppressWarnings("exports")
@@ -270,18 +263,34 @@ public class NovoOuEditarProdutoController {
 	}
 
 	public void initialize() throws Exception {
-		getRoot().getChildren().add(criarCheckBoxMarkup());
+		markup = MarkupPadraoController.buscarMarkup();
+		
 		getRoot().getChildren().add(criarComboBoxCategorias());
-		carregarDados();
-
+		getRoot().getChildren().add(criarCheckBoxMarkup());
+		getRoot().getChildren().add(criarMarkupText());
+		
+		getCheckBox().setOnAction(e -> {
+			try {
+				mostrarTelaMarkup(e);
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		});
+		
 	}
 
-	@FXML
-	protected void carregarDados() throws Exception {
-		Markup markup = new Markup(MarkupPadraoController.buscarMarkup());
-		TextField valor = new TextField();
-		valor.setText(markup.isUtilizar() ? markup.getMarkup().toString() : "");
-		getMarkupText().textProperty().bind(valor.textProperty());
+	@SuppressWarnings("exports")
+	public static TextField criarMarkupText() throws Exception {
+		setMarkupText(new TextField());
+		getMarkupText().setId("markupText");
+		getMarkupText().setLayoutX(140);
+		getMarkupText().setLayoutY(275);
+		getMarkupText().setPrefHeight(30);
+		getMarkupText().setPrefWidth(190);
+		getMarkupText().setPromptText(markup.isUtilizar() ? markup.getMarkup().toString() : ""); 
+		getMarkupText().setEditable(markup.isUtilizar()? false : true);
+		getMarkupText().setFont(new Font("Calibri", 15));
+		return getMarkupText();
 	}
 
 	/**
@@ -292,27 +301,15 @@ public class NovoOuEditarProdutoController {
 	 */
 	@SuppressWarnings("exports")
 	public void mostrarTelaMarkup(ActionEvent action) throws IOException {
-
-		Platform.runLater(new Runnable() {
-			@Override
-			public void run() {
-				Stage stage = new Stage();
-				Parent painel = null;
-				try {
-					painel = FXMLLoader.load(App.class.getResource("ProdutoViews/MarkupPadrao.fxml"));
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				Scene scene = new Scene(painel, 450, 300);
-				stage.setTitle("Margem de Lucro");
-				stage.setScene(scene);
-				stage.show();
-
-			}
-		});
-
+		Stage stage = new Stage();
+		Parent painel =	FXMLLoader.load(App.class.getResource("ProdutoViews/MarkupPadrao.fxml"));
+		Scene scene = new Scene(painel, 450, 300);
+		stage.setTitle("Margem de Lucro");
+		stage.setScene(scene);
+		stage.show(); 
 	}
+
+	
 
 	/**
 	 * Atualiza lista de Categorias do Produto

@@ -1,5 +1,7 @@
 package gui.Controllers.PrincipalControllers;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.IOException;
 import java.text.ParseException;
 
@@ -21,16 +23,17 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class PrincipalController {
-	
+
 	static final String url = "http://localhost:8080/";
 
 	static LoginDto usuarioLogado = null;
 
 	static String accessToken;
-	
+
 	static ConfiguracoesController configuracoes = null;
 
 	static UsuariosController usuariosController = null;
@@ -39,14 +42,15 @@ public class PrincipalController {
 
 	static ProdutosController produtosController = null;
 
-	public static TableView<UserDto> tabelaUsuarios = null; 
+	public static TableView<UserDto> tabelaUsuarios = null;
 
 	static TableView<ClienteDto> tabelaClients = null;
 
 	static TableView<ProdutoDto> tabelaprodutos = null;
-	
-	
 
+	@FXML
+	private Pane menuSuperior;
+	
 	@FXML
 	private BorderPane menu;
 
@@ -85,7 +89,6 @@ public class PrincipalController {
 
 	@FXML
 	private Label emissor;
-
 
 	public static String getUrl() {
 		return url;
@@ -137,6 +140,16 @@ public class PrincipalController {
 
 	public static void setTabelaprodutos(TableView<ProdutoDto> tabelaprodutos) {
 		PrincipalController.tabelaprodutos = tabelaprodutos;
+	}
+	
+	@SuppressWarnings("exports")
+	public Pane getMenuSuperior() {
+		return menuSuperior;
+	}
+
+	@SuppressWarnings("exports")
+	public void setMenuSuperior(Pane menuSuperior) {
+		this.menuSuperior = menuSuperior;
 	}
 
 	@SuppressWarnings("exports")
@@ -200,6 +213,7 @@ public class PrincipalController {
 		PrincipalController.usuariosController = usuariosController;
 	}
 
+	@SuppressWarnings("exports")
 	public static void setClientesController(ClientesController clientesController) {
 		PrincipalController.clientesController = clientesController;
 	}
@@ -210,7 +224,7 @@ public class PrincipalController {
 
 	public static void setTabelaClients(TableView<ClienteDto> tabelaClients) {
 		PrincipalController.tabelaClients = tabelaClients;
-	} 
+	}
 
 	@SuppressWarnings("exports")
 	public void setMenu(BorderPane menu) {
@@ -271,7 +285,6 @@ public class PrincipalController {
 		return usuario;
 	}
 
-
 	@SuppressWarnings("exports")
 	public void setBtnConfiguracoes(Button btnConfiguracoes) {
 		this.btnConfiguracoes = btnConfiguracoes;
@@ -282,7 +295,6 @@ public class PrincipalController {
 		this.usuario = usuario;
 	}
 
-	
 	public Label getPlano() {
 		return plano;
 	}
@@ -333,11 +345,20 @@ public class PrincipalController {
 
 	@SuppressWarnings({ "static-access" })
 	@FXML
-	private void initialize() throws IOException, ParseException{
-		getUsuario().setText("Usuário: " +getUsuarioLogado().getUserName());
+	private void initialize() throws IOException, ParseException {
+		
+		//-----------Configura o tamanho da tela------------------
+		Toolkit tk = Toolkit.getDefaultToolkit();
+		Dimension d = tk.getScreenSize();
+		getTelaBase().setPrefHeight(d.getHeight()-150);
+		getTelaBase().setPrefWidth(d.getWidth()-220);
+		getMenuSuperior().setPrefWidth(d.getWidth()-220);
+		//--------------------------------------------------------
+
+		getUsuario().setText("Usuário: " + getUsuarioLogado().getUserName());
 		getPlano().setText("Plano: Free");
 		getEmissor().setText("Emissor: Brambilla Informática");
-		
+
 		getBtnUsuarios().setOnAction((event) -> {
 			try {
 				setUsuariosController(new UsuariosController());
@@ -349,16 +370,16 @@ public class PrincipalController {
 				getStyle().removerCorBotaoSelecionado(getBtnProdutos());
 				getStyle().removerCorBotaoSelecionado(getBtnVendas());
 				getStyle().removerCorBotaoSelecionado(getBtnConfiguracoes());
-				
-				
 
 				// CARREGA O MENU DE USUARIOS
-				FXMLLoader loader = new FXMLLoader(App.class.getResource("UsuarioViews/Usuarios.fxml"));
-				getMenu().setTop(loader.load());
+				FXMLLoader loader = new FXMLLoader(App.class.getResource("UsuarioViews/MenuUsuarios.fxml"));
+	
+				
 				// CARREGA A TABELA DE USUARIOS
 				setTabelaUsuarios(getUsuariosController().construirTabela());
 				getTelaBase().setCenter(tabelaUsuarios);
-
+				tabelaUsuarios.autosize();
+				
 				usuariosController.setTelaBase(telaBase);
 				UsuariosController.setTabelaUsuarios(tabelaUsuarios);
 			} catch (IOException e) {
@@ -381,7 +402,7 @@ public class PrincipalController {
 				getStyle().removerCorBotaoSelecionado(getBtnConfiguracoes());
 
 				// CARREGA O MENU DE USUARIOS
-				FXMLLoader loader = new FXMLLoader(App.class.getResource("ClienteViews/Clientes.fxml"));
+				FXMLLoader loader = new FXMLLoader(App.class.getResource("ClienteViews/MenuClientes.fxml"));
 				getMenu().setTop(loader.load());
 
 				// CARREGA A TABELA DE CLIENTES
@@ -410,8 +431,7 @@ public class PrincipalController {
 				getStyle().removerCorBotaoSelecionado(getBtnUsuarios());
 				getStyle().removerCorBotaoSelecionado(getBtnVendas());
 				getStyle().removerCorBotaoSelecionado(getBtnConfiguracoes());
-				
-				
+
 				FXMLLoader loader = new FXMLLoader();
 				loader.setLocation(App.class.getResource("ProdutoViews/MenuProdutos.fxml"));
 				getMenu().setTop(loader.load());
@@ -425,7 +445,7 @@ public class PrincipalController {
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (Exception e) {
-				e.printStackTrace(); 
+				e.printStackTrace();
 			}
 		});
 	}

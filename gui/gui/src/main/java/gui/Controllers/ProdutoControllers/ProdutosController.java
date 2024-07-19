@@ -109,6 +109,7 @@ public class ProdutosController {
 		this.btnApagar = btnApagar;
 	}
 
+	@FXML 
 	public void initialize() throws Exception {
 
 		// CRIA UMA CATEGORIA PADRÃO CASO O BANCO SEJA NULL
@@ -283,13 +284,13 @@ public class ProdutosController {
 		Scene scene = new Scene(painel, 800, 680);
 		stage.setTitle("Cadasto de Produtos");
 		stage.setScene(scene);
-		stage.show();
+		stage.show(); 
 
 	}
 
 	@SuppressWarnings("exports")
 	public void editar(ActionEvent action) throws IOException {
-		// VERIFICA SE FOIS SELECIONADO UM CLIENTE PARA EDITAR
+		// VERIFICA SE FOIS SELECIONADO UM CLIENTE PARA EDITAR 
 		if (ProdutosController.getTabelaprodutos().getSelectionModel().isEmpty()) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setHeaderText(null);

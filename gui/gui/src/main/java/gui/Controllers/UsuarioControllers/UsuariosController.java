@@ -1,5 +1,7 @@
 package gui.Controllers.UsuarioControllers;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -303,44 +305,33 @@ public class UsuariosController extends Application {
 	@SuppressWarnings({ "unchecked" })
 	public TableView<UserDto> construirTabela() throws Exception {
 		setTabelaUsuarios(new TableView<UserDto>());
-		getTabelaUsuarios().setMinWidth(1200);
-		
 
 		TableColumn<UserDto, Integer> colunaID = new TableColumn<UserDto, Integer>("ID");
 		colunaID.setCellValueFactory(new PropertyValueFactory<UserDto, Integer>("id"));
-		colunaID.setMinWidth(50);
 
 		TableColumn<UserDto, String> colunaName = new TableColumn<UserDto, String>("Nome");
 		colunaName.setCellValueFactory(new PropertyValueFactory<UserDto, String>("fullName"));
-		colunaName.setMinWidth(350);
-		
+
 		TableColumn<UserDto, String> colunaUsername = new TableColumn<UserDto, String>("Usuário");
 		colunaUsername.setCellValueFactory(new PropertyValueFactory<UserDto, String>("userName"));
-		colunaUsername.setMinWidth(330);
-		
-		
+
 		TableColumn<UserDto, String> colunaEmail = new TableColumn<UserDto, String>("Email");
 		colunaEmail.setCellValueFactory(new PropertyValueFactory<UserDto, String>("email"));
-		colunaEmail.setMinWidth(350);
-		
 
 		TableColumn<UserDto, Boolean> colunaStatus = new TableColumn<UserDto, Boolean>("Status");
 		colunaStatus.setCellValueFactory(new PropertyValueFactory<UserDto, Boolean>("enabled"));
-		colunaStatus.setMinWidth(148);
-
-		
 
 		// ADICIONA AS COLUNAS
 		getTabelaUsuarios().getColumns().addAll(colunaID, colunaName, colunaEmail, colunaUsername, colunaStatus);
-		
+
 		// POPULA A TABELA
-				popularTabela();
+		popularTabela();
 
 		if (getTabelaUsuarios() == null) {
 			getTabelaUsuarios().setPlaceholder(new Label("Nenhum usuário cadastrado."));
 
 		}
-		return getTabelaUsuarios();                
+		return getTabelaUsuarios();
 
 	}
 
@@ -369,7 +360,7 @@ public class UsuariosController extends Application {
 				user = new UserDto();
 				user.setCredentialsNonExpired(jsonObj.getBoolean("credentialsNonExpired"));
 				user.setFullName(jsonObj.getString("fullName"));
-				user.setUserName(jsonObj.getString("userName")); 
+				user.setUserName(jsonObj.getString("userName"));
 				if (jsonObj.getBoolean("enabled") == true) {
 					user.setEnabled("Ativo");
 				} else {
@@ -455,7 +446,7 @@ public class UsuariosController extends Application {
 						.POST(HttpRequest.BodyPublishers.ofString(json.toString())).build();
 				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 				String message = response.body().substring(83, 152);
-				int status = response.statusCode(); 
+				int status = response.statusCode();
 
 				if (status == 200) {
 					Alert alert = new Alert(Alert.AlertType.CONFIRMATION);

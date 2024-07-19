@@ -14,15 +14,19 @@ import gui.Controllers.PrincipalControllers.PrincipalController;
 import gui.Dtos.Markup;
 import gui.Utilities.Mascaras;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class MarkupPadraoController {
-
+	
 	private static String token = PrincipalController.getAccessToken();
 
 	private static String url = PrincipalController.getUrl();
@@ -105,6 +109,8 @@ public class MarkupPadraoController {
 			throw new Exception("Não foi localizado o Markup padrão!");
 		}
 	}
+	
+	
 
 	public static void criarMarkup(Markup markup) throws Exception {
 		try {
@@ -153,8 +159,8 @@ public class MarkupPadraoController {
 		atualizarMarkup(markup);
 		Stage stage = (Stage) getBtnSalvar().getScene().getWindow();
 		stage.close();
-		NovoOuEditarProdutoController.getCheckBox().setSelected(buscarMarkup().isUtilizar() ? true : false);
-		
+		NovoOuEditarProdutoController.getCheckBox().setSelected(buscarMarkup().isUtilizar()? true : false);
+		NovoOuEditarProdutoController.getMarkupText().setText(markup.isUtilizar() ? markup.getMarkup().toString() + "  %" : "");
 	}
 
 	@SuppressWarnings("exports")

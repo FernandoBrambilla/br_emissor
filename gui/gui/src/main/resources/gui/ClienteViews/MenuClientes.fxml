@@ -8,9 +8,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane prefHeight="441.0" prefWidth="130.0" style="-fx-background-color: #171B36;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controllers.ClienteControllers.ClientesController">
+<Pane prefHeight="80.0" prefWidth="470.0" style="-fx-background-color: #171B36;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controllers.ClienteControllers.ClientesController">
    <children>
-      <Button fx:id="btnNovo" alignment="CENTER" graphicTextGap="10.0" layoutX="10.0" layoutY="80.0" mnemonicParsing="false" onAction="#novo" onMouseEntered="#aplicaEfeitos" prefHeight="45.0" prefWidth="110.0" style="-fx-background-color: #171B36;" text="Novo" textFill="WHITE">
+      <Button fx:id="btnNovo" alignment="CENTER" graphicTextGap="10.0" layoutX="10.0" layoutY="20.0" mnemonicParsing="false" onAction="#novo" onMouseEntered="#aplicaEfeitos" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #171B36;" text="Novo" textFill="WHITE">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
@@ -28,7 +28,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button fx:id="btnEditar" alignment="CENTER" graphicTextGap="10.0" layoutX="10.0" layoutY="130.0" mnemonicParsing="false" onAction="#editar" onMouseEntered="#aplicaEfeitos" prefHeight="45.0" prefWidth="110.0" style="-fx-background-color: #171B36;" text="Editar" textFill="WHITE">
+      <Button fx:id="btnEditar" alignment="CENTER" graphicTextGap="10.0" layoutX="130.0" layoutY="20.0" mnemonicParsing="false" onAction="#editar" onMouseEntered="#aplicaEfeitos" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #171B36;" text="Editar" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -46,7 +46,7 @@
             <Insets left="5.0" top="5.0" />
          </padding>
       </Button>
-      <Button fx:id="btnApagar" alignment="CENTER" graphicTextGap="10.0" layoutX="10.0" layoutY="180.0" mnemonicParsing="false" onAction="#apagar" onMouseEntered="#aplicaEfeitos" prefHeight="45.0" prefWidth="110.0" style="-fx-background-color: #171B36;" text="Apagar" textFill="WHITE">
+      <Button fx:id="btnApagar" alignment="CENTER" graphicTextGap="10.0" layoutX="250.0" layoutY="20.0" mnemonicParsing="false" onAction="#apagar" onMouseEntered="#aplicaEfeitos" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #171B36;" text="Apagar" textFill="WHITE">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>

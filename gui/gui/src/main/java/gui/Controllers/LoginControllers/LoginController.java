@@ -1,5 +1,8 @@
 package gui.Controllers.LoginControllers;
 
+import java.awt.Toolkit;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -24,14 +27,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 
-public class LoginController extends AnchorPane {
+public class LoginController {
 
 	private LoginDto login = new LoginDto();
-
+ 
 	@FXML
-	BorderPane telaBase;
-
+	private Pane painelLogin;
+	
 	@FXML
 	private TextField userName;
 
@@ -58,11 +62,6 @@ public class LoginController extends AnchorPane {
 	}
 
 	@SuppressWarnings("exports")
-	public BorderPane getTelaBase() {
-		return telaBase;
-	}
-
-	@SuppressWarnings("exports")
 	public TextField getUserName() {
 		return userName;
 	}
@@ -70,6 +69,16 @@ public class LoginController extends AnchorPane {
 	@SuppressWarnings("exports")
 	public PasswordField getPassword() {
 		return password;
+	}
+	
+	@SuppressWarnings("exports")
+	public Pane getPainelLogin() {
+		return painelLogin;
+	}
+
+	@SuppressWarnings("exports")
+	public void setPainelLogin(Pane painelLogin) {
+		this.painelLogin = painelLogin;
 	}
 
 	@SuppressWarnings("exports")
@@ -99,11 +108,6 @@ public class LoginController extends AnchorPane {
 
 	public void setLogin(LoginDto login) {
 		this.login = login;
-	}
-
-	@SuppressWarnings("exports")
-	public void setTelaBase(BorderPane telaBase) {
-		this.telaBase = telaBase;
 	}
 
 	@SuppressWarnings("exports")
@@ -140,12 +144,35 @@ public class LoginController extends AnchorPane {
 	public void setBtnEntrar(Button btnEntrar) {
 		this.btnEntrar = btnEntrar;
 	}
+	
+	@FXML
+	private void initialize() throws IOException {
+		getBtnEntrar().setStyle("-fx-background-color:  #0C70F2;");
+		getPasswordText().setVisible(false);
+		getHiddenPassword().setVisible(false);
+		getBtnEntrar().setOnAction((event) -> {
+			PrincipalController principalController = new PrincipalController();
+			try {
+				fazerLogin();
+				if (login.isAuthenticated()) { 
+					principalController.getLogin(fazerLogin());
+					App.setRoot("PrincipalViews/Root");
+					return;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+	}
+	
 
 	@SuppressWarnings("exports")
 	@FXML
 	public void login(ActionEvent action) {
 		fazerLogin();
 	}
+	
+	
 
 	private Boolean checarParametrosNull() {
 		Style efeito = new Style();
@@ -195,7 +222,7 @@ public class LoginController extends AnchorPane {
 				String body = "{\r\n" + "    \"username\" : \"" + username + "\",\r\n" + "    \"password\" : \""
 						+ password + "\"\r\n" + "}";
 				HttpRequest request = HttpRequest.newBuilder().uri(URI.create(urlLogin))
-						.header("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.ofString(body))
+						.header("Content-Type", "application/json").POST(HttpRequest.BodyPublishers.ofString(body)) 
 						.build();
 				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 				JSONObject responseJson = new JSONObject(response.body());
@@ -228,28 +255,6 @@ public class LoginController extends AnchorPane {
 		}
 		return null;
 	}
-
-	@FXML
-	private void initialize() throws IOException {
-		getBtnEntrar().setStyle("-fx-background-color:  #0C70F2;");
-		getPasswordText().setVisible(false);
-		getHiddenPassword().setVisible(false);
-		getBtnEntrar().setOnAction((event) -> {
-			PrincipalController principalController = new PrincipalController();
-			try {
-				fazerLogin();
-				if (login.isAuthenticated()) { 
-					principalController.getLogin(fazerLogin());
-					App.setRoot("PrincipalViews/Principal");
-					
-				} else {
-					return;
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		});
-	}
  
 	/**
 	 * Torna visível os caracteres do compo senha.
@@ -268,7 +273,7 @@ public class LoginController extends AnchorPane {
 
 	/**
 	 * Oculta os caracteres do compo senha.
-	 * 
+	 *  
 	 * @param event
 	 */
 	@SuppressWarnings("exports")
