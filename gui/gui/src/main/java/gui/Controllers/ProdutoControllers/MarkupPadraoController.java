@@ -6,20 +6,15 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.text.DecimalFormat;
 
 import org.json.JSONObject;
 
-import gui.App;
 import gui.Controllers.PrincipalControllers.PrincipalController;
 import gui.Dtos.Markup;
 import gui.Utilities.Mascaras;
-import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
@@ -84,9 +79,9 @@ public class MarkupPadraoController {
 	}
 
 	public void initialize() throws Exception {
-		Mascaras.numericField(getMarkup());
+		Mascaras.onlyDecimal(getMarkup());
 		Markup markup = new Markup(buscarMarkup());
-		getMarkup().setText(markup.getMarkup().toString());
+		getMarkup().setText( Mascaras.decimal(markup.getMarkup()));
 		getUtilizar().setSelected(markup.isUtilizar() ? true : false);
 	}
 
@@ -154,13 +149,14 @@ public class MarkupPadraoController {
 	public void salvar(ActionEvent action) throws Exception {
 		Markup markup = new Markup();
 		markup.setId(1);
-		markup.setMarkup(new BigDecimal(getMarkup().getText()));
+		markup.setMarkup(new BigDecimal(getMarkup().getText().replace(",", ".")));
 		markup.setUtilizar(getUtilizar().isSelected() ? true : false);
 		atualizarMarkup(markup);
 		Stage stage = (Stage) getBtnSalvar().getScene().getWindow();
 		stage.close();
 		NovoOuEditarProdutoController.getCheckBox().setSelected(buscarMarkup().isUtilizar()? true : false);
-		NovoOuEditarProdutoController.getMarkupText().setText(markup.isUtilizar() ? markup.getMarkup().toString() + "  %" : "");
+		NovoOuEditarProdutoController.getMarkupText().setText(markup.isUtilizar() ? (Mascaras.decimal(markup.getMarkup())) : "");
+		NovoOuEditarProdutoController.getMarkupText().setEditable(markup.isUtilizar()? false : true);
 	}
 
 	@SuppressWarnings("exports")

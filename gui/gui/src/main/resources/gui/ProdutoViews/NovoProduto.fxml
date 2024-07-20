@@ -29,26 +29,34 @@
             <Font size="15.0" />
          </font>
       </TextField>
-      <TextField fx:id="valor" layoutX="140.0" layoutY="175.0" prefHeight="30.0" prefWidth="190.0" promptText="R$ 100,00">
+      <TextField fx:id="custo" layoutX="140.0" layoutY="175.0" prefHeight="30.0" prefWidth="190.0" promptText="R$ 50,00">
          <font>
             <Font size="15.0" />
          </font>
       </TextField>
-      <CheckBox fx:id="auto" layoutX="340.0" layoutY="180.0" mnemonicParsing="false" onAction="#calcularValorVendaAutomatico" text="Automático">
+      <TextField fx:id="valor" layoutX="140.0" layoutY="225.0" prefHeight="30.0" prefWidth="190.0" promptText="R$ 100,00">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </TextField>
+      <CheckBox fx:id="auto" layoutX="341.0" layoutY="230.0" mnemonicParsing="false" onAction="#calcularValorVendaAutomatico" text="Automático">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
       </CheckBox>
-      <TextField fx:id="custo" layoutX="140.0" layoutY="225.0" prefHeight="30.0" prefWidth="190.0" promptText="R$ 50,00">
+      <Button fx:id="btnMarkup" graphicTextGap="0.0" layoutX="360.0" layoutY="275.0" mnemonicParsing="false" onAction="#mostrarTelaMarkup" prefHeight="30.0" prefWidth="160.0" style="-fx-background-color: white;" text="Seguir Markup Padrão" textAlignment="RIGHT">
          <font>
-            <Font size="15.0" />
+            <Font name="Calibri" size="15.0" />
          </font>
-      </TextField>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
       <TextArea fx:id="obs" layoutX="140.0" layoutY="326.0" prefHeight="90.0" prefWidth="540.0">
          <font>
             <Font size="15.0" />
          </font></TextArea>
-      <Button fx:id="btnSalvar" layoutX="411.0" layoutY="451.0" mnemonicParsing="false" onAction="#salvar" prefHeight="30.0" prefWidth="113.0" style="-fx-background-color: #2484BF;" text="Salvar" textFill="WHITE">
+      <Button fx:id="btnSalvar" layoutX="411.0" layoutY="451.0" mnemonicParsing="false" onAction="#salvar" prefHeight="30.0" prefWidth="113.0" style="-fx-background-color: #2484BF;" text="Salvar  (F2)" textFill="WHITE">
          <font>
             <Font size="15.0" />
          </font>
@@ -68,7 +76,7 @@
             <Font name="Calibri" size="15.0" />
          </font>
       </Label>
-      <Label alignment="CENTER_RIGHT" layoutX="20.0" layoutY="175.0" prefHeight="30.0" prefWidth="100.0" text="Valor deVenda">
+      <Label alignment="CENTER_RIGHT" layoutX="17.0" layoutY="225.0" prefHeight="30.0" prefWidth="100.0" text="Valor de Venda">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
@@ -96,7 +104,7 @@
             </ImageView>
          </graphic>
       </Label>
-      <Label alignment="CENTER_RIGHT" layoutX="20.0" layoutY="225.0" prefHeight="30.0" prefWidth="100.0" text="Preço de Custo">
+      <Label alignment="CENTER_RIGHT" layoutX="20.0" layoutY="175.0" prefHeight="30.0" prefWidth="100.0" text="Preço de Custo">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
@@ -116,13 +124,5 @@
             <Image url="@../img/inserirImagem.png" />
          </image>
       </ImageView>
-      <Button fx:id="btnMarkup" graphicTextGap="0.0" layoutX="360.0" layoutY="275.0" mnemonicParsing="false" onAction="#mostrarTelaMarkup" prefHeight="30.0" prefWidth="160.0" style="-fx-background-color: white;" text="Seguir Markup Padrão" textAlignment="RIGHT">
-         <font>
-            <Font name="Calibri" size="15.0" />
-         </font>
-         <cursor>
-            <Cursor fx:constant="HAND" />
-         </cursor>
-      </Button>
    </children>
 </Pane>

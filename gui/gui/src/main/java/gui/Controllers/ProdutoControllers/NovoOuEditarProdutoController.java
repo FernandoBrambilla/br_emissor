@@ -2,12 +2,14 @@ package gui.Controllers.ProdutoControllers;
 
 import java.awt.Cursor;
 import java.io.IOException;
+import java.math.BigDecimal;
 
 import gui.App;
 import gui.Controllers.PrincipalControllers.PrincipalController;
 import gui.Dtos.CategoriaProdutoDto;
 import gui.Dtos.Markup;
 import gui.Dtos.Style;
+import gui.Utilities.Mascaras;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.collections.ObservableList;
@@ -29,6 +31,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.skin.ComboBoxListViewSkin;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
@@ -46,7 +49,7 @@ public class NovoOuEditarProdutoController {
 	private static BorderPane categoriaPane;
 
 	private static ComboBox<CategoriaProdutoDto> categoria;
-	
+
 	private static Markup markup = new Markup();
 
 	@FXML
@@ -76,7 +79,6 @@ public class NovoOuEditarProdutoController {
 	@FXML
 	private TextField custo;
 
-	
 	private static TextField markupText;
 
 	@FXML
@@ -180,6 +182,7 @@ public class NovoOuEditarProdutoController {
 		NovoOuEditarProdutoController.listCategorias = listCategorias;
 	}
 
+	@SuppressWarnings("exports")
 	public static void setCheckBoxMarkupPane(BorderPane checkBoxMarkupPane) {
 		NovoOuEditarProdutoController.checkBoxMarkupPane = checkBoxMarkupPane;
 	}
@@ -243,6 +246,7 @@ public class NovoOuEditarProdutoController {
 		this.custo = custo;
 	}
 
+	@SuppressWarnings("exports")
 	public static void setMarkupText(TextField markupText) {
 		NovoOuEditarProdutoController.markupText = markupText;
 	}
@@ -264,11 +268,14 @@ public class NovoOuEditarProdutoController {
 
 	public void initialize() throws Exception {
 		markup = MarkupPadraoController.buscarMarkup();
-		
+		Mascaras.monetaryField(getValor());
+		Mascaras.monetaryField(getCusto());
+
 		getRoot().getChildren().add(criarComboBoxCategorias());
 		getRoot().getChildren().add(criarCheckBoxMarkup());
 		getRoot().getChildren().add(criarMarkupText());
-		
+		getMarkupText().setEditable(markup.isUtilizar() ? false : true);
+
 		getCheckBox().setOnAction(e -> {
 			try {
 				mostrarTelaMarkup(e);
@@ -276,19 +283,76 @@ public class NovoOuEditarProdutoController {
 				e1.printStackTrace();
 			}
 		});
-		
+
+		getEan_getin().setOnKeyPressed((keyEvent) -> {
+			if (keyEvent.getCode() == KeyCode.ENTER)
+				getDescricao().requestFocus();
+		});
+
+		getDescricao().setOnKeyPressed((keyEvent) -> {
+			if (keyEvent.getCode() == KeyCode.ENTER) {
+				getCategoria().requestFocus();
+				getCategoria().show();
+			}
+		});
+
+		getCategoria().setOnKeyPressed((keyEvent) -> {
+			if (keyEvent.getCode() == KeyCode.ENTER)
+				getCusto().requestFocus();
+		});
+
+		getCusto().setOnKeyPressed((keyEvent) -> {
+			if (keyEvent.getCode() == KeyCode.ENTER)
+				getValor().requestFocus();
+		});
+
+		getValor().setOnKeyPressed((keyEvent) -> {
+			if (keyEvent.getCode() == KeyCode.ENTER)
+				getAuto().requestFocus();
+		});
+
+		getAuto().setOnKeyPressed((keyEvent) -> {
+			if (keyEvent.getCode() == KeyCode.ENTER)
+				calcularValorVenda();
+			getMarkupText().requestFocus();
+		});
+
+		getMarkupText().setOnKeyPressed((keyEvent) -> {
+			if (keyEvent.getCode() == KeyCode.ENTER)
+				getBtnMarkup().requestFocus();
+		});
+
+		getBtnMarkup().setOnKeyPressed((keyEvent) -> {
+			if (keyEvent.getCode() == KeyCode.ENTER)
+				getObs().requestFocus();
+		});
+
+		getObs().setOnKeyPressed((keyEvent) -> {
+			if (keyEvent.getCode() == KeyCode.ENTER)
+				getBtnSalvar().requestFocus();
+		});
+
+		getBtnSalvar().setOnKeyPressed((keyEvent) -> {
+			if (keyEvent.getCode() == KeyCode.F2)
+				System.out.println("savar");
+				getBtnSalvar().arm();
+				//salvarProduto();
+		});
+
 	}
 
 	@SuppressWarnings("exports")
 	public static TextField criarMarkupText() throws Exception {
 		setMarkupText(new TextField());
+		Mascaras.onlyDecimal(getMarkupText());
+		getMarkupText().setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
 		getMarkupText().setId("markupText");
 		getMarkupText().setLayoutX(140);
 		getMarkupText().setLayoutY(275);
 		getMarkupText().setPrefHeight(30);
 		getMarkupText().setPrefWidth(190);
-		getMarkupText().setPromptText(markup.isUtilizar() ? markup.getMarkup().toString() : ""); 
-		getMarkupText().setEditable(markup.isUtilizar()? false : true);
+		getMarkupText().setText(markup.isUtilizar() ? Mascaras.decimal(markup.getMarkup()) : "");
+		getMarkupText().setEditable(markup.isUtilizar() ? false : true);
 		getMarkupText().setFont(new Font("Calibri", 15));
 		return getMarkupText();
 	}
@@ -302,14 +366,12 @@ public class NovoOuEditarProdutoController {
 	@SuppressWarnings("exports")
 	public void mostrarTelaMarkup(ActionEvent action) throws IOException {
 		Stage stage = new Stage();
-		Parent painel =	FXMLLoader.load(App.class.getResource("ProdutoViews/MarkupPadrao.fxml"));
+		Parent painel = FXMLLoader.load(App.class.getResource("ProdutoViews/MarkupPadrao.fxml"));
 		Scene scene = new Scene(painel, 450, 300);
 		stage.setTitle("Margem de Lucro");
 		stage.setScene(scene);
-		stage.show(); 
+		stage.show();
 	}
-
-	
 
 	/**
 	 * Atualiza lista de Categorias do Produto
@@ -512,37 +574,36 @@ public class NovoOuEditarProdutoController {
 	}
 
 	/**
-	 * Calcula Valor de vanda automaticamento utilizando o markup
+	 * /** Calcula Valor de vanda automaticamento utilizando o markup
 	 * 
-	 * @param action
 	 */
-	@SuppressWarnings("exports")
-	public void calcularValorVendaAutomatico(ActionEvent action) {
-		if (getMarkupText().getText().isEmpty() && getCusto().getText().isEmpty()) {
+	private void calcularValorVenda() {
+		Style style = new Style();
+		if (getMarkupText().getText().isEmpty() || getCusto().getText().isEmpty()) {
 			getInfo().setText(
 					"Para calcular o valor de venda automaticamente é obrigatório fornecer o custo e o % markup!");
-			Style style = new Style();
+
 			style.campoObrigatorio(getCusto());
 			style.campoObrigatorio(getMarkupText());
+			getAuto().setSelected(false);
 			return;
 		}
+		style.campoObrigatorioRemove(getCusto());
+		style.campoObrigatorioRemove(getMarkupText());
+		getInfo().setText("");
 		if (getAuto().isSelected()) {
-			Double markup = Double.parseDouble(getMarkupText().getText());
-			Double custo = Double.parseDouble(getCusto().getText());
-			Double venda = custo += custo * (markup / 100);
-			getValor().setText(venda.toString());
+			BigDecimal percentualMarkup = new BigDecimal(getMarkupText().getText().replace(",", "."));
+			percentualMarkup = percentualMarkup.divide(new BigDecimal(100));
+			BigDecimal custo = new BigDecimal(getCusto().getText().replace(",", "."));
+			BigDecimal venda = custo.add(custo.multiply(percentualMarkup));
+			getValor().setText(Mascaras.decimal(venda));
 		}
 
 	}
-
 	/**
 	 * Salva Produto no Banco de dados
-	 * 
-	 * @param action
-	 * @throws Exception
 	 */
-	@SuppressWarnings("exports")
-	public void salvar(ActionEvent action) throws Exception {
+	public void salvarProduto() {
 		if (getEan_getin().getText().isEmpty() || getDescricao().getText().isEmpty() || getValor().getText().isEmpty()
 				|| getCusto().getText().isEmpty()) {
 			getInfo().setText("Campos Obrigatórios!");
@@ -552,7 +613,17 @@ public class NovoOuEditarProdutoController {
 			style.campoObrigatorio(getValor());
 			style.campoObrigatorio(getCusto());
 		}
+	}
 
+	@SuppressWarnings("exports")
+	public void calcularValorVendaAutomatico(ActionEvent action) {
+		calcularValorVenda();
+
+	}
+	
+	@SuppressWarnings("exports")
+	public void salvar(ActionEvent action) throws Exception {
+		salvarProduto();
 	}
 
 	/**
