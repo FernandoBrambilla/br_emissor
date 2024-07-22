@@ -9,10 +9,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 
 public class MenuNovoProdutoController {
-	
+
 	@FXML
 	BorderPane telaBase;
 
@@ -21,20 +23,19 @@ public class MenuNovoProdutoController {
 
 	@FXML
 	private Label titulo;
-	
+
 	@FXML
 	private Button btnCadastro;
-	
+
 	@FXML
 	private Button btnTributacao;
-	
+
 	@FXML
 	private Button btnFornecedor;
-	
+
 	@FXML
 	private Button btnOpcoes;
-	
-	
+
 	public BorderPane getTelaBase() {
 		return telaBase;
 	}
@@ -92,13 +93,21 @@ public class MenuNovoProdutoController {
 	}
 
 	public void initialize() throws IOException {
+		getBtnCadastro().requestFocus();
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(App.class.getResource("ProdutoViews/NovoProduto.fxml"));
 		getTelaBase().setCenter(loader.load());
 		getBtnCadastro().setStyle("-fx-background-color:  deedfc; ");
+		
+		getBtnCadastro().setOnKeyReleased((keyEvent) -> {
+			Stage stage = null;
+			if (keyEvent.getCode() == KeyCode.ESCAPE)
+				stage = (Stage) getBtnCadastro().getScene().getWindow();
+			stage.close();
+		});
 
 	}
-	
+
 	@SuppressWarnings("exports")
 	public void btnCadastro(ActionEvent action) throws IOException {
 		limparSelecaoBtns();
@@ -108,7 +117,7 @@ public class MenuNovoProdutoController {
 		getBtnCadastro().setStyle("-fx-background-color:  deedfc; ");
 
 	}
-	
+
 	@SuppressWarnings("exports")
 	public void btnTributacao(ActionEvent action) throws IOException {
 		limparSelecaoBtns();
@@ -118,7 +127,7 @@ public class MenuNovoProdutoController {
 		getBtnTributacao().setStyle("-fx-background-color:  deedfc; ");
 
 	}
-	
+
 	@SuppressWarnings("exports")
 	public void btnFornecedor(ActionEvent action) throws IOException {
 		limparSelecaoBtns();
@@ -128,7 +137,7 @@ public class MenuNovoProdutoController {
 		getBtnFornecedor().setStyle("-fx-background-color:  deedfc; ");
 
 	}
-	
+
 	@SuppressWarnings("exports")
 	public void btnOpcoes(ActionEvent action) throws IOException {
 		limparSelecaoBtns();
@@ -139,13 +148,12 @@ public class MenuNovoProdutoController {
 
 	}
 
-	
 	private void limparSelecaoBtns() {
 		getBtnCadastro().setStyle("-fx-background-color:  white;");
 		getBtnTributacao().setStyle("-fx-background-color:  white;");
 		getBtnFornecedor().setStyle("-fx-background-color:  white;");
 		getBtnOpcoes().setStyle("-fx-background-color:  white;");
-		
+
 	}
 
 }

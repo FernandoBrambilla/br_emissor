@@ -11,10 +11,10 @@ import org.springframework.hateoas.RepresentationModel;
 
 @Entity 
 @Table(name = "unidade_produto")
-public class UnidadeProduto extends RepresentationModel<UnidadeProduto> implements Serializable{
+public class ProductUnity extends RepresentationModel<ProductUnity> implements Serializable{
     private static final long serialVersionUID = 1L;
     
-    public UnidadeProduto(String descricao) {
+    public ProductUnity(String descricao) {
 		this.descricao = descricao;
 	}
 

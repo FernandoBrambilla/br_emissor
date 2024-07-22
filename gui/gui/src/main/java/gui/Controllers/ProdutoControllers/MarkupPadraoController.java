@@ -6,7 +6,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.text.DecimalFormat;
 
 import org.json.JSONObject;
 
@@ -81,7 +80,7 @@ public class MarkupPadraoController {
 	public void initialize() throws Exception {
 		Mascaras.onlyDecimal(getMarkup());
 		Markup markup = new Markup(buscarMarkup());
-		getMarkup().setText( Mascaras.decimal(markup.getMarkup()));
+		getMarkup().setText(Mascaras.decimal(markup.getMarkup()));
 		getUtilizar().setSelected(markup.isUtilizar() ? true : false);
 	}
 
@@ -155,7 +154,7 @@ public class MarkupPadraoController {
 		Stage stage = (Stage) getBtnSalvar().getScene().getWindow();
 		stage.close();
 		NovoOuEditarProdutoController.getCheckBox().setSelected(buscarMarkup().isUtilizar()? true : false);
-		NovoOuEditarProdutoController.getMarkupText().setText(markup.isUtilizar() ? (Mascaras.decimal(markup.getMarkup())) : "");
+		NovoOuEditarProdutoController.getMarkupText().setText(markup.isUtilizar() ? (Mascaras.decimal(markup.getMarkup()) + " %") : "");
 		NovoOuEditarProdutoController.getMarkupText().setEditable(markup.isUtilizar()? false : true);
 	}
 

@@ -1,23 +1,20 @@
 package gui.Controllers.ProdutoControllers;
 
-import java.awt.Cursor;
 import java.io.IOException;
 import java.math.BigDecimal;
 
 import gui.App;
-import gui.Controllers.PrincipalControllers.PrincipalController;
 import gui.Dtos.CategoriaProdutoDto;
 import gui.Dtos.Markup;
 import gui.Dtos.Style;
+import gui.Dtos.UnidadeProdutoDto;
 import gui.Utilities.Mascaras;
-import javafx.application.Application;
-import javafx.application.Platform;
 import javafx.collections.ObservableList;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.NodeOrientation;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -49,6 +46,8 @@ public class NovoOuEditarProdutoController {
 	private static BorderPane categoriaPane;
 
 	private static ComboBox<CategoriaProdutoDto> categoria;
+	
+	private static ComboBox<UnidadeProdutoDto> unidade;
 
 	private static Markup markup = new Markup();
 
@@ -111,6 +110,22 @@ public class NovoOuEditarProdutoController {
 
 	public static ComboBox<CategoriaProdutoDto> getCategoria() {
 		return categoria;
+	}
+
+	public static ComboBox<UnidadeProdutoDto> getUnidade() {
+		return unidade;
+	}
+
+	public static Markup getMarkup() {
+		return markup;
+	}
+
+	public static void setUnidade(ComboBox<UnidadeProdutoDto> unidade) {
+		NovoOuEditarProdutoController.unidade = unidade;
+	}
+
+	public static void setMarkup(Markup markup) {
+		NovoOuEditarProdutoController.markup = markup;
 	}
 
 	@SuppressWarnings("exports")
@@ -271,11 +286,12 @@ public class NovoOuEditarProdutoController {
 		Mascaras.monetaryField(getValor());
 		Mascaras.monetaryField(getCusto());
 
-		getRoot().getChildren().add(criarComboBoxCategorias());
-		getRoot().getChildren().add(criarCheckBoxMarkup());
-		getRoot().getChildren().add(criarMarkupText());
-		getMarkupText().setEditable(markup.isUtilizar() ? false : true);
+		getRoot().getChildren().add(3, criarComboBoxCategorias());
+		getRoot().getChildren().add(4, criarComboBoxUnidades());
+		getRoot().getChildren().add(7, criarMarkupText());
+		getRoot().getChildren().add(8, criarCheckBoxMarkup());
 
+		getMarkupText().setEditable(markup.isUtilizar() ? false : true);
 		getCheckBox().setOnAction(e -> {
 			try {
 				mostrarTelaMarkup(e);
@@ -284,59 +300,79 @@ public class NovoOuEditarProdutoController {
 			}
 		});
 
+		getRoot().setOnKeyReleased((keyEvent) -> {
+			if (keyEvent.getCode() == KeyCode.F2)
+				salvarProduto();
+		});
+
+		getRoot().setOnKeyReleased((keyEvent) -> {
+			if (keyEvent.getCode() == KeyCode.ESCAPE)
+				fecharTela();
+		});
+
 		getEan_getin().setOnKeyPressed((keyEvent) -> {
-			if (keyEvent.getCode() == KeyCode.ENTER)
+			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB)
 				getDescricao().requestFocus();
 		});
 
 		getDescricao().setOnKeyPressed((keyEvent) -> {
-			if (keyEvent.getCode() == KeyCode.ENTER) {
+			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB) {
 				getCategoria().requestFocus();
 				getCategoria().show();
 			}
 		});
 
 		getCategoria().setOnKeyPressed((keyEvent) -> {
-			if (keyEvent.getCode() == KeyCode.ENTER)
+			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB) {
 				getCusto().requestFocus();
+
+			}
 		});
 
 		getCusto().setOnKeyPressed((keyEvent) -> {
-			if (keyEvent.getCode() == KeyCode.ENTER)
+			if (getAuto().isSelected()) {
+				calcularValorVenda();
+			}
+			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB) {
 				getValor().requestFocus();
+				calcularValorVenda();
+				calcularMarkup();
+
+			}
 		});
 
 		getValor().setOnKeyPressed((keyEvent) -> {
-			if (keyEvent.getCode() == KeyCode.ENTER)
+			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB) {
 				getAuto().requestFocus();
+				if (!markup.isUtilizar())
+					calcularMarkup();
+			}
+
 		});
 
 		getAuto().setOnKeyPressed((keyEvent) -> {
-			if (keyEvent.getCode() == KeyCode.ENTER)
-				calcularValorVenda();
-			getMarkupText().requestFocus();
+			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB) {
+				getMarkupText().requestFocus();
+
+			}
 		});
 
 		getMarkupText().setOnKeyPressed((keyEvent) -> {
-			if (keyEvent.getCode() == KeyCode.ENTER)
+			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB) {
 				getBtnMarkup().requestFocus();
+				calcularValorVenda();
+			}
+
 		});
 
 		getBtnMarkup().setOnKeyPressed((keyEvent) -> {
-			if (keyEvent.getCode() == KeyCode.ENTER)
+			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB)
 				getObs().requestFocus();
 		});
 
 		getObs().setOnKeyPressed((keyEvent) -> {
-			if (keyEvent.getCode() == KeyCode.ENTER)
+			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB)
 				getBtnSalvar().requestFocus();
-		});
-
-		getBtnSalvar().setOnKeyPressed((keyEvent) -> {
-			if (keyEvent.getCode() == KeyCode.F2)
-				System.out.println("savar");
-				getBtnSalvar().arm();
-				//salvarProduto();
 		});
 
 	}
@@ -344,14 +380,13 @@ public class NovoOuEditarProdutoController {
 	@SuppressWarnings("exports")
 	public static TextField criarMarkupText() throws Exception {
 		setMarkupText(new TextField());
-		Mascaras.onlyDecimal(getMarkupText());
-		getMarkupText().setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+		getMarkupText().setAlignment(Pos.CENTER_RIGHT);
 		getMarkupText().setId("markupText");
 		getMarkupText().setLayoutX(140);
 		getMarkupText().setLayoutY(275);
 		getMarkupText().setPrefHeight(30);
 		getMarkupText().setPrefWidth(190);
-		getMarkupText().setText(markup.isUtilizar() ? Mascaras.decimal(markup.getMarkup()) : "");
+		getMarkupText().setText(markup.isUtilizar() ? markup.getMarkup().toString() + " %" : "");
 		getMarkupText().setEditable(markup.isUtilizar() ? false : true);
 		getMarkupText().setFont(new Font("Calibri", 15));
 		return getMarkupText();
@@ -383,7 +418,7 @@ public class NovoOuEditarProdutoController {
 		getCategoria().getItems().clear();
 		getCategoria().setSkin(null);
 		getCategoria().getItems().addAll(NovaCategoriaController.buscarCategoriasProduto());
-		getCategoria().setSkin(criarSkin());
+		getCategoria().setSkin(criarSkinCategoria());
 	}
 
 	/**
@@ -391,7 +426,7 @@ public class NovoOuEditarProdutoController {
 	 * 
 	 * @return ComboBoxListViewSkin<CategoriaProdutoDto>
 	 */
-	private static ComboBoxListViewSkin<CategoriaProdutoDto> criarSkin() {
+	private static ComboBoxListViewSkin<CategoriaProdutoDto> criarSkinCategoria() {
 		getCategoria().getItems().add(0, null);
 		ComboBoxListViewSkin<CategoriaProdutoDto> skin = new ComboBoxListViewSkin<CategoriaProdutoDto>(getCategoria());
 		skin.setHideOnClick(false);
@@ -400,6 +435,31 @@ public class NovoOuEditarProdutoController {
 
 			@Override
 			protected void updateItem(CategoriaProdutoDto item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty) {
+					setText("");
+					setGraphic(null);
+				} else if (item == null) {
+					setText("");
+					setGraphic(buttons);
+				} else {
+					setText(item.getDescricao());
+					setGraphic(null);
+				}
+			}
+		});
+		return skin;
+	}
+
+	private static ComboBoxListViewSkin<UnidadeProdutoDto> criarSkinUnidade() {
+		getUnidade().getItems().add(0, null);
+		ComboBoxListViewSkin<UnidadeProdutoDto> skin = new ComboBoxListViewSkin<UnidadeProdutoDto>(getUnidade());
+		skin.setHideOnClick(false);
+		getUnidade().setCellFactory(lv -> new ListCell<>() {
+			private ButtonBar buttons = criarButtonBar();
+
+			@Override
+			protected void updateItem(UnidadeProdutoDto item, boolean empty) {
 				super.updateItem(item, empty);
 				if (empty) {
 					setText("");
@@ -426,11 +486,27 @@ public class NovoOuEditarProdutoController {
 		setCategoria(new ComboBox<CategoriaProdutoDto>());
 		getCategoria().setLayoutX(140);
 		getCategoria().setLayoutY(125);
-		getCategoria().setPrefWidth(245);
+		getCategoria().setPrefWidth(230);
 		getCategoria().setPrefHeight(30);
 		getCategoria().getItems().addAll(NovaCategoriaController.buscarCategoriasProduto());
-		getCategoria().setSkin(criarSkin());
+		getCategoria().setSkin(criarSkinCategoria());
 		return getCategoria();
+	}
+	
+	/**
+	 * Cria o ComboBox de unidade
+	 * @return
+	 * @throws Exception
+	 */
+	public static ComboBox<UnidadeProdutoDto> criarComboBoxUnidades() throws Exception {
+		setUnidade(new ComboBox<UnidadeProdutoDto>());
+		getUnidade().setLayoutX(450);
+		getUnidade().setLayoutY(125);
+		getUnidade().setPrefWidth(230);
+		getUnidade().setPrefHeight(30);
+		getUnidade().getItems().addAll(NovaUnidadeController.buscarUnidadesProduto());
+		getUnidade().setSkin(criarSkinUnidade());
+		return getUnidade();
 	}
 
 	/**
@@ -578,64 +654,62 @@ public class NovoOuEditarProdutoController {
 	 * 
 	 */
 	private void calcularValorVenda() {
-		Style style = new Style();
-		if (getMarkupText().getText().isEmpty() || getCusto().getText().isEmpty()) {
-			getInfo().setText(
-					"Para calcular o valor de venda automaticamente é obrigatório fornecer o custo e o % markup!");
-
-			style.campoObrigatorio(getCusto());
-			style.campoObrigatorio(getMarkupText());
-			getAuto().setSelected(false);
-			return;
-		}
-		style.campoObrigatorioRemove(getCusto());
-		style.campoObrigatorioRemove(getMarkupText());
-		getInfo().setText("");
-		if (getAuto().isSelected()) {
-			BigDecimal percentualMarkup = new BigDecimal(getMarkupText().getText().replace(",", "."));
-			percentualMarkup = percentualMarkup.divide(new BigDecimal(100));
-			BigDecimal custo = new BigDecimal(getCusto().getText().replace(",", "."));
-			BigDecimal venda = custo.add(custo.multiply(percentualMarkup));
+		if (!getMarkupText().getText().isEmpty() && !getCusto().getText().isEmpty()) {
+			Double percentualMarkup = Double.parseDouble(getMarkupText().getText().replace(",", ".").replace("%", ""));
+			percentualMarkup = percentualMarkup / 100;
+			BigDecimal custo = new BigDecimal(getCusto().getText().replace(".", "").replace(",", "."));
+			BigDecimal venda = custo.add(custo.multiply(new BigDecimal(percentualMarkup)));
 			getValor().setText(Mascaras.decimal(venda));
+		} else {
+			return;
 		}
 
 	}
+
+	private void calcularMarkup() {
+		getMarkupText().clear();
+		if (!getValor().getText().isEmpty()) {
+			BigDecimal custo = new BigDecimal(getCusto().getText().replace(".", "").replace(",", "."));
+			BigDecimal venda = new BigDecimal(getValor().getText().replace(".", "").replace(",", "."));
+			Double percentual = venda.subtract(custo).doubleValue();
+			percentual = percentual * 100;
+			percentual = percentual / custo.doubleValue();
+			getMarkupText().setText(Mascaras.percentual(percentual)+ " %");
+		}
+	}
+
 	/**
 	 * Salva Produto no Banco de dados
 	 */
 	public void salvarProduto() {
-		if (getEan_getin().getText().isEmpty() || getDescricao().getText().isEmpty() || getValor().getText().isEmpty()
-				|| getCusto().getText().isEmpty()) {
+		if (getEan_getin().getText().isEmpty() || getDescricao().getText().isEmpty()) {
 			getInfo().setText("Campos Obrigatórios!");
 			Style style = new Style();
 			style.campoObrigatorio(getEan_getin());
 			style.campoObrigatorio(getDescricao());
-			style.campoObrigatorio(getValor());
-			style.campoObrigatorio(getCusto());
 		}
 	}
 
 	@SuppressWarnings("exports")
 	public void calcularValorVendaAutomatico(ActionEvent action) {
+
 		calcularValorVenda();
 
 	}
-	
+
+	private void fecharTela() {
+		Stage stage = (Stage) getBtnCancelar().getScene().getWindow();
+		stage.close();
+	}
+
 	@SuppressWarnings("exports")
 	public void salvar(ActionEvent action) throws Exception {
 		salvarProduto();
 	}
 
-	/**
-	 * Fecha a tela manipulação de produtos
-	 * 
-	 * @param action
-	 * @throws IOException
-	 */
 	@SuppressWarnings("exports")
 	public void cancelar(ActionEvent action) throws IOException {
-		Stage stage = (Stage) getBtnCancelar().getScene().getWindow();
-		stage.close();
+		fecharTela();
 	}
 
 }

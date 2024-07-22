@@ -73,6 +73,11 @@ public abstract class Mascaras {
 		return (df.format(valor));
 	}
 
+	public static String percentual(final Double valor) {
+		DecimalFormat df = new DecimalFormat("#,###.00");
+		return (df.format(valor));
+	}
+
 	/**
 	 * Monta a mascara para Data (dd/MM/yyyy).
 	 *

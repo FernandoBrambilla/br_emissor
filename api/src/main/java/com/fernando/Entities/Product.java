@@ -41,7 +41,7 @@ public class Product extends RepresentationModel<Product> implements Serializabl
 	private boolean utilizarMarkup = false;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	private UnidadeProduto unidadeProduto = new UnidadeProduto("");
+	private ProductUnity unidadeProduto = new ProductUnity("");
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	private Markup markup;
@@ -91,7 +91,7 @@ public class Product extends RepresentationModel<Product> implements Serializabl
 		return utilizarMarkup;
 	}
 
-	public UnidadeProduto getUnidadeProduto() {
+	public ProductUnity getUnidadeProduto() {
 		return unidadeProduto;
 	}
 
@@ -159,7 +159,7 @@ public class Product extends RepresentationModel<Product> implements Serializabl
 		this.utilizarMarkup = utilizarMarkup;
 	}
 
-	public void setUnidadeProduto(UnidadeProduto unidadeProduto) {
+	public void setUnidadeProduto(ProductUnity unidadeProduto) {
 		this.unidadeProduto = unidadeProduto;
 	}
 
