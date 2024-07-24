@@ -22,6 +22,7 @@ import gui.Dtos.CategoriaProdutoDto;
 import gui.Dtos.Markup;
 import gui.Dtos.ProdutoDto;
 import gui.Dtos.Style;
+import gui.Dtos.UnidadeProdutoDto;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -117,6 +118,13 @@ public class ProdutosController {
 			CategoriaProdutoDto categoria = new CategoriaProdutoDto();
 			categoria.setDescricao(" ");
 			NovaCategoriaController.criarCategoria(categoria);
+		} 
+		
+		// CRIA UMA UNIDADE PADRÃO CASO O BANCO SEJA NULL
+		if (NovaUnidadeController.buscarUnidadesProduto().isEmpty()) {
+			UnidadeProdutoDto unidade = new UnidadeProdutoDto();
+			unidade.setDescricao(" ");
+			NovaUnidadeController.criarUnidade(unidade);
 		} 
 		
 		// CRIA UM MARKUP PADRÃO CASO O BANCO SEJA NULL
@@ -241,29 +249,53 @@ public class ProdutosController {
 					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			JSONArray responseJson = new JSONArray(response.body());
-			ProdutoDto produto;
+			
 			List<ProdutoDto> produtos = new ArrayList<>();
 			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
+			
+			//OBJETOS QUE COMPÕEM UM PRODUTO
+			ProdutoDto produto = new ProdutoDto();
+			UnidadeProdutoDto unidadeProduto = new UnidadeProdutoDto();
+			CategoriaProdutoDto categoriaProduto = new CategoriaProdutoDto();
+			Markup markup = new Markup();
+				//JSONArray unidadeProduto = new JSONArray();
+				
 			// LOOP CONVERTE JSON EM CLIENTS
 			for (int i = 0; i < responseJson.length(); i++) {
-
 				JSONObject jsonObj = responseJson.getJSONObject(i);
-				String dataInclusao = jsonObj.getString("dataInclusao").substring(0, 19).replaceAll("T", " ");
+				JSONObject unidadeJson = (JSONObject) jsonObj.get("unidadeProduto");
+				JSONObject categoriaJson = (JSONObject) jsonObj.get("categoria");
+				JSONObject markupJson = (JSONObject) jsonObj.get("markup");
+				String dataInclusao = jsonObj.getString("dataInclusao").substring(0, 19).replaceAll("T", " ");	
+				
+				
+				//PRECHE UNIDADE PRODUTO
+				unidadeProduto.setId(unidadeJson.getInt("id"));
+				unidadeProduto.setDescricao(unidadeJson.getString("descricao"));
+				
+				//PRENCHE CATEGORIA PRODUTO
+				categoriaProduto.setId(categoriaJson.getInt("id"));
+				categoriaProduto.setDescricao(categoriaJson.getString("descricao"));
+				
+				//PRENCHE MARKUP PRODUTO
+				markup.setId(markupJson.getInt("id"));
+				markup.setMarkup(new BigDecimal(markupJson.getBigInteger("markup")));
+				markup.setUtilizar(markupJson.getBoolean("utilizar"));
+				
 
-				produto = new ProdutoDto();
+				
+				
 				produto.setId(jsonObj.getLong("id"));
 				produto.setDescricao(jsonObj.getString("descricao"));
 				produto.setCodigo(jsonObj.getString("codigo"));
 				produto.setValorVenda(jsonObj.getDouble("valorVenda"));
 				produto.setCusto(jsonObj.getDouble("custo"));
 				produto.setEstoque(jsonObj.getInt("estoque"));
-				produto.setUnidadeProduto(jsonObj.getString("unidadeProduto"));
-				// produto.setCategoria(jsonObj.get("categoria") isEmpty() ? "" :
-				// produto.setCategoria(jsonObj.getString("categoria"));
+				produto.setUnidadeProduto(unidadeProduto);
+				produto.setCategoria(categoriaProduto); 
+				produto.setMarkup(markup);
 				produto.setTributacao(jsonObj.getString("tributacao"));
 				produto.setNcm(jsonObj.getInt("ncm"));
-				produto.setDescNcm(jsonObj.getString("descNcm"));
 				produto.setCest(jsonObj.getString("cest"));
 				produto.setDataInclusao(LocalDateTime.parse(dataInclusao, format));
 				produto.setEAN_GTIN(jsonObj.getString("ean_GTIN"));

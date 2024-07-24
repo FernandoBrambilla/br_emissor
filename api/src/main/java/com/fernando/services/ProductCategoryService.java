@@ -21,7 +21,7 @@ import com.fernando.Repositories.ProductCategoryRepository;
 public class ProductCategoryService {
 
 	/*
-	 * CLASSE CATEGORIA DO PRODUTO, NÃO RETORNA LINK HATEOAS NÃO PERMITE DELETAR
+	 * CLASSE CATEGORIA DO PRODUTO, NÃO RETORNA LINK HATEOAS
 	 */
 
 	ProductCategoryRepository repository;

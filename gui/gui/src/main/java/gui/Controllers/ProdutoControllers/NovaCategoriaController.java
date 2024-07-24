@@ -33,7 +33,7 @@ public class NovaCategoriaController {
 	private TextField categoria;
 
 	@FXML
-	private Label info;
+	private Label info; 
 
 	@FXML
 	private Button btnSalvar;
@@ -67,7 +67,7 @@ public class NovaCategoriaController {
 	}
 
 	@SuppressWarnings("exports")
-	public void setCategoria(TextField categoria) {
+	public void setCategoria(TextField categoria) { 
 		this.categoria = categoria;
 	}
 
@@ -102,8 +102,8 @@ public class NovaCategoriaController {
 				JSONObject jsonObj = responseJson.getJSONObject(i);
 				categoriaProdutoDto.setId(jsonObj.getInt("id"));
 				categoriaProdutoDto.setDescricao(jsonObj.getString("descricao"));
-				listaCategorias.add(categoriaProdutoDto);
-
+				listaCategorias.add(categoriaProdutoDto); 
+ 
 			}
 			return listaCategorias;
 
@@ -160,7 +160,6 @@ public class NovaCategoriaController {
 			HttpRequest request = HttpRequest.newBuilder().header("Authorization", "Bearer " + token)
 					.header("Content-Type", "application/json").DELETE().uri(URI.create(endpoint)).build();
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-			System.out.println(response.body());
 			if (response.statusCode() == 204) {
 				Alert alert1 = new Alert(Alert.AlertType.CONFIRMATION);
 				alert1.setHeaderText(null);
@@ -221,7 +220,7 @@ public class NovaCategoriaController {
 					alert.showAndWait();
 					Stage stage = (Stage) getBtnSalvar().getScene().getWindow();
 					stage.close();
-					NovoOuEditarProdutoController.atualizarLista();
+					NovoOuEditarProdutoController.atualizarListaCategorias();
 					NovoOuEditarProdutoController.getCategoria().show();
 				}
 			}
@@ -237,6 +236,7 @@ public class NovaCategoriaController {
 		}
 
 	}
+	
 
 	@SuppressWarnings("exports")
 	public void cancelar(ActionEvent action) throws IOException {

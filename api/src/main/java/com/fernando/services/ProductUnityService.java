@@ -16,7 +16,7 @@ import com.fernando.Repositories.ProductUnityRepository;
 public class ProductUnityService {
 
 	/*
-	 * CLASSE UNIDADE DO PRODUTO, NÃO RETORNA LINK HATEOAS NÃO PERMITE DELETAR
+	 * CLASSE UNIDADE DO PRODUTO, NÃO RETORNA LINK HATEOAS
 	 */
 
 	ProductUnityRepository repository;

@@ -9,8 +9,8 @@ import java.net.http.HttpResponse;
 import org.json.JSONObject;
 
 import gui.Controllers.PrincipalControllers.PrincipalController;
-import gui.Dtos.CategoriaProdutoDto;
 import gui.Dtos.Style;
+import gui.Dtos.UnidadeProdutoDto;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -20,16 +20,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
 
-public class EditarCategoriaController {
+public class EditarUnidadeController {
 
 	private static String url = PrincipalController.getUrl();
 
 	private static String token = PrincipalController.getAccessToken();
 
-	private CategoriaProdutoDto categoriaParaEditar = null;
+	private UnidadeProdutoDto unidadeParaEditar = null;
 
 	@FXML
-	private TextField categoria;
+	private TextField unidade;
 
 	@FXML
 	private Label info;
@@ -41,8 +41,13 @@ public class EditarCategoriaController {
 	private Button btnCancelar;
 
 	@SuppressWarnings("exports")
-	public TextField getCategoria() {
-		return categoria;
+	public TextField getUnidade() {
+		return unidade;
+	}
+
+	@SuppressWarnings("exports")
+	public void setUnidade(TextField unidade) {
+		this.unidade = unidade;
 	}
 
 	@SuppressWarnings("exports")
@@ -66,11 +71,6 @@ public class EditarCategoriaController {
 	}
 
 	@SuppressWarnings("exports")
-	public void setCategoria(TextField categoria) {
-		this.categoria = categoria;
-	}
-
-	@SuppressWarnings("exports")
 	public void setBtnSalvar(Button btnSalvar) {
 		this.btnSalvar = btnSalvar;
 	}
@@ -81,8 +81,8 @@ public class EditarCategoriaController {
 	}
 
 	public void initialize() throws Exception {
-		categoriaParaEditar = NovoOuEditarProdutoController.getCategoria().getSelectionModel().getSelectedItem();
-		getCategoria().setText(categoriaParaEditar.getDescricao());
+		unidadeParaEditar = NovoOuEditarProdutoController.getUnidade().getSelectionModel().getSelectedItem();
+		getUnidade().setText(unidadeParaEditar.getDescricao());
 
 	}
 
@@ -91,15 +91,15 @@ public class EditarCategoriaController {
 		Style effect = new Style();
 		try {
 			// VERIFICA CAMPOS VAZIOS
-			if (getCategoria().getText().isEmpty()) {
+			if (getUnidade().getText().isEmpty()) {
 				getInfo().setText("*Campo Obrigatórios!");
-				effect.campoObrigatorio(getCategoria());
+				effect.campoObrigatorio(getUnidade());
 				return;
 			} else {
 				JSONObject json = new JSONObject();
-				json.put("id", categoriaParaEditar.getId());
-				json.put("descricao", getCategoria().getText().toUpperCase());
-				String endpoint = url + "category";
+				json.put("id", unidadeParaEditar.getId());
+				json.put("descricao", getUnidade().getText().toUpperCase());
+				String endpoint = url + "unidade";
 				HttpClient client = HttpClient.newHttpClient();
 				HttpRequest request = HttpRequest.newBuilder().uri(URI.create(endpoint))
 						.header("Authorization", "Bearer " + token).header("Content-Type", "application/json")
@@ -108,12 +108,12 @@ public class EditarCategoriaController {
 				if (response.statusCode() == 200) {
 					Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 					alert.setHeaderText(null);
-					alert.setContentText("Categoria \"" + getCategoria().getText() + "\" atualizada com sucesso! ");
+					alert.setContentText("Unidade \"" + getUnidade().getText() + "\" atualizada com sucesso! ");
 					alert.showAndWait();
 					Stage stage = (Stage) getBtnSalvar().getScene().getWindow();
 					stage.close();
-					NovoOuEditarProdutoController.atualizarListaCategorias();
-					NovoOuEditarProdutoController.getCategoria().show();
+					NovoOuEditarProdutoController.atualizarListaUnidades();
+					NovoOuEditarProdutoController.getUnidade().show();
 				}
 			}
 		} catch (

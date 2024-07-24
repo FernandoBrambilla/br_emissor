@@ -17,6 +17,16 @@ public class ProductUnity extends RepresentationModel<ProductUnity> implements S
     public ProductUnity(String descricao) {
 		this.descricao = descricao;
 	}
+    
+	public ProductUnity(Integer id, String descricao) {
+		super();
+		this.id = id;
+		this.descricao = descricao;
+	}
+
+	public ProductUnity() {
+		super();
+	}
 
 	@Id
     @GeneratedValue(strategy=GenerationType.IDENTITY) 

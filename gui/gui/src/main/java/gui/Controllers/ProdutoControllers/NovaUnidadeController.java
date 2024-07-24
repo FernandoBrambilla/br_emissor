@@ -12,7 +12,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import gui.Controllers.PrincipalControllers.PrincipalController;
-import gui.Dtos.CategoriaProdutoDto;
 import gui.Dtos.Style;
 import gui.Dtos.UnidadeProdutoDto;
 import javafx.event.ActionEvent;
@@ -41,7 +40,6 @@ public class NovaUnidadeController {
 
 	@FXML
 	private Button btnCancelar;
-
 
 	@SuppressWarnings("exports")
 	public Label getInfo() {
@@ -89,7 +87,7 @@ public class NovaUnidadeController {
 
 	public static List<UnidadeProdutoDto> buscarUnidadesProduto() throws Exception {
 		try {
-			String endpoint = url + "unity";
+			String endpoint = url + "unidade";
 			HttpClient client = HttpClient.newHttpClient();
 			HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(endpoint))
 					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
@@ -116,7 +114,7 @@ public class NovaUnidadeController {
 
 	public static UnidadeProdutoDto buscarUnidadeProduto(int id) throws Exception {
 		try {
-			String endpoint = url + "unity/" + id;
+			String endpoint = url + "unidade/" + id;
 			HttpClient client = HttpClient.newHttpClient();
 			HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(endpoint))
 					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
@@ -140,7 +138,7 @@ public class NovaUnidadeController {
 		try {
 			JSONObject json = new JSONObject();
 			json.put("descricao", unidade.getDescricao());
-			String endpoint = url + "unity";
+			String endpoint = url + "unidade";
 			HttpClient client = HttpClient.newHttpClient();
 			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(endpoint))
 					.header("Authorization", "Bearer " + token).header("Content-Type", "application/json")
@@ -154,10 +152,10 @@ public class NovaUnidadeController {
 
 	}
 
-	public static void apagarUnidadae(UnidadeProdutoDto unidade) {
+	public static void apagarUnidade(UnidadeProdutoDto unidade) {
 		try {
 			// REQUIÇÃO PARA DELETAR
-			String endpoint = url + "unity/" + unidade.getId();
+			String endpoint = url + "unidade/" + unidade.getId();
 			HttpClient client = HttpClient.newHttpClient();
 			HttpRequest request = HttpRequest.newBuilder().header("Authorization", "Bearer " + token)
 					.header("Content-Type", "application/json").DELETE().uri(URI.create(endpoint)).build();
@@ -185,7 +183,7 @@ public class NovaUnidadeController {
 			JSONObject json = new JSONObject();
 			json.put("id", unidade.getId());
 			json.put("descricao", unidade.getDescricao());
-			String endpoint = url + "unity";
+			String endpoint = url + "unidade";
 			HttpClient client = HttpClient.newHttpClient();
 			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(endpoint))
 					.header("Authorization", "Bearer " + token).header("Content-Type", "application/json")
@@ -211,7 +209,6 @@ public class NovaUnidadeController {
 			} else {
 				UnidadeProdutoDto novaUnidade = new UnidadeProdutoDto();
 				novaUnidade.setDescricao(getUnidade().getText().toUpperCase());
-
 				JSONObject json = new JSONObject();
 				json.put("descricao", novaUnidade.getDescricao());
 				int statusCode = criarUnidade(novaUnidade);
@@ -222,7 +219,7 @@ public class NovaUnidadeController {
 					alert.showAndWait();
 					Stage stage = (Stage) getBtnSalvar().getScene().getWindow();
 					stage.close();
-					NovoOuEditarProdutoController.atualizarLista();
+					NovoOuEditarProdutoController.atualizarListaUnidades();
 					NovoOuEditarProdutoController.getUnidade().show();
 				}
 			}

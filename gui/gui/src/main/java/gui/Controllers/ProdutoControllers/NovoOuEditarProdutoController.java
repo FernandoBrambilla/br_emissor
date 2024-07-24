@@ -2,8 +2,17 @@ package gui.Controllers.ProdutoControllers;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+import org.json.JSONObject;
 
 import gui.App;
+import gui.Controllers.ClienteControllers.ClientesController;
 import gui.Dtos.CategoriaProdutoDto;
 import gui.Dtos.Markup;
 import gui.Dtos.Style;
@@ -46,7 +55,7 @@ public class NovoOuEditarProdutoController {
 	private static BorderPane categoriaPane;
 
 	private static ComboBox<CategoriaProdutoDto> categoria;
-	
+
 	private static ComboBox<UnidadeProdutoDto> unidade;
 
 	private static Markup markup = new Markup();
@@ -324,8 +333,14 @@ public class NovoOuEditarProdutoController {
 
 		getCategoria().setOnKeyPressed((keyEvent) -> {
 			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB) {
-				getCusto().requestFocus();
+				getUnidade().requestFocus();
+				getUnidade().show();
+			}
+		});
 
+		getUnidade().setOnKeyPressed((keyEvent) -> {
+			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB) {
+				getCusto().requestFocus();
 			}
 		});
 
@@ -409,16 +424,31 @@ public class NovoOuEditarProdutoController {
 	}
 
 	/**
-	 * Atualiza lista de Categorias do Produto
+	 * Atualiza lista de categorias
 	 * 
 	 * @throws Exception
 	 */
-
-	public static void atualizarLista() throws Exception {
-		getCategoria().getItems().clear();
-		getCategoria().setSkin(null);
+	public static void atualizarListaCategorias() throws Exception {
+		int indice = getCategoria().getItems().size();
+		do {
+			indice--;
+			getCategoria().getItems().remove(indice);
+		} while (indice > 1);
 		getCategoria().getItems().addAll(NovaCategoriaController.buscarCategoriasProduto());
-		getCategoria().setSkin(criarSkinCategoria());
+	}
+
+	/**
+	 * Atualiza lista de unidades
+	 * 
+	 * @throws Exception
+	 */
+	public static void atualizarListaUnidades() throws Exception {
+		int indice = getUnidade().getItems().size();
+		do {
+			indice--;
+			getUnidade().getItems().remove(indice);
+		} while (indice > 1);
+		getUnidade().getItems().addAll(NovaUnidadeController.buscarUnidadesProduto());
 	}
 
 	/**
@@ -426,12 +456,12 @@ public class NovoOuEditarProdutoController {
 	 * 
 	 * @return ComboBoxListViewSkin<CategoriaProdutoDto>
 	 */
-	private static ComboBoxListViewSkin<CategoriaProdutoDto> criarSkinCategoria() {
+	public static ComboBoxListViewSkin<CategoriaProdutoDto> criarSkinCategoria() {
 		getCategoria().getItems().add(0, null);
 		ComboBoxListViewSkin<CategoriaProdutoDto> skin = new ComboBoxListViewSkin<CategoriaProdutoDto>(getCategoria());
 		skin.setHideOnClick(false);
 		getCategoria().setCellFactory(lv -> new ListCell<>() {
-			private ButtonBar buttons = criarButtonBar();
+			private ButtonBar buttons = criarButtonBarCategorias();
 
 			@Override
 			protected void updateItem(CategoriaProdutoDto item, boolean empty) {
@@ -451,12 +481,12 @@ public class NovoOuEditarProdutoController {
 		return skin;
 	}
 
-	private static ComboBoxListViewSkin<UnidadeProdutoDto> criarSkinUnidade() {
+	public static ComboBoxListViewSkin<UnidadeProdutoDto> criarSkinUnidade() {
 		getUnidade().getItems().add(0, null);
 		ComboBoxListViewSkin<UnidadeProdutoDto> skin = new ComboBoxListViewSkin<UnidadeProdutoDto>(getUnidade());
 		skin.setHideOnClick(false);
 		getUnidade().setCellFactory(lv -> new ListCell<>() {
-			private ButtonBar buttons = criarButtonBar();
+			private ButtonBar buttons = criarButtonBarUnidade();
 
 			@Override
 			protected void updateItem(UnidadeProdutoDto item, boolean empty) {
@@ -492,9 +522,10 @@ public class NovoOuEditarProdutoController {
 		getCategoria().setSkin(criarSkinCategoria());
 		return getCategoria();
 	}
-	
+
 	/**
 	 * Cria o ComboBox de unidade
+	 * 
 	 * @return
 	 * @throws Exception
 	 */
@@ -517,7 +548,7 @@ public class NovoOuEditarProdutoController {
 	private static void estilizarButton(Button button) {
 		Style style = new Style();
 		style.hoverBtnsInternos(button);
-		Font font = new Font("Calibri", 14);
+		Font font = new Font("Calibri", 12);
 		button.setFont(font);
 		button.setStyle("-fx-background-color: white;");
 
@@ -528,26 +559,25 @@ public class NovoOuEditarProdutoController {
 	 * 
 	 * @return ButtonBar
 	 */
-	private static ButtonBar criarButtonBar() {
-		ButtonBar buttonBar = new ButtonBar();
-		Button buttonNovo = new Button("Novo");
-
-		estilizarButton(buttonNovo);
-		Button buttonEditar = new Button("Editar");
-		estilizarButton(buttonEditar);
-		Button buttonApagar = new Button("Apagar");
-		estilizarButton(buttonApagar);
-		ButtonBar.setButtonData(buttonNovo, null);
-		ButtonBar.setButtonData(buttonEditar, null);
-		ButtonBar.setButtonData(buttonApagar, null);
-		buttonBar.getButtons().addAll(buttonApagar, buttonEditar, buttonNovo);
-		buttonBar.setStyle("-fx-background-color:  #2484BF; -fx-border-color: #2484BF; -fx-padding:20;");
-		buttonBar.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
-		buttonBar.setPrefHeight(45);
-		buttonBar.setPrefWidth(110);
+	private static ButtonBar criarButtonBarCategorias() {
+		ButtonBar buttonBarCat = new ButtonBar();
+		Button buttonNovoCat = new Button("Novo");
+		estilizarButton(buttonNovoCat);
+		Button buttonEditarCat = new Button("Editar");
+		estilizarButton(buttonEditarCat);
+		Button buttonApagarCat = new Button("Apagar");
+		estilizarButton(buttonApagarCat);
+		ButtonBar.setButtonData(buttonNovoCat, null);
+		ButtonBar.setButtonData(buttonEditarCat, null);
+		ButtonBar.setButtonData(buttonApagarCat, null);
+		buttonBarCat.getButtons().addAll(buttonApagarCat, buttonEditarCat, buttonNovoCat);
+		buttonBarCat.setStyle("-fx-background-color:  #2484BF; -fx-border-color: #2484BF; -fx-padding: 6;");
+		buttonBarCat.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+		// buttonBar.setPrefHeight(30);
+		// buttonBar.setPrefWidth(50);
 
 		// AÇÃO DO BOTÃO NOVA CATEGORIA
-		buttonNovo.setOnAction(e -> {
+		buttonNovoCat.setOnAction(e -> {
 			Stage stage = new Stage();
 			Parent painel = null;
 			try {
@@ -562,7 +592,7 @@ public class NovoOuEditarProdutoController {
 		});
 
 		// AÇÃO DO BOTÃO EDITAR CATEGORIA
-		buttonEditar.setOnAction(e -> {
+		buttonEditarCat.setOnAction(e -> {
 			Stage stage = new Stage();
 			Parent painel = null;
 			try {
@@ -585,7 +615,7 @@ public class NovoOuEditarProdutoController {
 			}
 		});
 		// AÇÃO DO BOTÃO APAGAR CATEGORIA
-		buttonApagar.setOnAction(e -> {
+		buttonApagarCat.setOnAction(e -> {
 			try {
 				if (getCategoria().getSelectionModel().getSelectedItem() == null) {
 					Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -617,15 +647,128 @@ public class NovoOuEditarProdutoController {
 
 		// AÇÃO AO CLICAR EM UMA CATEGORIA
 		getCategoria().setOnAction(e -> {
-			try {
-				getCategoria().getConverter().fromString("");
-				getCategoria().hide();
 
+		});
+		return buttonBarCat;
+	}
+
+	private static ButtonBar criarButtonBarUnidade() {
+		ButtonBar buttonBarUni = new ButtonBar();
+		Button buttonNovoUni = new Button("Novo");
+		estilizarButton(buttonNovoUni);
+		Button buttonEditarUni = new Button("Editar");
+		estilizarButton(buttonEditarUni);
+		Button buttonApagarUni = new Button("Apagar");
+		estilizarButton(buttonApagarUni);
+		ButtonBar.setButtonData(buttonNovoUni, null);
+		ButtonBar.setButtonData(buttonEditarUni, null);
+		ButtonBar.setButtonData(buttonApagarUni, null);
+		buttonBarUni.getButtons().addAll(buttonApagarUni, buttonEditarUni, buttonNovoUni);
+		buttonBarUni.setStyle("-fx-background-color:  #2484BF; -fx-border-color: #2484BF; -fx-padding: 6;");
+		buttonBarUni.setNodeOrientation(NodeOrientation.RIGHT_TO_LEFT);
+		// buttonBar.setPrefHeight(30);
+		// buttonBar.setPrefWidth(50);
+
+		// AÇÃO DO BOTÃO NOVA UNIDADE
+		buttonNovoUni.setOnAction(e -> {
+			Stage stage = new Stage();
+			Parent painel = null;
+			try {
+				painel = FXMLLoader.load(App.class.getResource("ProdutoViews/NovaUnidade.fxml"));
+				Scene scene = new Scene(painel, 500, 200);
+				stage.setTitle("Cadasto de Unidades de medidas de Produtos");
+				stage.setScene(scene);
+				stage.show();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		});
+
+		// AÇÃO DO BOTÃO EDITAR UNIDADE
+		buttonEditarUni.setOnAction(e -> {
+			Stage stage = new Stage();
+			Parent painel = null;
+			try {
+				if (getUnidade().getSelectionModel().getSelectedItem() == null) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setHeaderText(null);
+					alert.setContentText("Selecione uma Unidade para para editar.");
+					alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+					alert.showAndWait();
+					getCategoria().show();
+					return;
+				}
+				painel = FXMLLoader.load(App.class.getResource("ProdutoViews/EditarUnidade.fxml"));
+				Scene scene = new Scene(painel, 500, 200);
+				stage.setTitle("Editar Unidade");
+				stage.setScene(scene);
+				stage.show();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		});
+		// AÇÃO DO BOTÃO APAGAR UNIDADE
+		buttonApagarUni.setOnAction(e -> {
+			System.out.println("apagar");
+			try {
+				if (getUnidade().getSelectionModel().getSelectedItem() == null) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setHeaderText(null);
+					alert.setContentText("Selecione uma Unidade para apagar.");
+					alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+					alert.showAndWait();
+					getCategoria().show();
+					return;
+				} else {
+					UnidadeProdutoDto unidadeParaApagar = getUnidade().getSelectionModel().getSelectedItem();
+
+					Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+					alert.setHeaderText(null);
+					alert.setContentText("Deseja apagar a unidade \"" + unidadeParaApagar.getDescricao() + "\"?");
+					alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+					alert.showAndWait();
+					if (alert.getResult() == ButtonType.CANCEL) {
+						alert.close();
+						return;
+					} else {
+						NovaUnidadeController.apagarUnidade(unidadeParaApagar);
+					}
+				}
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
 		});
-		return buttonBar;
+
+		buttonApagarUni.setOnAction(e -> {
+			try {
+				if (getUnidade().getSelectionModel().getSelectedItem() == null) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setHeaderText(null);
+					alert.setContentText("Selecione uma Unidade para apagar.");
+					alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+					alert.showAndWait();
+					getUnidade().show();
+					return;
+				} else {
+					UnidadeProdutoDto unidadeParaApagar = getUnidade().getSelectionModel().getSelectedItem();
+					Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+					alert.setHeaderText(null);
+					alert.setContentText("Deseja apagar a unidade \"" + unidadeParaApagar.getDescricao() + "\"?");
+					alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+					alert.showAndWait();
+					if (alert.getResult() == ButtonType.CANCEL) {
+						alert.close();
+						return;
+					} else {
+						NovaUnidadeController.apagarUnidade(unidadeParaApagar);
+					}
+				}
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+		});
+
+		return buttonBarUni;
 	}
 
 	/**
@@ -674,7 +817,7 @@ public class NovoOuEditarProdutoController {
 			Double percentual = venda.subtract(custo).doubleValue();
 			percentual = percentual * 100;
 			percentual = percentual / custo.doubleValue();
-			getMarkupText().setText(Mascaras.percentual(percentual)+ " %");
+			getMarkupText().setText(Mascaras.percentual(percentual) + " %");
 		}
 	}
 
@@ -682,19 +825,79 @@ public class NovoOuEditarProdutoController {
 	 * Salva Produto no Banco de dados
 	 */
 	public void salvarProduto() {
+		Style style = new Style();
 		if (getEan_getin().getText().isEmpty() || getDescricao().getText().isEmpty()) {
 			getInfo().setText("Campos Obrigatórios!");
-			Style style = new Style();
+			
 			style.campoObrigatorio(getEan_getin());
 			style.campoObrigatorio(getDescricao());
+		}else {
+			style.campoObrigatorioRemove(getEan_getin());
+			style.campoObrigatorioRemove(getDescricao());
+			getInfo().setText(null);
+			/*
+			JSONObject json = new JSONObject();
+			json.put("name", getName().getText()); 
+			json.put("tipo", tipo);
+			json.put("phone", getPhone().getText());
+			json.put("email", getEmail().getText());
+			json.put("cpf_cnpj", getCpf_cnpj().getText());
+			json.put("rg_ie", getRg_ie().getText());
+			json.put("dateNasc_const", dateNascConst.format(formatter));
+			json.put("dateExp", dateExp.format(formatter));
+			json.put("address", getAdress().getText());
+			json.put("addressNumber", getNum().getText());
+			json.put("addressComplement", getCompl().getText());
+			json.put("city", getCity().getText());
+			json.put("bairro" , getBairro().getText());
+			json.put("uf", getUf().getValue());
+			json.put("cep", getCep().getText());
+			json.put("obs", getObs().getText());
+
+			// REQUIÇÃO
+			String url = "http://localhost:8080/clients";
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url))
+					.header("Authorization", "Bearer " + token).header("Content-Type", "application/json")
+ 					.POST(HttpRequest.BodyPublishers.ofString(json.toString())).build();
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			String message = response.body();
+			int status = response.statusCode();
+
+			if (status == 200) {
+				Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+				alert.setHeaderText(null);
+				alert.setContentText("Cliente \"" + getName().getText() + "\" cadastrado com sucesso! ");
+				alert.showAndWait();
+				Stage stage = (Stage) btnCancelar.getScene().getWindow();
+				stage.close();
+
+				// ATUALIZA A TABELA
+				ClientesController.popularTabela();
+			} else {
+
+				Alert alert = new Alert(Alert.AlertType.ERROR);
+				alert.setHeaderText(null);
+				alert.setContentText("Cliente \"" + getName().getText() + "\" não cadastrado! Motivo: " + message);
+				alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+				alert.showAndWait();
+
+			}
 		}
+	} catch (Exception e) {
+		Alert alert = new Alert(Alert.AlertType.ERROR);
+		alert.setHeaderText(null);
+		alert.setContentText("Erro. " + e.getMessage() + e.getCause());
+		alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+		alert.showAndWait();
+		*/
+	}
+		
 	}
 
 	@SuppressWarnings("exports")
 	public void calcularValorVendaAutomatico(ActionEvent action) {
-
 		calcularValorVenda();
-
 	}
 
 	private void fecharTela() {

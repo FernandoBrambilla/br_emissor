@@ -20,7 +20,7 @@ import com.fernando.Entities.ProductUnity;
 import com.fernando.services.ProductUnityService;
 
 @RestController
-@RequestMapping(value = "/unity")
+@RequestMapping(value = "/unidade")
 public class ProductUnityController {
 
 	@Autowired
@@ -60,7 +60,7 @@ public class ProductUnityController {
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<?> delete(@PathVariable(value = "id") Integer id) {
 		service.delete(id);
-		return ResponseEntity.noContent().build();
+		return ResponseEntity.noContent().build(); 
 	}
 
 }

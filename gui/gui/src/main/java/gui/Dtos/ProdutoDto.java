@@ -3,7 +3,7 @@ package gui.Dtos;
 import java.time.LocalDateTime;
 
 public class ProdutoDto {
-	
+
 	private Long id;
     
     private String descricao;
@@ -16,9 +16,11 @@ public class ProdutoDto {
     
     private Integer estoque;
     
-    private String unidadeProduto;
+    private UnidadeProdutoDto unidadeProduto;
     
     private CategoriaProdutoDto categoria;
+    
+    private Markup markup;
     
     private String fornecedor;
     
@@ -33,8 +35,9 @@ public class ProdutoDto {
     private LocalDateTime dataInclusao;
    
     private String EAN_GTIN;
-
-	public ProdutoDto(ProdutoDto p) {
+    
+    
+    public ProdutoDto(ProdutoDto p) {
 		this.id = p.getId();
 		this.descricao = p.getDescricao();
 		this.codigo = p.getCodigo();
@@ -43,6 +46,7 @@ public class ProdutoDto {
 		this.estoque = p.getEstoque();
 		this.unidadeProduto = p.getUnidadeProduto();
 		this.categoria = p.getCategoria();
+		this.markup = p.getMarkup();
 		this.fornecedor = p.getFornecedor();
 		this.tributacao = p.getTributacao();
 		this.ncm = p.getNcm();
@@ -51,10 +55,14 @@ public class ProdutoDto {
 		this.dataInclusao = p.getDataInclusao();
 		this.EAN_GTIN = p.getEAN_GTIN();
 	}
+    
+    
 
 	public ProdutoDto() {
 		super();
 	}
+
+
 
 	public Long getId() {
 		return id;
@@ -80,12 +88,16 @@ public class ProdutoDto {
 		return estoque;
 	}
 
-	public String getUnidadeProduto() {
+	public UnidadeProdutoDto getUnidadeProduto() {
 		return unidadeProduto;
 	}
 
 	public CategoriaProdutoDto getCategoria() {
 		return categoria;
+	}
+
+	public Markup getMarkup() {
+		return markup;
 	}
 
 	public String getFornecedor() {
@@ -140,12 +152,16 @@ public class ProdutoDto {
 		this.estoque = estoque;
 	}
 
-	public void setUnidadeProduto(String unidadeProduto) {
+	public void setUnidadeProduto(UnidadeProdutoDto unidadeProduto) {
 		this.unidadeProduto = unidadeProduto;
 	}
 
-	public void setCategoria(String categoria) {
-		this.categoria.setDescricao(categoria);
+	public void setCategoria(CategoriaProdutoDto categoria) {
+		this.categoria = categoria;
+	}
+
+	public void setMarkup(Markup markup) {
+		this.markup = markup;
 	}
 
 	public void setFornecedor(String fornecedor) {
@@ -175,7 +191,7 @@ public class ProdutoDto {
 	public void setEAN_GTIN(String eAN_GTIN) {
 		EAN_GTIN = eAN_GTIN;
 	}
-    
-    
+
+	    
 
 }

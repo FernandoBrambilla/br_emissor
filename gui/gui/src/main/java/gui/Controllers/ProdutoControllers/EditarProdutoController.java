@@ -249,7 +249,7 @@ public class EditarProdutoController {
 		getTelaBase().setCenter(loader.load());
 		getBtnCadastro().setStyle("-fx-background-color:  deedfc; ");
 		setProduto(new ProdutoDto(ProdutosController.getTabelaprodutos().getSelectionModel().getSelectedItem()));
-		getDescricao().setText("fffffff");
+		getDescricao().setText("fffffff"); 
 		
 	}
 	

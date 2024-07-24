@@ -373,7 +373,7 @@ public class PrincipalController {
 
 				// CARREGA O MENU DE USUARIOS
 				FXMLLoader loader = new FXMLLoader(App.class.getResource("UsuarioViews/MenuUsuarios.fxml"));
-	
+				getMenu().setTop(loader.load());
 				
 				// CARREGA A TABELA DE USUARIOS
 				setTabelaUsuarios(getUsuariosController().construirTabela());

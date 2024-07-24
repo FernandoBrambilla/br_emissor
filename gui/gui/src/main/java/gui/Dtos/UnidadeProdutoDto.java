@@ -22,4 +22,8 @@ public class UnidadeProdutoDto {
 		this.descricao = descricao;
 	}
 
+	@Override
+	public String toString() {
+		return  descricao;
+	}
 }

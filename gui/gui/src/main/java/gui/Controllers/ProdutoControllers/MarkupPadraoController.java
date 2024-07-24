@@ -50,7 +50,7 @@ public class MarkupPadraoController {
 	@SuppressWarnings("exports")
 	public Button getBtnSalvar() {
 		return btnSalvar;
-	}
+	} 
 
 	@SuppressWarnings("exports")
 	public Button getBtnCancelar() {
@@ -156,6 +156,7 @@ public class MarkupPadraoController {
 		NovoOuEditarProdutoController.getCheckBox().setSelected(buscarMarkup().isUtilizar()? true : false);
 		NovoOuEditarProdutoController.getMarkupText().setText(markup.isUtilizar() ? (Mascaras.decimal(markup.getMarkup()) + " %") : "");
 		NovoOuEditarProdutoController.getMarkupText().setEditable(markup.isUtilizar()? false : true);
+		
 	}
 
 	@SuppressWarnings("exports")

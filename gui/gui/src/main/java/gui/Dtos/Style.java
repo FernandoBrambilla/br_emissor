@@ -42,7 +42,7 @@ public class Style {
 	@SuppressWarnings("exports")
 	public void hover(Button btn) {
 		ColorAdjust color = new ColorAdjust();
-		color.setBrightness(-0.15);
+		color.setBrightness(-0.20);
 
 		btn.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
 			@Override

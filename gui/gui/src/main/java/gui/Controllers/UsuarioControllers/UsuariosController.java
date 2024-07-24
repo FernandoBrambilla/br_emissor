@@ -295,6 +295,7 @@ public class UsuariosController extends Application {
 	}
 
 	public void aplicaEfeitos() {
+		user = PrincipalController.getTabelaUsuarios().getSelectionModel().getSelectedItem();
 		Style efeitos = new Style();
 		efeitos.hover(getBtnNovo());
 		efeitos.hover(getBtnEditar());
@@ -503,9 +504,8 @@ public class UsuariosController extends Application {
 	@SuppressWarnings({ "exports" })
 	@FXML
 	public void editar(ActionEvent action) throws Exception {
-		editar = new EditarUsuarioController();
 		// VERIFICA SE FOIS SELECIONADO UM USUARIO PARA EDITAR
-		if (editar.isNull()) {
+		if (user.equals(null)) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setHeaderText(null);
 			alert.setContentText("Selecione um Usuário para editar.");
