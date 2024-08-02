@@ -10,7 +10,7 @@ import java.net.http.HttpResponse;
 import org.json.JSONObject;
 
 import gui.Controllers.PrincipalControllers.PrincipalController;
-import gui.Dtos.Markup;
+import gui.Dtos.MarkupDto;
 import gui.Utilities.Mascaras;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -79,12 +79,12 @@ public class MarkupPadraoController {
 
 	public void initialize() throws Exception {
 		Mascaras.onlyDecimal(getMarkup());
-		Markup markup = new Markup(buscarMarkup());
+		MarkupDto markup = new MarkupDto(buscarMarkup());
 		getMarkup().setText(Mascaras.decimal(markup.getMarkup()));
 		getUtilizar().setSelected(markup.isUtilizar() ? true : false);
 	}
 
-	public static Markup buscarMarkup() throws Exception {
+	public static MarkupDto buscarMarkup() throws Exception {
 
 		try {
 			String endpoint = url + "markup";
@@ -93,7 +93,7 @@ public class MarkupPadraoController {
 					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			JSONObject responseJson = new JSONObject(response.body());
-			Markup markup = new Markup();
+			MarkupDto markup = new MarkupDto();
 			markup.setId(responseJson.getInt("id"));
 			markup.setMarkup(responseJson.getBigDecimal("markup"));
 			markup.setUtilizar(responseJson.getBoolean("utilizar"));
@@ -106,7 +106,7 @@ public class MarkupPadraoController {
 	
 	
 
-	public static void criarMarkup(Markup markup) throws Exception {
+	public static void criarMarkup(MarkupDto markup) throws Exception {
 		try {
 			JSONObject json = new JSONObject();
 			json.put("id", 1);
@@ -124,7 +124,7 @@ public class MarkupPadraoController {
 
 	}
 
-	private void atualizarMarkup(Markup markup) throws Exception {
+	private void atualizarMarkup(MarkupDto markup) throws Exception {
 		try {
 			JSONObject json = new JSONObject();
 			json.put("id", 1);
@@ -146,7 +146,7 @@ public class MarkupPadraoController {
 
 	@SuppressWarnings("exports")
 	public void salvar(ActionEvent action) throws Exception {
-		Markup markup = new Markup();
+		MarkupDto markup = new MarkupDto();
 		markup.setId(1);
 		markup.setMarkup(new BigDecimal(getMarkup().getText().replace(",", ".")));
 		markup.setUtilizar(getUtilizar().isSelected() ? true : false);

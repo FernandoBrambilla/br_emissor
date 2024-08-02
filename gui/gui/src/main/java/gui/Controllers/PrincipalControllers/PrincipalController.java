@@ -338,7 +338,7 @@ public class PrincipalController {
 		stage.setTitle("Configurações");
 		stage.setScene(scene);
 		stage.show();
-		getStyle().adicinarCorBotaoSelecionado(getBtnConfiguracoes());
+		getStyle().adicinarCorBotaoSelecionado(getBtnConfiguracoes()); 
 	}
 
 	Style style = new Style();
@@ -387,7 +387,7 @@ public class PrincipalController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		});
+		}); 
 
 		getBtnClientes().setOnAction((event) -> {
 			try {

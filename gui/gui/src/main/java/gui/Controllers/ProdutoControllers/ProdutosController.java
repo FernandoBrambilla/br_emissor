@@ -19,7 +19,7 @@ import org.json.JSONObject;
 import gui.App;
 import gui.Controllers.PrincipalControllers.PrincipalController;
 import gui.Dtos.CategoriaProdutoDto;
-import gui.Dtos.Markup;
+import gui.Dtos.MarkupDto;
 import gui.Dtos.ProdutoDto;
 import gui.Dtos.Style;
 import gui.Dtos.UnidadeProdutoDto;
@@ -126,10 +126,10 @@ public class ProdutosController {
 			unidade.setDescricao(" ");
 			NovaUnidadeController.criarUnidade(unidade);
 		} 
-		
+		 
 		// CRIA UM MARKUP PADRÃO CASO O BANCO SEJA NULL
 		if (MarkupPadraoController.buscarMarkup() == null) {
-			Markup markup = new Markup();
+			MarkupDto markup = new MarkupDto();
 			markup.setId(1);
 			markup.setMarkup(new BigDecimal(0));
 			markup.setUtilizar(false);
@@ -257,7 +257,7 @@ public class ProdutosController {
 			ProdutoDto produto = new ProdutoDto();
 			UnidadeProdutoDto unidadeProduto = new UnidadeProdutoDto();
 			CategoriaProdutoDto categoriaProduto = new CategoriaProdutoDto();
-			Markup markup = new Markup();
+			MarkupDto markup = new MarkupDto();
 				//JSONArray unidadeProduto = new JSONArray();
 				
 			// LOOP CONVERTE JSON EM CLIENTS
@@ -281,10 +281,7 @@ public class ProdutosController {
 				markup.setId(markupJson.getInt("id"));
 				markup.setMarkup(new BigDecimal(markupJson.getBigInteger("markup")));
 				markup.setUtilizar(markupJson.getBoolean("utilizar"));
-				
-
-				
-				
+			
 				produto.setId(jsonObj.getLong("id"));
 				produto.setDescricao(jsonObj.getString("descricao"));
 				produto.setCodigo(jsonObj.getString("codigo"));

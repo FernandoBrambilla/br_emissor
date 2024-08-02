@@ -242,7 +242,7 @@ public class ClientesController {
 			ClienteDto cliente;
 			List<ClienteDto> clientes = new ArrayList<>();
 			DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
+ 
 			// LOOP CONVERTE JSON EM CLIENTS
 			for (int i = 0; i < responseJson.length(); i++) {
 				JSONObject jsonObj = responseJson.getJSONObject(i);

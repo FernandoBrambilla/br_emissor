@@ -42,13 +42,13 @@ public class Clients extends RepresentationModel<Clients> implements Serializabl
 	@Column (name = "rg/ie")
 	private String rg_ie;
 	
-        @JsonFormat(pattern="dd-MM-yyyy")
+    @JsonFormat(pattern="dd-MM-yyyy")
 	@Column (name = "date_nasc/const")
 	@Temporal(TemporalType.DATE)
 	private LocalDate dateNasc_const;
 	
         
-        @JsonFormat(pattern="dd-MM-yyyy")
+    @JsonFormat(pattern="dd-MM-yyyy")
 	@Column (name = "date_exp")
 	@Temporal(TemporalType.DATE)
 	private LocalDate dateExp;

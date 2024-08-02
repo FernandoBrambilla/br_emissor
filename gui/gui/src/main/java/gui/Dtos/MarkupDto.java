@@ -2,19 +2,19 @@ package gui.Dtos;
 
 import java.math.BigDecimal;
 
-public class Markup {
+public class MarkupDto {
 	
 	private int id;
 	private BigDecimal markup;
 	private boolean utilizar;
 	
-	public Markup(Markup markup) {
+	public MarkupDto(MarkupDto markup) {
 		this.id = markup.getId();
 		this.markup = markup.getMarkup();
 		this.utilizar = markup.isUtilizar();
 	}
 	
-	public Markup() {
+	public MarkupDto() {
 	}
 
 

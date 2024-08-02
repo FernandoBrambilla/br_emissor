@@ -23,6 +23,7 @@ module gui{
 	opens gui.Controllers.ProdutoControllers;
 	opens gui.Controllers.UsuarioControllers;
 	opens gui.Controllers.VendaControllers;
+	opens gui.Controllers.TributacaoControllers;
 	
     exports gui;
     exports gui.Dtos;
@@ -32,6 +33,6 @@ module gui{
     exports gui.Controllers.ProdutoControllers;
     exports gui.Controllers.UsuarioControllers;
     exports gui.Controllers.VendaControllers;
-
+    exports gui.Controllers.TributacaoControllers;
    
 }

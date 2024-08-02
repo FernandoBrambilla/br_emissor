@@ -122,7 +122,7 @@ public class MenuNovoProdutoController {
 	public void btnTributacao(ActionEvent action) throws IOException {
 		limparSelecaoBtns();
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(App.class.getResource("ProdutoViews/Tributacao.fxml"));
+		loader.setLocation(App.class.getResource("TributacaoViews/Tributacao.fxml"));
 		getTelaBase().setCenter(loader.load());
 		getBtnTributacao().setStyle("-fx-background-color:  deedfc; ");
 

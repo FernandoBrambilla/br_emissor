@@ -1,7 +1,13 @@
 
 package com.fernando.Entities;
 
+import java.io.Serializable;
+import java.time.LocalDate;
+
+import org.springframework.hateoas.RepresentationModel;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,107 +16,158 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.Year;
-import org.springframework.hateoas.RepresentationModel;
 
-@Entity 
+@Entity
 @Table(name = "ncm")
-public class NCM extends RepresentationModel<NCM> implements Serializable{
-    private static final long serialVersionUID = 1L;
-    
-    @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY) 
-    private Long id;
-    
-    private String ncm;
-    
-    private String descricao;
-    
-    @JsonFormat(pattern="dd/MM/yyyy")
-    @Column (name = "data_inicio")
-    @Temporal(TemporalType.DATE)
-    private LocalDate dataInicio;
-    
-    @JsonFormat(pattern="dd/MM/yyyy")
-    @Column (name = "data_fim")
-    @Temporal(TemporalType.DATE)
-    private LocalDate dataFim;
-    
-    private String ato;
-    
-    private String numero;
-    
-    @JsonFormat(pattern="yyyy")
-    @Temporal(TemporalType.DATE)
-    private Year ano;
+public class NCM extends RepresentationModel<NCM> implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-    public Long getId() {
-        return id;
-    }
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	private String ncm;
 
-    public String getNcm() {
-        return ncm;
-    }
+	private String ex;
 
-    public void setNcm(String ncm) {
-        this.ncm = ncm;
-    }
+	private String tipo;
 
-    public String getDescricao() {
-        return descricao;
-    }
+	private String descricao;
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
+	private Double nacionalfederal;
 
-    public LocalDate getDataInicio() {
-        return dataInicio;
-    }
+	private Double importadosfederal;
 
-    public void setDataInicio(LocalDate dataInicio) {
-        this.dataInicio = dataInicio;
-    }
+	private Double estadual;
 
-    public LocalDate getDataFim() {
-        return dataFim;
-    }
+	private Double municipal;
 
-    public void setDataFim(LocalDate dataFim) {
-        this.dataFim = dataFim;
-    }
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	@Column(name = "data_inicio")
+	@Temporal(TemporalType.DATE)
+	private LocalDate vigenciainicio;
 
-    public String getAto() {
-        return ato;
-    }
+	@JsonFormat(pattern = "dd/MM/yyyy")
+	@Column(name = "data_fim")
+	@Temporal(TemporalType.DATE)
+	private LocalDate vigenciafim;
 
-    public void setAto(String ato) {
-        this.ato = ato;
-    }
+	private String chave;
 
-    public String getNumero() {
-        return numero;
-    }
+	private String versao;
 
-    public void setNumero(String numero) {
-        this.numero = numero;
-    }
+	private String fonte;
 
-    public Year getAno() {
-        return ano;
-    }
+	public Long getId() {
+		return id;
+	}
 
-    public void setAno(Year ano) {
-        this.ano = ano;
-    }
-    
-    
-    
-    
+	public String getNcm() {
+		return ncm;
+	}
+
+	public String getEx() {
+		return ex;
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public String getDescricao() {
+		return descricao;
+	}
+
+	public Double getNacionalfederal() {
+		return nacionalfederal;
+	}
+
+	public Double getImportadosfederal() {
+		return importadosfederal;
+	}
+
+	public Double getEstadual() {
+		return estadual;
+	}
+
+	public Double getMunicipal() {
+		return municipal;
+	}
+
+	public LocalDate getVigenciainicio() {
+		return vigenciainicio;
+	}
+
+	public LocalDate getVigenciafim() {
+		return vigenciafim;
+	}
+
+	public String getChave() {
+		return chave;
+	}
+
+	public String getVersao() {
+		return versao;
+	}
+
+	public String getFonte() {
+		return fonte;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public void setNcm(String ncm) {
+		this.ncm = ncm;
+	}
+
+	public void setEx(String ex) {
+		this.ex = ex;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+
+	public void setNacionalfederal(Double nacionalfederal) {
+		this.nacionalfederal = nacionalfederal;
+	}
+
+	public void setImportadosfederal(Double importadosfederal) {
+		this.importadosfederal = importadosfederal;
+	}
+
+	public void setEstadual(Double estadual) {
+		this.estadual = estadual;
+	}
+
+	public void setMunicipal(Double municipal) {
+		this.municipal = municipal;
+	}
+
+	public void setVigenciainicio(LocalDate vigenciainicio) {
+		this.vigenciainicio = vigenciainicio;
+	}
+
+	public void setVigenciafim(LocalDate vigenciafim) {
+		this.vigenciafim = vigenciafim;
+	}
+
+	public void setChave(String chave) {
+		this.chave = chave;
+	}
+
+	public void setVersao(String versao) {
+		this.versao = versao;
+	}
+
+	public void setFonte(String fonte) {
+		this.fonte = fonte;
+	}
+
 }

@@ -20,7 +20,7 @@ public class ProdutoDto {
     
     private CategoriaProdutoDto categoria;
     
-    private Markup markup;
+    private MarkupDto markup;
     
     private String fornecedor;
     
@@ -96,7 +96,7 @@ public class ProdutoDto {
 		return categoria;
 	}
 
-	public Markup getMarkup() {
+	public MarkupDto getMarkup() {
 		return markup;
 	}
 
@@ -160,7 +160,7 @@ public class ProdutoDto {
 		this.categoria = categoria;
 	}
 
-	public void setMarkup(Markup markup) {
+	public void setMarkup(MarkupDto markup) {
 		this.markup = markup;
 	}
 

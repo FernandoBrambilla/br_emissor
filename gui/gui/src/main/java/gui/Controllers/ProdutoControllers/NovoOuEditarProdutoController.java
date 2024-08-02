@@ -14,7 +14,7 @@ import org.json.JSONObject;
 import gui.App;
 import gui.Controllers.ClienteControllers.ClientesController;
 import gui.Dtos.CategoriaProdutoDto;
-import gui.Dtos.Markup;
+import gui.Dtos.MarkupDto;
 import gui.Dtos.Style;
 import gui.Dtos.UnidadeProdutoDto;
 import gui.Utilities.Mascaras;
@@ -58,7 +58,7 @@ public class NovoOuEditarProdutoController {
 
 	private static ComboBox<UnidadeProdutoDto> unidade;
 
-	private static Markup markup = new Markup();
+	private static MarkupDto markup = new MarkupDto();
 
 	@FXML
 	private Pane root;
@@ -125,7 +125,7 @@ public class NovoOuEditarProdutoController {
 		return unidade;
 	}
 
-	public static Markup getMarkup() {
+	public static MarkupDto getMarkup() {
 		return markup;
 	}
 
@@ -133,7 +133,7 @@ public class NovoOuEditarProdutoController {
 		NovoOuEditarProdutoController.unidade = unidade;
 	}
 
-	public static void setMarkup(Markup markup) {
+	public static void setMarkup(MarkupDto markup) {
 		NovoOuEditarProdutoController.markup = markup;
 	}
 
@@ -305,7 +305,7 @@ public class NovoOuEditarProdutoController {
 			try {
 				mostrarTelaMarkup(e);
 			} catch (IOException e1) {
-				e1.printStackTrace();
+				e1.printStackTrace(); 
 			}
 		});
 
@@ -377,7 +377,7 @@ public class NovoOuEditarProdutoController {
 				getBtnMarkup().requestFocus();
 				calcularValorVenda();
 			}
-
+ 
 		});
 
 		getBtnMarkup().setOnKeyPressed((keyEvent) -> {

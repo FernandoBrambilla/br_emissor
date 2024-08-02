@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0" prefWidth="750.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controllers.TributacaoControllers.tributacaoController">
+   <children>
+      <TextField fx:id="descricao" layoutX="140.0" layoutY="23.0" prefHeight="30.0" prefWidth="540.0" promptText="Normal">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </TextField>
+      <TextField fx:id="custo" accessibleRole="BUTTON" layoutX="140.0" layoutY="145.0" prefHeight="30.0" prefWidth="190.0" promptText="R$ 50,00">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </TextField>
+      <CheckBox fx:id="auto" layoutX="71.0" layoutY="204.0" mnemonicParsing="false" onAction="#calcularValorVendaAutomatico" text="Tributação Monofásica">
+         <font>
+            <Font name="Calibri" size="15.0" />
+         </font>
+      </CheckBox>
+      <Button fx:id="btnMarkup" graphicTextGap="0.0" layoutX="360.0" layoutY="275.0" mnemonicParsing="false" onAction="#mostrarTelaMarkup" prefHeight="30.0" prefWidth="160.0" style="-fx-background-color: white;" text="Seguir Markup Padrão" textAlignment="RIGHT">
+         <font>
+            <Font name="Calibri" size="15.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="btnSalvar" layoutX="411.0" layoutY="451.0" mnemonicParsing="false" onAction="#salvar" prefHeight="30.0" prefWidth="113.0" style="-fx-background-color: #2484BF;" text="Salvar  (F2)" textFill="WHITE">
+         <font>
+            <Font size="15.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="btnCancelar" layoutX="552.0" layoutY="451.0" mnemonicParsing="false" onAction="#cancelar" prefHeight="30.0" prefWidth="113.0" style="-fx-background-color: #2484BF;" text="Cancelar" textFill="WHITE">
+         <font>
+            <Font size="15.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Label alignment="CENTER_RIGHT" layoutX="20.0" layoutY="27.0" prefHeight="30.0" prefWidth="100.0" text="Nome">
+         <font>
+            <Font name="Calibri" size="15.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER_RIGHT" layoutX="20.0" layoutY="81.0" prefHeight="30.0" prefWidth="94.0" text="Origem">
+         <font>
+            <Font name="Calibri" size="15.0" />
+         </font>
+      </Label>
+      <Separator layoutX="6.0" layoutY="432.0" prefHeight="0.0" prefWidth="729.0" />
+      <Label fx:id="info" alignment="CENTER" layoutX="5.0" layoutY="-1.0" prefHeight="18.0" prefWidth="740.0" textFill="RED">
+         <font>
+            <Font name="Calibri" size="14.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER_RIGHT" layoutX="20.0" layoutY="149.0" prefHeight="30.0" prefWidth="100.0" text="\% ICMS">
+         <font>
+            <Font name="Calibri" size="15.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER_RIGHT" layoutX="12.0" layoutY="275.0" prefHeight="30.0" prefWidth="113.0" text="Margem de Lucro">
+         <font>
+            <Font name="Calibri" size="15.0" />
+         </font>
+      </Label>
+      <ComboBox layoutX="140.0" layoutY="83.0" prefHeight="30.0" prefWidth="540.0" />
+      <CheckBox fx:id="auto1" layoutX="330.0" layoutY="204.0" mnemonicParsing="false" onAction="#calcularValorVendaAutomatico" text="Tornar essa a tributação de todos os produtos">
+         <font>
+            <Font name="Calibri" size="15.0" />
+         </font>
+      </CheckBox>
+   </children>
+</Pane>
