@@ -28,13 +28,13 @@ public class NcmService {
 		this.repository = repository;
 		this.mapper = mapper;
 	}
-
+ 
 	// FindAll
 	public List<NCM> findAll() {
 		var entity = repository.findAll().stream().map(ncm -> mapper.map(ncm, NCM.class)).collect(Collectors.toList());
 		// LINK HATEOAS
 		entity.stream()
-				.forEach(ncm -> ncm.add(linkTo(methodOn(NCMController.class).findById(ncm.getId())).withSelfRel()));
+				.forEach(ncm -> ncm.add(linkTo(methodOn(NCMController.class).findById(ncm.getNcm())).withSelfRel()));
 		return entity;
 	}
 
@@ -44,7 +44,7 @@ public class NcmService {
 				.collect(Collectors.toList());
 		// LINK HATEOAS
 		entity.stream()
-				.forEach(ncm -> ncm.add(linkTo(methodOn(NCMController.class).findById(ncm.getId())).withSelfRel()));
+				.forEach(ncm -> ncm.add(linkTo(methodOn(NCMController.class).findById(ncm.getNcm())).withSelfRel()));
 		return entity;
 	} 
 
@@ -64,22 +64,30 @@ public class NcmService {
 		var ncmVO = repository.save(ncm);
 
 		// LINK HATEOAS
-		ncmVO.add(linkTo(methodOn(NCMController.class).findById(ncmVO.getId())).withSelfRel());
+		ncmVO.add(linkTo(methodOn(NCMController.class).findById(ncmVO.getNcm())).withSelfRel());
 		return repository.save(ncmVO);
 	}
 
 	// Update
 	public NCM update(NCM ncm) {
 		if (ncm == null)
-			throw new RequiredObjectIsNullException();
-
-		NCM entity = repository.findById(ncm.getId()).orElseThrow(() -> new ResourceNotFoundException());
-
-
-		
-
+			throw new RequiredObjectIsNullException(); 
+		NCM entity = repository.findById(ncm.getNcm()).orElseThrow(() -> new ResourceNotFoundException()); 
+		entity.setNcm(ncm.getNcm());
+		entity.setEx(ncm.getEx());
+		entity.setTipo(ncm.getTipo());
+		entity.setDescricao(ncm.getDescricao());
+		entity.setNacionalfederal(ncm.getNacionalfederal());
+		entity.setImportadosfederal(ncm.getImportadosfederal());
+		entity.setEstadual(ncm.getEstadual());
+		entity.setMunicipal(ncm.getMunicipal());
+		entity.setVigenciainicio(ncm.getVigenciainicio());
+		entity.setVigenciafim(ncm.getVigenciafim());
+		entity.setChave(ncm.getChave());
+		entity.setVersao(ncm.getVersao());
+		entity.setFonte(ncm.getFonte());
 		// LINK HATEOAS
-		entity.add(linkTo(methodOn(NCMController.class).findById(ncm.getId())).withSelfRel());
+		entity.add(linkTo(methodOn(NCMController.class).findById(ncm.getNcm())).withSelfRel());
 		return repository.save(entity);
 	}
 

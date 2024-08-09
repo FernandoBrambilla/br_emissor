@@ -6,15 +6,15 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDateTime;
 
 import org.json.JSONObject;
 
 import gui.App;
-import gui.Controllers.ClienteControllers.ClientesController;
+import gui.Controllers.PrincipalControllers.PrincipalController;
 import gui.Dtos.CategoriaProdutoDto;
 import gui.Dtos.MarkupDto;
+import gui.Dtos.ProdutoDto;
 import gui.Dtos.Style;
 import gui.Dtos.UnidadeProdutoDto;
 import gui.Utilities.Mascaras;
@@ -45,6 +45,10 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class NovoOuEditarProdutoController {
+	
+	private static String url = PrincipalController.getUrl();
+
+	private static String token = PrincipalController.getAccessToken();
 
 	private static ObservableList<CategoriaProdutoDto> listCategorias;
 
@@ -91,6 +95,9 @@ public class NovoOuEditarProdutoController {
 
 	@FXML
 	private Button btnMarkup;
+
+	@FXML
+	private TextField estoque;
 
 	@FXML
 	private TextArea obs;
@@ -190,6 +197,14 @@ public class NovoOuEditarProdutoController {
 	@SuppressWarnings("exports")
 	public static TextField getMarkupText() {
 		return markupText;
+	}
+
+	public TextField getEstoque() {
+		return estoque;
+	}
+
+	public void setEstoque(TextField estoque) {
+		this.estoque = estoque;
 	}
 
 	@SuppressWarnings("exports")
@@ -294,6 +309,7 @@ public class NovoOuEditarProdutoController {
 		markup = MarkupPadraoController.buscarMarkup();
 		Mascaras.monetaryField(getValor());
 		Mascaras.monetaryField(getCusto());
+		Mascaras.numericField(getCusto());
 
 		getRoot().getChildren().add(3, criarComboBoxCategorias());
 		getRoot().getChildren().add(4, criarComboBoxUnidades());
@@ -305,13 +321,13 @@ public class NovoOuEditarProdutoController {
 			try {
 				mostrarTelaMarkup(e);
 			} catch (IOException e1) {
-				e1.printStackTrace(); 
+				e1.printStackTrace();
 			}
 		});
 
 		getRoot().setOnKeyReleased((keyEvent) -> {
 			if (keyEvent.getCode() == KeyCode.F2)
-				salvarProduto();
+				criarProduto();
 		});
 
 		getRoot().setOnKeyReleased((keyEvent) -> {
@@ -377,7 +393,7 @@ public class NovoOuEditarProdutoController {
 				getBtnMarkup().requestFocus();
 				calcularValorVenda();
 			}
- 
+
 		});
 
 		getBtnMarkup().setOnKeyPressed((keyEvent) -> {
@@ -824,42 +840,77 @@ public class NovoOuEditarProdutoController {
 	/**
 	 * Salva Produto no Banco de dados
 	 */
-	public void salvarProduto() {
+	
+	
+	public void criarProduto() {
 		Style style = new Style();
 		if (getEan_getin().getText().isEmpty() || getDescricao().getText().isEmpty()) {
 			getInfo().setText("Campos Obrigatórios!");
-			
+
 			style.campoObrigatorio(getEan_getin());
 			style.campoObrigatorio(getDescricao());
-		}else {
+		} else {
 			style.campoObrigatorioRemove(getEan_getin());
 			style.campoObrigatorioRemove(getDescricao());
 			getInfo().setText(null);
-			/*
+			
+		
+			
+			//CRIAR NOVO PRODUTO
+			ProdutoDto p = new ProdutoDto();
+			p.setEAN_GTIN(getEan_getin().getText());
+			p.setDescricao(getDescricao().getText());
+			p.setCodigo("00789");
+			p.setValorVenda(Double.parseDouble(getValor().getText()));
+			p.setCusto(Double.parseDouble(getCusto().getText()));
+			p.setEstoque(Integer.parseInt(getEstoque().getText()));
+			p.setUnidadeProduto(getUnidade().getSelectionModel().getSelectedItem());
+			p.setCategoria(getCategoria().getSelectionModel().getSelectedItem());
+			p.setMarkup(getMarkup());
+			p.setFornecedor("Reval");
+			p.setTributacao("1"); 
+			
+			p.setCest("");
+			p.setDataInclusao(LocalDateTime.now());
+			
+		try {
+			JSONObject unidade = new JSONObject();
+			unidade.put("id", p.getUnidadeProduto().getId());
+			
+			JSONObject markup = new JSONObject();
+			markup.put("id", p.getMarkup().getId());
+			
+			JSONObject categoria = new JSONObject();
+			categoria.put("id", p.getCategoria().getId());
+			
+			JSONObject ncm = new JSONObject();
+			ncm.put("id", 3);
+			
 			JSONObject json = new JSONObject();
-			json.put("name", getName().getText()); 
-			json.put("tipo", tipo);
-			json.put("phone", getPhone().getText());
-			json.put("email", getEmail().getText());
-			json.put("cpf_cnpj", getCpf_cnpj().getText());
-			json.put("rg_ie", getRg_ie().getText());
-			json.put("dateNasc_const", dateNascConst.format(formatter));
-			json.put("dateExp", dateExp.format(formatter));
-			json.put("address", getAdress().getText());
-			json.put("addressNumber", getNum().getText());
-			json.put("addressComplement", getCompl().getText());
-			json.put("city", getCity().getText());
-			json.put("bairro" , getBairro().getText());
-			json.put("uf", getUf().getValue());
-			json.put("cep", getCep().getText());
-			json.put("obs", getObs().getText());
-
+			json.put("descricao", p.getDescricao());
+			json.put("codigo", p.getCodigo());
+			json.put("valorVenda", p.getValorVenda());
+			json.put("custo", p.getCusto());
+			json.put("estoque", p.getEstoque());
+			json.put("utilizarMarkup", p.getMarkup().isUtilizar());
+			json.put("unidadeProduto", unidade);
+			json.put("markup", markup);
+			json.put("categoria", categoria);
+			json.put("fornecedor", 1); //<<<<<<<<<<<<<<<<<<<<<<<VER FORNCECEDOR
+			json.put("tributacao", 1);
+			json.put("ncm", ncm);
+			json.put("cest", 1);
+			json.put("dataInclusao" , p.getDataInclusao());
+			json.put("status" , 1);
+			json.put("ean_GTIN", p.getEAN_GTIN());
+	
+			
 			// REQUIÇÃO
-			String url = "http://localhost:8080/clients";
+			String endpoint = url + "products";
 			HttpClient client = HttpClient.newHttpClient();
-			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(url))
+			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(endpoint))
 					.header("Authorization", "Bearer " + token).header("Content-Type", "application/json")
- 					.POST(HttpRequest.BodyPublishers.ofString(json.toString())).build();
+					.POST(HttpRequest.BodyPublishers.ofString(json.toString())).build();
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			String message = response.body();
 			int status = response.statusCode();
@@ -867,32 +918,28 @@ public class NovoOuEditarProdutoController {
 			if (status == 200) {
 				Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 				alert.setHeaderText(null);
-				alert.setContentText("Cliente \"" + getName().getText() + "\" cadastrado com sucesso! ");
+				alert.setContentText("Produto \"" + getDescricao().getText() + "\" cadastrado com sucesso! ");
 				alert.showAndWait();
 				Stage stage = (Stage) btnCancelar.getScene().getWindow();
 				stage.close();
-
+				
 				// ATUALIZA A TABELA
-				ClientesController.popularTabela();
+				ProdutosController.popularTabela();
+		
 			} else {
 
 				Alert alert = new Alert(Alert.AlertType.ERROR);
 				alert.setHeaderText(null);
-				alert.setContentText("Cliente \"" + getName().getText() + "\" não cadastrado! Motivo: " + message);
+				alert.setContentText("Produto \"" + getDescricao().getText() + "\" não cadastrado! Motivo: " + message);
 				alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
 				alert.showAndWait();
 
 			}
-		}
-	} catch (Exception e) {
-		Alert alert = new Alert(Alert.AlertType.ERROR);
-		alert.setHeaderText(null);
-		alert.setContentText("Erro. " + e.getMessage() + e.getCause());
-		alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-		alert.showAndWait();
-		*/
-	}
 		
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		}
 	}
 
 	@SuppressWarnings("exports")
@@ -907,7 +954,7 @@ public class NovoOuEditarProdutoController {
 
 	@SuppressWarnings("exports")
 	public void salvar(ActionEvent action) throws Exception {
-		salvarProduto();
+		criarProduto();
 	}
 
 	@SuppressWarnings("exports")

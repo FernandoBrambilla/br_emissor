@@ -6,7 +6,7 @@ public class NcmDto {
 
 	private Long id;
 	
-	private String ncm;
+	private Long ncm;
 
 	private String ex;
 
@@ -32,7 +32,7 @@ public class NcmDto {
 
 	private String fonte;
 
-	public NcmDto(String ncm, String ex, String tipo, String descricao, Double nacionalfederal,
+	public NcmDto(Long ncm, String ex, String tipo, String descricao, Double nacionalfederal,
 			Double importadosfederal, Double estadual, Double municipal, LocalDate dataInicio, LocalDate dataFim,
 			String chave, String versao, String fonte) {
 
@@ -56,7 +56,6 @@ public class NcmDto {
 	}
 	
 	public NcmDto(NcmDto selectedItem) {
-		this.id = selectedItem.getId();
 		this.ncm = selectedItem.getNcm();
 		this.ex = selectedItem.getEx();
 		this.tipo = selectedItem.getTipo();
@@ -80,7 +79,7 @@ public class NcmDto {
 		this.id = id;
 	}
 
-	public String getNcm() {
+	public Long getNcm() {
 		return ncm;
 	}
 
@@ -132,7 +131,7 @@ public class NcmDto {
 		return fonte;
 	}
 
-	public void setNcm(String ncm) {
+	public void setNcm(Long ncm) {
 		this.ncm = ncm;
 	}
 
@@ -186,10 +185,7 @@ public class NcmDto {
 
 	@Override
 	public String toString() {
-		return "NcmDto [ncm=" + ncm +   ", /n ex=" + ex + ", tipo=" + tipo + ", descricao=" + descricao
-				+ ", nacionalfederal=" + nacionalfederal + ", importadosfederal=" + importadosfederal + ", estadual="
-				+ estadual + ", municipal=" + municipal + ", dataInicio=" + dataInicio + ", dataFim=" + dataFim
-				+ ", chave=" + chave + ", versao=" + versao + ", fonte=" + fonte + "]";
+		return "" + ncm +   "";
 	}
 	
 	

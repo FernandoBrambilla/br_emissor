@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.net.URI;
-import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -14,30 +13,42 @@ import java.nio.file.Files;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Enumeration;
 import java.util.List;
-import java.util.ResourceBundle;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import gui.App;
+import gui.Controllers.ClienteControllers.ClientesController;
 import gui.Controllers.PrincipalControllers.PrincipalController;
 import gui.Dtos.NcmDto;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
+import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Region;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -53,11 +64,21 @@ public class NCMController {
 
 	public static ObservableList<NcmDto> observableList;
 
+	List<NcmDto> allNcms = new ArrayList<>();
+
+	double progresso;
+
 	@FXML
 	private TextField ncm;
 
 	@FXML
 	private ImageView pesquisarNcm;
+
+	@FXML
+	private ProgressBar barraProgresso;
+
+	@FXML
+	private Label info;
 
 	@FXML
 	private Button importNcm;
@@ -71,6 +92,9 @@ public class NCMController {
 	@FXML
 	private Button btnCancelar;
 
+	@FXML
+	private Button btnCancelarImport;
+
 	public TextField getNcm() {
 		return ncm;
 	}
@@ -83,8 +107,32 @@ public class NCMController {
 		return importNcm;
 	}
 
+	public ProgressBar getBarraProgresso() {
+		return barraProgresso;
+	}
+
+	public void setBarraProgresso(ProgressBar barraProgresso) {
+		this.barraProgresso = barraProgresso;
+	}
+
+	public Button getBtnCancelarImport() {
+		return btnCancelarImport;
+	}
+
+	public void setBtnCancelarImport(Button btnCancelarImport) {
+		this.btnCancelarImport = btnCancelarImport;
+	}
+
 	public BorderPane getBase() {
 		return base;
+	}
+
+	public Label getInfo() {
+		return info;
+	}
+
+	public void setInfo(Label info) {
+		this.info = info;
 	}
 
 	public Button getBtnSelecionar() {
@@ -151,6 +199,11 @@ public class NCMController {
 		NCMController.token = token;
 	}
 
+	List<NcmDto> ncms;
+	int size = 0;
+	double progressso = 0;
+
+	@SuppressWarnings("unchecked")
 	public void initialize() throws Exception {
 		getBase().setTop(construirTabela());
 
@@ -162,7 +215,206 @@ public class NCMController {
 				stage.close();
 			}
 		});
+		getImportNcm().setOnAction(new EventHandler<ActionEvent>() {
+			@Override
+			public void handle(ActionEvent event) {
+				Stage stage = (Stage) getBase().getScene().getWindow();
 
+				try {
+					ncms = load(stage);
+					allNcms = getAllNCM();
+					if (ncms == null) {
+						return;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				HttpClient client = HttpClient.newHttpClient();
+				String endpoint = url + "ncm";
+				esconderControles();
+				Service<Object> service = new Service<Object>() {
+					@Override
+					protected Task createTask() {
+						return new Task() {
+							@Override
+							protected ObservableList<NcmDto> call() throws Exception {
+								if (allNcms.size() == 0) {
+									// SALVA TABELA CASO BANCO ESTEJA VAZIO
+									JSONObject toSalvar = new JSONObject();
+									System.out.println("salvando");
+									System.out.println(ncms.size());
+									for (int i = 0; i < ncms.size(); i++) {
+										toSalvar.put("ncm", ncms.get(i).getNcm());
+										toSalvar.put("ex", ncms.get(i).getEx());
+										toSalvar.put("tipo", ncms.get(i).getTipo());
+										toSalvar.put("descricao", ncms.get(i).getDescricao());
+										toSalvar.put("nacionalfederal", ncms.get(i).getNacionalfederal());
+										toSalvar.put("importadosfederal", ncms.get(i).getImportadosfederal());
+										toSalvar.put("estadual", ncms.get(i).getEstadual());
+										toSalvar.put("municipal", ncms.get(i).getMunicipal());
+										toSalvar.put("vigenciainicio", ncms.get(i).getDataInicio());
+										toSalvar.put("vigenciafim", ncms.get(i).getDataFim());
+										toSalvar.put("chave", ncms.get(i).getChave());
+										toSalvar.put("versao", ncms.get(i).getVersao());
+										toSalvar.put("fonte", ncms.get(i).getFonte());
+										HttpRequest request = HttpRequest.newBuilder().uri(URI.create(endpoint))
+												.header("Authorization", "Bearer " + token)
+												.header("Content-Type", "application/json")
+												.POST(HttpRequest.BodyPublishers.ofString(toSalvar.toString())).build();
+										HttpResponse<String> response = client.send(request,
+												HttpResponse.BodyHandlers.ofString());
+										size++;
+										progresso = (size * 100) / (ncms.size());
+										updateProgress(progresso, 100);
+										if (response.statusCode() != 200) {
+											System.out.println(response.body());
+										}
+
+									}
+									mostrarControles();
+									updateMessage("Finished.");
+									popularTabela();
+									return FXCollections.observableArrayList();
+								} else {
+									// ATUALIZA BANCO COM TABELA NOVA
+									JSONObject toUpdate = new JSONObject();
+									System.out.println("atualizando");
+									progresso = 0 ;
+									NcmDto ncm;
+									int tamanhoBanco = allNcms.size();
+									int tamanhoTbela = ncms.size();
+									for (int i = 0; i < allNcms.size(); i++) {
+										ncm = new NcmDto(allNcms.get(i));
+										toUpdate.put("id", ncm.getId());
+										toUpdate.put("ncm", ncm.getNcm());
+										toUpdate.put("ex", ncms.get(i).getEx());
+										toUpdate.put("tipo", ncms.get(i).getTipo());
+										toUpdate.put("descricao", ncms.get(i).getDescricao());
+										toUpdate.put("nacionalfederal", ncms.get(i).getNacionalfederal());
+										toUpdate.put("importadosfederal", ncms.get(i).getImportadosfederal());
+										toUpdate.put("estadual", ncms.get(i).getEstadual());
+										toUpdate.put("municipal", ncms.get(i).getMunicipal());
+										toUpdate.put("vigenciainicio", ncms.get(i).getDataInicio());
+										toUpdate.put("vigenciafim", ncms.get(i).getDataFim());
+										toUpdate.put("chave", ncms.get(i).getChave());
+										toUpdate.put("versao", ncms.get(i).getVersao());
+										toUpdate.put("fonte", ncms.get(i).getFonte());
+										HttpRequest request = HttpRequest.newBuilder().uri(URI.create(endpoint))
+												.header("Authorization", "Bearer " + token)
+												.header("Content-Type", "application/json")
+												.PUT(HttpRequest.BodyPublishers.ofString(toUpdate.toString())).build();
+										client.send(request, HttpResponse.BodyHandlers.ofString());
+										tamanhoTbela--;
+										tamanhoBanco--;
+										size++;
+										progresso = (size * 100) / (ncms.size());
+										updateProgress(progresso, 100);
+
+									}
+									System.out.println("banco :" + tamanhoBanco);
+									System.out.println("tabela: " + tamanhoTbela);
+									if (tamanhoTbela != 0) {
+										JSONObject toSalvar = new JSONObject();
+										for (int i = 0; i < ncms.size(); i++) {
+											int posicao = ncms.size() - tamanhoTbela;
+											System.out.println(posicao);
+											/*
+											 * toSalvar.put("ncm", ncms.get(i).getNcm()); toSalvar.put("ex",
+											 * ncms.get(i).getEx()); toSalvar.put("tipo", ncms.get(i).getTipo());
+											 * toSalvar.put("descricao", ncms.get(i).getDescricao());
+											 * toSalvar.put("nacionalfederal", ncms.get(i).getNacionalfederal());
+											 * toSalvar.put("importadosfederal", ncms.get(i).getImportadosfederal());
+											 * toSalvar.put("estadual", ncms.get(i).getEstadual());
+											 * toSalvar.put("municipal", ncms.get(i).getMunicipal());
+											 * toSalvar.put("vigenciainicio", ncms.get(i).getDataInicio());
+											 * toSalvar.put("vigenciafim", ncms.get(i).getDataFim());
+											 * toSalvar.put("chave", ncms.get(i).getChave()); toSalvar.put("versao",
+											 * ncms.get(i).getVersao()); toSalvar.put("fonte", ncms.get(i).getFonte());
+											 * HttpRequest request = HttpRequest.newBuilder().uri(URI.create(endpoint))
+											 * .header("Authorization", "Bearer " + token) .header("Content-Type",
+											 * "application/json")
+											 * .POST(HttpRequest.BodyPublishers.ofString(toSalvar.toString())).build();
+											 * HttpResponse<String> response = client.send(request,
+											 * HttpResponse.BodyHandlers.ofString());
+											 */
+										}
+
+									}
+									mostrarControles();
+									updateMessage("Finished.");
+									popularTabela();
+									return FXCollections.observableArrayList();
+								}
+							}
+						};
+					}
+				};
+				getBarraProgresso().progressProperty().bind(service.progressProperty());
+				service.stateProperty().addListener(new ChangeListener<Worker.State>() {
+					@Override
+					public void changed(ObservableValue<? extends Worker.State> observableValue, Worker.State oldState,
+							Worker.State newState) {
+						if (newState == Worker.State.SUCCEEDED) {
+							Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+							alert.setHeaderText(null);
+							alert.setContentText("Tabela IBPT importada com sucesso! " + String.valueOf(size)
+									+ " Ncm(s) importados.");
+							alert.showAndWait();
+							try {
+								popularTabela();
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				});
+				service.start();
+				getBtnCancelarImport().setOnAction(new EventHandler<ActionEvent>() {
+					public void handle(ActionEvent event) {
+						Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+						alert.setHeaderText(null);
+						alert.setContentText("Deseja cancelar a importação da tabela IBPT?");
+						alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+						alert.showAndWait();
+						if (alert.getResult() == ButtonType.CANCEL) {
+							alert.close();
+						}
+						service.cancel();
+						mostrarControles();
+						try {
+							popularTabela();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+		});
+
+	}
+
+	private void esconderControles() {
+		getBase().setVisible(false);
+		getInfo().setVisible(true);
+		getBarraProgresso().setVisible(true);
+		getBtnSelecionar().setDisable(true);
+		getImportNcm().setDisable(true);
+		getNcm().setEditable(false);
+		getInfo().setText("Importando tabela IBPT. Aguarde...");
+		getBtnCancelarImport().setVisible(true);
+
+	}
+
+	private void mostrarControles() {
+		getBase().setVisible(true);
+		getInfo().setVisible(false);
+		getBarraProgresso().setVisible(false);
+		getBtnSelecionar().setDisable(false);
+		getImportNcm().setDisable(false);
+		getNcm().setEditable(true);
+		getBtnCancelarImport().setVisible(false);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -171,31 +423,33 @@ public class NCMController {
 		setTabelaNCM(new TableView<NcmDto>());
 		getTabelaNCM().setMaxHeight(340);
 
-		TableColumn<NcmDto, String> colunaCod = new TableColumn<NcmDto, String>("Código");
-		colunaCod.setCellValueFactory(new PropertyValueFactory<NcmDto, String>("ncm"));
+		TableColumn<NcmDto, Long> colunaCod = new TableColumn<NcmDto, Long>("Código");
+		colunaCod.setCellValueFactory(new PropertyValueFactory<NcmDto, Long>("ncm"));
+		colunaCod.setPrefWidth(90);
 
 		TableColumn<NcmDto, String> colunaDesc = new TableColumn<NcmDto, String>("Descrição");
 		colunaDesc.setCellValueFactory(new PropertyValueFactory<NcmDto, String>("descricao"));
-		colunaDesc.setPrefWidth(400);
+		colunaDesc.setPrefWidth(380);
 
-		TableColumn<NcmDto, LocalDate> colunaDataInicio = new TableColumn<NcmDto, LocalDate>("Data Início");
-		colunaDataInicio.setCellValueFactory(new PropertyValueFactory<NcmDto, LocalDate>("dataInicio"));
+		TableColumn<NcmDto, String> colunaDataInicio = new TableColumn<NcmDto, String>("Data Início");
+		colunaDataInicio.setCellValueFactory(new PropertyValueFactory<NcmDto, String>("dataInicio"));
 
-		TableColumn<NcmDto, LocalDate> colunaDataFim = new TableColumn<NcmDto, LocalDate>("Data Fim");
-		colunaDataFim.setCellValueFactory(new PropertyValueFactory<NcmDto, LocalDate>("dataFim"));
+		TableColumn<NcmDto, String> colunaDataFim = new TableColumn<NcmDto, String>("Data Fim");
+		colunaDataFim.setCellValueFactory(new PropertyValueFactory<NcmDto, String>("dataFim"));
 
-		TableColumn<NcmDto, String> colunaAto = new TableColumn<NcmDto, String>("Versão");
-		colunaAto.setCellValueFactory(new PropertyValueFactory<NcmDto, String>("versao"));
+		TableColumn<NcmDto, String> colunaVersao = new TableColumn<NcmDto, String>("Versão");
+		colunaVersao.setCellValueFactory(new PropertyValueFactory<NcmDto, String>("versao"));
 
-		TableColumn<NcmDto, String> colunaNum = new TableColumn<NcmDto, String>("Fonte");
-		colunaNum.setCellValueFactory(new PropertyValueFactory<NcmDto, String>("fonte"));
+		TableColumn<NcmDto, String> colunaFonte = new TableColumn<NcmDto, String>("Fonte");
+		colunaFonte.setCellValueFactory(new PropertyValueFactory<NcmDto, String>("fonte"));
+		colunaFonte.setPrefWidth(170);
 
 		// POPULA A TABELA
 		popularTabela();
 
 		// ADICIONA AS COLUNAS
-		getTabelaNCM().getColumns().addAll(colunaCod, colunaDesc, colunaDataInicio, colunaDataFim, colunaAto,
-				colunaNum);
+		getTabelaNCM().getColumns().addAll(colunaCod, colunaDesc, colunaDataInicio, colunaDataFim, colunaVersao,
+				colunaFonte);
 
 		if (getTabelaNCM() == null) {
 			getTabelaNCM().setPlaceholder(new Label("Nenhum NCM Cadastrado."));
@@ -223,16 +477,14 @@ public class NCMController {
 			List<NcmDto> ncms = new ArrayList<>();
 			NcmDto ncm;
 			// DateTimeFormatter parser = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			DateTimeFormatter format = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
 			for (int i = 0; i < responseJson.length(); i++) {
 				JSONObject jsonObj = responseJson.getJSONObject(i);
 				String dataInicio = jsonObj.getString("vigenciainicio");
 				String dataFim = jsonObj.getString("vigenciafim");
-
 				ncm = new NcmDto();
 				ncm.setId(jsonObj.getLong("id"));
-				ncm.setNcm(jsonObj.getString("ncm"));
+				ncm.setNcm(jsonObj.getLong("ncm"));
 				ncm.setEx(jsonObj.getString("ex"));
 				ncm.setTipo(jsonObj.getString("tipo"));
 				ncm.setDescricao(jsonObj.getString("descricao"));
@@ -240,84 +492,54 @@ public class NCMController {
 				ncm.setImportadosfederal(jsonObj.getDouble("importadosfederal"));
 				ncm.setEstadual(jsonObj.getDouble("estadual"));
 				ncm.setMunicipal(jsonObj.getDouble("municipal"));
-				ncm.setDataInicio(LocalDate.parse(dataInicio, format));
-				ncm.setDataFim(LocalDate.parse(dataFim, format));
+				ncm.setDataInicio(LocalDate.parse(dataInicio));
+				ncm.setDataFim(LocalDate.parse(dataFim));
 				ncm.setChave(jsonObj.getString("chave"));
 				ncm.setVersao(jsonObj.getString("versao"));
 				ncm.setFonte(jsonObj.getString("fonte"));
 				ncms.add(ncm);
 			}
 			return ncms;
+
 		} catch (Exception e) {
 			throw new Exception(e.getMessage() + e.getCause());
 		}
 	}
 
-	public void salvarTabelaBanco() throws Exception {
-		Stage stage = (Stage) getBase().getScene().getWindow();
-		List<NcmDto> ncms = load(stage);
-		JSONObject json = new JSONObject();
-		String endpoint = url + "ncm";
-		HttpClient client = HttpClient.newHttpClient();
-		DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-
-		for (int i = 0; i < ncms.size(); i++) {
-			json.put("ncm", ncms.get(i).getNcm());
-			json.put("ex", ncms.get(i).getEx());
-			json.put("tipo", ncms.get(i).getTipo());
-			json.put("descricao", ncms.get(i).getDescricao());
-			json.put("nacionalfederal", ncms.get(i).getNacionalfederal());
-			json.put("importadosfederal", ncms.get(i).getImportadosfederal());
-			json.put("estadual", ncms.get(i).getEstadual());
-			json.put("municipal", ncms.get(i).getMunicipal());
-			json.put("vigenciainicio", ncms.get(i).getDataInicio().format(format));
-			json.put("vigenciafim", ncms.get(i).getDataFim().format(format));
-			json.put("chave", ncms.get(i).getChave());
-			json.put("versao", ncms.get(i).getVersao());
-			json.put("fonte", ncms.get(i).getFonte());
-
-			System.out.println(json);
-			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(endpoint))
-					.header("Authorization", "Bearer " + token).header("Content-Type", "application/json")
-					.POST(HttpRequest.BodyPublishers.ofString(json.toString())).build();
-			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-			System.out.println(response.body());
-		}
-	}
-
 	private List<NcmDto> load(Stage stage) throws Exception {
 		FileChooser caixaDialogo = new FileChooser();
-		FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("Arquivo (*.csv)", "*.csv");
-		// FileChooser.ExtensionFilter encoding = new
-		// FileChooser.ExtensionFilter("Arquivo (*.csv)", "*.csv");
-		caixaDialogo.getExtensionFilters().add(extFilter);
+		FileChooser.ExtensionFilter filtroCsv = new FileChooser.ExtensionFilter("Arquivo (*.csv)", "*.csv");
+		caixaDialogo.getExtensionFilters().add(filtroCsv);
 		caixaDialogo.setTitle("Importar tablea IBPT");
-		caixaDialogo.setSelectedExtensionFilter(extFilter);
+		caixaDialogo.setSelectedExtensionFilter(filtroCsv);
+
 		try {
 			File csv = caixaDialogo.showOpenDialog(stage);
-			BufferedReader br = null;
-			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-			try {
-				br = new BufferedReader(new FileReader(csv));
-				// for(int i = 0 ; (linha= br.readLine()) != null; i++) {
-				var entity = Files.lines(csv.toPath()).skip(1).map(line -> line.split(";"))
-						.map(col -> new NcmDto(col[0], col[1], col[2], col[3].replace("\"", ""),
-								Double.valueOf(col[4]).doubleValue(), Double.valueOf(col[5]).doubleValue(),
-								Double.valueOf(col[6]).doubleValue(), Double.valueOf(col[7]),
-								LocalDate.parse(col[8], format), LocalDate.parse(col[9], format), col[10], col[11],
-								col[12]))
-						.collect(Collectors.toList());
-				return entity;
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} finally {
-				if (br != null) {
-					try {
-						br.close();
-					} catch (IOException e) {
-						e.printStackTrace();
+			if (csv != null) {
+				BufferedReader br = null;
+				Locale localeBr = new Locale("pt", "BR");
+				DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy", localeBr);
+				try {
+					br = new BufferedReader(new FileReader(csv));
+					var entity = Files.lines(csv.toPath()).skip(1).map(line -> line.split(";"))
+							.map(col -> new NcmDto(Long.parseLong(col[0]), col[1], col[2], col[3].replace("\"", ""),
+									Double.valueOf(col[4]).doubleValue(), Double.valueOf(col[5]).doubleValue(),
+									Double.valueOf(col[6]).doubleValue(), Double.valueOf(col[7]),
+									LocalDate.parse(col[8].replace("/", "-"), format),
+									LocalDate.parse(col[9].replace("/", "-"), format), col[10], col[11], col[12]))
+							.collect(Collectors.toList());
+					return entity;
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				} finally {
+					if (br != null) {
+						try {
+							br.close();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 					}
 				}
 			}
@@ -327,15 +549,6 @@ public class NCMController {
 		return null;
 	}
 
-	@SuppressWarnings("exports")
-	public void importarNcm(ActionEvent action) throws Exception {
-		try {
-			salvarTabelaBanco();
-		} catch (Exception e) {
-			throw new Exception("Erro ao importar Tabela de NCM: " + e.getMessage());
-		}
-	}
-
 	public static NcmDto retornarNcmSelecionado() {
 		NcmDto ncm = new NcmDto(getTabelaNCM().getSelectionModel().getSelectedItem());
 		return ncm;
@@ -343,9 +556,7 @@ public class NCMController {
 
 	@SuppressWarnings("exports")
 	public void selecionar(ActionEvent action) throws Exception {
-		controller.getNcm().setText(getTabelaNCM().getSelectionModel().getSelectedItem().getNcm());
-		Stage stage = (Stage) getBtnSelecionar().getScene().getWindow();
-		stage.close();
+
 	}
 
 	@SuppressWarnings("exports")

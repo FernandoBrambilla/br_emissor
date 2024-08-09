@@ -24,7 +24,7 @@ import com.fernando.services.ProductService;
 @RequestMapping(value = "/products")
 public class ProductController {
 
-	@Autowired
+	@Autowired 
 	private ProductService service;
 
 	

@@ -19,22 +19,22 @@
             <Font size="15.0" />
          </font>
       </TextField>
-      <TextField fx:id="ean_getin" layoutX="422.0" layoutY="25.0" prefHeight="31.0" prefWidth="260.0" promptText="78980209193191">
+      <TextField fx:id="ean_getin" layoutX="422.0" layoutY="25.0" prefHeight="31.0" prefWidth="260.0">
          <font>
             <Font size="15.0" />
          </font>
       </TextField>
-      <TextField fx:id="descricao" layoutX="140.0" layoutY="75.0" prefHeight="30.0" prefWidth="540.0" promptText="Caneta Esferográfica azul">
+      <TextField fx:id="descricao" layoutX="140.0" layoutY="75.0" prefHeight="30.0" prefWidth="540.0">
          <font>
             <Font size="15.0" />
          </font>
       </TextField>
-      <TextField fx:id="custo" accessibleRole="BUTTON" layoutX="140.0" layoutY="175.0" prefHeight="30.0" prefWidth="190.0" promptText="R$ 50,00">
+      <TextField fx:id="custo" accessibleRole="BUTTON" layoutX="140.0" layoutY="175.0" prefHeight="30.0" prefWidth="190.0">
          <font>
             <Font size="15.0" />
          </font>
       </TextField>
-      <TextField fx:id="valor" layoutX="140.0" layoutY="225.0" prefHeight="30.0" prefWidth="190.0" promptText="R$ 100,00">
+      <TextField fx:id="valor" layoutX="140.0" layoutY="225.0" prefHeight="30.0" prefWidth="190.0">
          <font>
             <Font size="15.0" />
          </font>
@@ -52,7 +52,12 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <TextArea fx:id="obs" layoutX="140.0" layoutY="326.0" prefHeight="90.0" prefWidth="540.0">
+      <TextField fx:id="estoque" layoutX="140.0" layoutY="325.0" prefHeight="30.0" prefWidth="190.0">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </TextField>
+      <TextArea fx:id="obs" layoutX="140.0" layoutY="374.0" prefHeight="51.0" prefWidth="540.0">
          <font>
             <Font size="15.0" />
          </font></TextArea>
@@ -66,17 +71,17 @@
             <Font size="15.0" />
          </font>
       </Button>
-      <Label alignment="CENTER_RIGHT" layoutX="20.0" layoutY="75.0" prefHeight="30.0" prefWidth="100.0" text="Descrição">
+      <Label alignment="CENTER_RIGHT" layoutX="24.0" layoutY="75.0" prefHeight="30.0" prefWidth="100.0" text="Descrição">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
       </Label>
-      <Label alignment="CENTER_RIGHT" layoutX="20.0" layoutY="125.0" prefHeight="30.0" prefWidth="94.0" text="Categoria">
+      <Label alignment="CENTER_RIGHT" layoutX="31.0" layoutY="125.0" prefHeight="30.0" prefWidth="94.0" text="Categoria">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
       </Label>
-      <Label alignment="CENTER_RIGHT" layoutX="17.0" layoutY="225.0" prefHeight="30.0" prefWidth="100.0" text="Valor de Venda">
+      <Label alignment="CENTER_RIGHT" layoutX="28.0" layoutY="225.0" prefHeight="30.0" prefWidth="100.0" text="Valor de Venda">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
@@ -104,17 +109,17 @@
             </ImageView>
          </graphic>
       </Label>
-      <Label alignment="CENTER_RIGHT" layoutX="20.0" layoutY="175.0" prefHeight="30.0" prefWidth="100.0" text="Preço de Custo">
+      <Label alignment="CENTER_RIGHT" layoutX="28.0" layoutY="175.0" prefHeight="30.0" prefWidth="100.0" text="Preço de Custo">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
       </Label>
-      <Label alignment="CENTER_RIGHT" layoutX="12.0" layoutY="275.0" prefHeight="30.0" prefWidth="113.0" text="Margem de Lucro">
+      <Label alignment="CENTER_RIGHT" layoutX="14.0" layoutY="275.0" prefHeight="30.0" prefWidth="113.0" text="Margem de Lucro">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
       </Label>
-      <Label alignment="CENTER_RIGHT" layoutX="20.0" layoutY="350.0" prefHeight="30.0" prefWidth="105.0" text="Observações">
+      <Label alignment="CENTER_RIGHT" layoutX="18.0" layoutY="385.0" prefHeight="30.0" prefWidth="105.0" text="Observações">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
@@ -125,6 +130,11 @@
          </image>
       </ImageView>
       <Label alignment="CENTER_RIGHT" layoutX="385.0" layoutY="125.0" prefHeight="30.0" prefWidth="56.0" text="Unidade">
+         <font>
+            <Font name="Calibri" size="15.0" />
+         </font>
+      </Label>
+      <Label alignment="CENTER_RIGHT" layoutX="12.0" layoutY="325.0" prefHeight="30.0" prefWidth="113.0" text="Estoque">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>

@@ -1,48 +1,50 @@
 package gui.Dtos;
 
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
+import java.util.Locale;
 
 public class ProdutoDto {
 
+	Locale brasil = new Locale("pt", "BR");
+
+	DecimalFormat realFormato = new DecimalFormat("¤ #,###,##0.00");
+
 	private Long id;
-    
-    private String descricao;
-    
-    private String codigo;
-    
-    private Double valorVenda;
-    
-    private Double custo;
-    
-    private Integer estoque;
-    
-    private UnidadeProdutoDto unidadeProduto;
-    
-    private CategoriaProdutoDto categoria;
-    
-    private MarkupDto markup;
-    
-    private String fornecedor;
-    
-    private String tributacao;
-    
-    private Integer ncm;
-    
-    private String descNcm;
-    
-    private String cest;
-    
-    private LocalDateTime dataInclusao;
-   
-    private String EAN_GTIN;
-    
-    
-    public ProdutoDto(ProdutoDto p) {
-		this.id = p.getId();
+
+	private String descricao;
+
+	private String codigo;
+
+	private Double valorVenda;
+
+	private Double custo;
+
+	private Integer estoque;
+
+	private UnidadeProdutoDto unidadeProduto;
+
+	private CategoriaProdutoDto categoria;
+
+	private MarkupDto markup;
+
+	private String fornecedor;
+
+	private String tributacao;
+
+	private NcmDto ncm;
+
+	private String cest;
+
+	private LocalDateTime dataInclusao;
+
+	private String EAN_GTIN;
+
+	public ProdutoDto(ProdutoDto p) {
 		this.descricao = p.getDescricao();
 		this.codigo = p.getCodigo();
-		this.valorVenda = p.getValorVenda();
-		this.custo = p.getCusto();
+		this.valorVenda = Double.valueOf(p.getValorVenda());
+		this.custo = Double.valueOf(p.getCusto());
 		this.estoque = p.getEstoque();
 		this.unidadeProduto = p.getUnidadeProduto();
 		this.categoria = p.getCategoria();
@@ -50,38 +52,33 @@ public class ProdutoDto {
 		this.fornecedor = p.getFornecedor();
 		this.tributacao = p.getTributacao();
 		this.ncm = p.getNcm();
-		this.descNcm = p.getDescNcm();
 		this.cest = p.getCest();
 		this.dataInclusao = p.getDataInclusao();
 		this.EAN_GTIN = p.getEAN_GTIN();
 	}
-    
-    
 
 	public ProdutoDto() {
 		super();
 	}
-
-
 
 	public Long getId() {
 		return id;
 	}
 
 	public String getDescricao() {
-		return descricao;
+		return descricao.toString();
 	}
 
 	public String getCodigo() {
 		return codigo;
 	}
 
-	public Double getValorVenda() {
-		return valorVenda;
+	public String getValorVenda() {
+		return realFormato.format(valorVenda);
 	}
 
-	public Double getCusto() {
-		return custo;
+	public String getCusto() {
+		return realFormato.format(custo);
 	}
 
 	public Integer getEstoque() {
@@ -106,14 +103,6 @@ public class ProdutoDto {
 
 	public String getTributacao() {
 		return tributacao;
-	}
-
-	public Integer getNcm() {
-		return ncm;
-	}
-
-	public String getDescNcm() {
-		return descNcm;
 	}
 
 	public String getCest() {
@@ -172,12 +161,12 @@ public class ProdutoDto {
 		this.tributacao = tributacao;
 	}
 
-	public void setNcm(Integer ncm) {
-		this.ncm = ncm;
+	public NcmDto getNcm() {
+		return ncm;
 	}
 
-	public void setDescNcm(String descNcm) {
-		this.descNcm = descNcm;
+	public void setNcm(NcmDto ncm) {
+		this.ncm = ncm;
 	}
 
 	public void setCest(String cest) {
@@ -192,6 +181,8 @@ public class ProdutoDto {
 		EAN_GTIN = eAN_GTIN;
 	}
 
-	    
+	public String toReal() {
+		return "" + valorVenda + "]";
+	}
 
 }

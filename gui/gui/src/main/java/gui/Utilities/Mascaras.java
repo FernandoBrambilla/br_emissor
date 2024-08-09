@@ -14,6 +14,8 @@ import static javafx.scene.input.KeyCode.F8;
 import static javafx.scene.input.KeyCode.F9;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,6 +53,8 @@ public abstract class Mascaras {
 			}
 		});
 	}
+	
+	
 
 	public static void onlyDecimal(final TextField valor) {
 		valor.textProperty().addListener(new ChangeListener<String>() {

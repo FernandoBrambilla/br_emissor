@@ -118,10 +118,9 @@ public class TributacaoController implements Initializable {
 	INSTANCE = this;
 	}
 	
-	public void pesquisarNCM(MouseEvent event) throws IOException {
+	public void pesquisarNCM(@SuppressWarnings("exports") MouseEvent event) throws IOException {
 		Stage stage = new Stage();
-		FXMLLoader loader = new FXMLLoader();
-		Parent painel = loader.load(App.class.getResource("TributacaoViews/NCM.fxml"));
+		Parent painel = FXMLLoader.load(App.class.getResource("TributacaoViews/NCM.fxml"));
 		Scene scene = new Scene(painel);
 		stage.setTitle("NCM");
 		stage.setScene(scene);
@@ -131,7 +130,7 @@ public class TributacaoController implements Initializable {
 	
 	public void pesquisarCEST(MouseEvent event) {
 
-	}
+	} 
 
 	public void pesquisarTributacao(MouseEvent event) {
 

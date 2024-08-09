@@ -6,12 +6,14 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.plaf.synth.SynthOptionPaneUI;
+import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,6 +22,7 @@ import gui.App;
 import gui.Controllers.PrincipalControllers.PrincipalController;
 import gui.Dtos.CategoriaProdutoDto;
 import gui.Dtos.MarkupDto;
+import gui.Dtos.NcmDto;
 import gui.Dtos.ProdutoDto;
 import gui.Dtos.Style;
 import gui.Dtos.UnidadeProdutoDto;
@@ -110,7 +113,7 @@ public class ProdutosController {
 		this.btnApagar = btnApagar;
 	}
 
-	@FXML 
+	@FXML
 	public void initialize() throws Exception {
 
 		// CRIA UMA CATEGORIA PADRÃO CASO O BANCO SEJA NULL
@@ -118,15 +121,15 @@ public class ProdutosController {
 			CategoriaProdutoDto categoria = new CategoriaProdutoDto();
 			categoria.setDescricao(" ");
 			NovaCategoriaController.criarCategoria(categoria);
-		} 
-		
+		}
+
 		// CRIA UMA UNIDADE PADRÃO CASO O BANCO SEJA NULL
 		if (NovaUnidadeController.buscarUnidadesProduto().isEmpty()) {
 			UnidadeProdutoDto unidade = new UnidadeProdutoDto();
 			unidade.setDescricao(" ");
 			NovaUnidadeController.criarUnidade(unidade);
-		} 
-		 
+		}
+
 		// CRIA UM MARKUP PADRÃO CASO O BANCO SEJA NULL
 		if (MarkupPadraoController.buscarMarkup() == null) {
 			MarkupDto markup = new MarkupDto();
@@ -135,7 +138,7 @@ public class ProdutosController {
 			markup.setUtilizar(false);
 			MarkupPadraoController.criarMarkup(markup);
 		}
- 
+
 	}
 
 	public void aplicaEfeitos() {
@@ -151,79 +154,47 @@ public class ProdutosController {
 
 		setTabelaprodutos(new TableView<ProdutoDto>());
 
+		TableColumn<ProdutoDto, Long> colunaId = new TableColumn<ProdutoDto, Long>("Id");
+		colunaId.setCellValueFactory(new PropertyValueFactory<ProdutoDto, Long>("id"));
+
 		TableColumn<ProdutoDto, String> colunaCod = new TableColumn<ProdutoDto, String>("Código");
 		colunaCod.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("codigo"));
+		colunaCod.setMinWidth(90);
 
 		TableColumn<ProdutoDto, String> colunaDesc = new TableColumn<ProdutoDto, String>("Descrição");
 		colunaDesc.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("descricao"));
+		colunaDesc.setPrefWidth(450);
 
 		TableColumn<ProdutoDto, Integer> colunaEstoque = new TableColumn<ProdutoDto, Integer>("Estoque");
 		colunaEstoque.setCellValueFactory(new PropertyValueFactory<ProdutoDto, Integer>("estoque"));
-		colunaEstoque.setPrefWidth(100);
+		colunaEstoque.setMinWidth(90);
 
-		TableColumn<ProdutoDto, String> colunaCusto = new TableColumn<ProdutoDto, String>("Custo R$");
+		TableColumn<ProdutoDto, String> colunaCusto = new TableColumn<ProdutoDto, String>("Custo");
 		colunaCusto.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("custo"));
 
-		TableColumn<ProdutoDto, String> colunaValor = new TableColumn<ProdutoDto, String>("Preço R$");
+		TableColumn<ProdutoDto, String> colunaValor = new TableColumn<ProdutoDto, String>("Preço");
 		colunaValor.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("valorVenda"));
+		// colunaValor.setMinWidth(90);
 
 		TableColumn<ProdutoDto, String> colunaUni = new TableColumn<ProdutoDto, String>("Unidade");
 		colunaUni.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("unidadeProduto"));
+		colunaUni.setMinWidth(90);
 
 		TableColumn<ProdutoDto, String> colunaCateg = new TableColumn<ProdutoDto, String>("Categoria");
 		colunaCateg.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("categoria"));
 
+		TableColumn<ProdutoDto, Long> colunaNcm = new TableColumn<ProdutoDto, Long>("NCM");
+		colunaNcm.setCellValueFactory(new PropertyValueFactory<ProdutoDto, Long>("ncm"));
+
 		TableColumn<ProdutoDto, String> colunaFornecedor = new TableColumn<ProdutoDto, String>("Fornecedor");
 		colunaFornecedor.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("fornecedor"));
 
-		/*
-		 * TableColumn<Clients, String> colunaRg_Ie = new TableColumn<Clients,
-		 * String>("Rg/Ie"); colunaRg_Ie.setCellValueFactory(new
-		 * PropertyValueFactory<Clients, String>("rg_ie"));
-		 * 
-		 * TableColumn<Clients, LocalDate> colunaDateNasc_cons = new
-		 * TableColumn<Clients, LocalDate>("Data Nasc/Const.");
-		 * colunaDateNasc_cons.setCellValueFactory(new PropertyValueFactory<Clients,
-		 * LocalDate>("dateNasc_const"));
-		 * 
-		 * TableColumn<Clients, LocalDate> colunaDateExp = new TableColumn<Clients,
-		 * LocalDate>("Data de Expedição"); colunaDateExp.setCellValueFactory(new
-		 * PropertyValueFactory<Clients, LocalDate>("dateExp"));
-		 * 
-		 * TableColumn<Clients, String> colunaEndereco = new TableColumn<Clients,
-		 * String>("Endereço"); colunaEndereco.setCellValueFactory(new
-		 * PropertyValueFactory<Clients, String>("address"));
-		 * 
-		 * TableColumn<Clients, String> colunaNum = new TableColumn<Clients,
-		 * String>("Número"); colunaNum.setCellValueFactory(new
-		 * PropertyValueFactory<Clients, String>("addressNumber"));
-		 * 
-		 * TableColumn<Clients, String> colunaComplement = new TableColumn<Clients,
-		 * String>("Complemento"); colunaComplement.setCellValueFactory(new
-		 * PropertyValueFactory<Clients, String>("addressComplement"));
-		 * 
-		 * TableColumn<Clients, String> colunaCity = new TableColumn<Clients,
-		 * String>("Cidade"); colunaCity.setCellValueFactory(new
-		 * PropertyValueFactory<Clients, String>("city"));
-		 * 
-		 * TableColumn<Clients, String> colunaUf = new TableColumn<Clients,
-		 * String>("UF"); colunaUf.setCellValueFactory(new PropertyValueFactory<Clients,
-		 * String>("uf"));
-		 * 
-		 * TableColumn<Clients, String> colunaCep = new TableColumn<Clients,
-		 * String>("Cep"); colunaCep.setCellValueFactory(new
-		 * PropertyValueFactory<Clients, String>("cep"));
-		 * 
-		 * TableColumn<Clients, String> colunaObs = new TableColumn<Clients,
-		 * String>("Obs"); colunaObs.setCellValueFactory(new
-		 * PropertyValueFactory<Clients, String>("obs"));
-		 */
 		// POPULA A TABELA
 		popularTabela();
 
 		// ADICIONA AS COLUNAS
-		getTabelaprodutos().getColumns().addAll(colunaCod, colunaDesc, colunaEstoque, colunaCusto, colunaValor,
-				colunaUni, colunaCateg, colunaFornecedor);
+		getTabelaprodutos().getColumns().addAll(colunaId, colunaCod, colunaDesc, colunaEstoque, colunaCusto,
+				colunaValor, colunaUni, colunaCateg, colunaNcm, colunaFornecedor);
 
 		if (getTabelaprodutos() == null) {
 			getTabelaprodutos().setPlaceholder(new Label("Nenhum Produto Cadastrado."));
@@ -243,45 +214,71 @@ public class ProdutosController {
 
 		try {
 			// BUSCA TODOS PRODUTOS
-			String url = "http://localhost:8080/products";
+			String endpoint = url + "products";
 			HttpClient client = HttpClient.newHttpClient();
-			HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(url))
+			HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(endpoint))
 					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 			JSONArray responseJson = new JSONArray(response.body());
-			
+
 			List<ProdutoDto> produtos = new ArrayList<>();
 			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-			
-			//OBJETOS QUE COMPÕEM UM PRODUTO
-			ProdutoDto produto = new ProdutoDto();
-			UnidadeProdutoDto unidadeProduto = new UnidadeProdutoDto();
-			CategoriaProdutoDto categoriaProduto = new CategoriaProdutoDto();
-			MarkupDto markup = new MarkupDto();
-				//JSONArray unidadeProduto = new JSONArray();
-				
+
+			// OBJETOS QUE COMPÕEM UM PRODUTO
+			ProdutoDto produto;
+			UnidadeProdutoDto unidadeProduto;
+			CategoriaProdutoDto categoriaProduto;
+			;
+			MarkupDto markup;
+			NcmDto ncm;
+			Locale brasil = new Locale("pt", "BR");
+
 			// LOOP CONVERTE JSON EM CLIENTS
 			for (int i = 0; i < responseJson.length(); i++) {
+				produto = new ProdutoDto();
+				unidadeProduto = new UnidadeProdutoDto();
+				categoriaProduto = new CategoriaProdutoDto();
+				markup = new MarkupDto();
+				ncm = new NcmDto();
+
 				JSONObject jsonObj = responseJson.getJSONObject(i);
 				JSONObject unidadeJson = (JSONObject) jsonObj.get("unidadeProduto");
 				JSONObject categoriaJson = (JSONObject) jsonObj.get("categoria");
 				JSONObject markupJson = (JSONObject) jsonObj.get("markup");
-				String dataInclusao = jsonObj.getString("dataInclusao").substring(0, 19).replaceAll("T", " ");	
-				
-				
-				//PRECHE UNIDADE PRODUTO
+				JSONObject ncmJson = jsonObj.getJSONObject("ncm");
+
+				String dataInclusao = jsonObj.getString("dataInclusao").substring(0, 19).replaceAll("T", " ");
+
+				// PRECHE UNIDADE PRODUTO
 				unidadeProduto.setId(unidadeJson.getInt("id"));
 				unidadeProduto.setDescricao(unidadeJson.getString("descricao"));
-				
-				//PRENCHE CATEGORIA PRODUTO
+
+				// PRENCHE CATEGORIA PRODUTO
 				categoriaProduto.setId(categoriaJson.getInt("id"));
 				categoriaProduto.setDescricao(categoriaJson.getString("descricao"));
-				
-				//PRENCHE MARKUP PRODUTO
+
+				// PRENCHE MARKUP PRODUTO
 				markup.setId(markupJson.getInt("id"));
 				markup.setMarkup(new BigDecimal(markupJson.getBigInteger("markup")));
 				markup.setUtilizar(markupJson.getBoolean("utilizar"));
-			
+
+				// PRENCHE NCM PRODUTO
+				ncm.setId(ncmJson.getLong("id"));
+				ncm.setNcm(ncmJson.getLong("ncm"));
+				ncm.setEx(ncmJson.getString("ex"));
+				ncm.setTipo(ncmJson.getString("tipo"));
+				ncm.setDescricao(ncmJson.getString("descricao"));
+				ncm.setNacionalfederal(ncmJson.getDouble("nacionalfederal"));
+				ncm.setImportadosfederal(ncmJson.getDouble("importadosfederal"));
+				ncm.setEstadual(ncmJson.getDouble("estadual"));
+				ncm.setMunicipal(ncmJson.getDouble("municipal"));
+				ncm.setDataInicio(LocalDate.parse(ncmJson.getString("vigenciainicio")));
+				ncm.setDataFim(LocalDate.parse(ncmJson.getString("vigenciafim")));
+				ncm.setChave(ncmJson.getString("chave"));
+				ncm.setVersao(ncmJson.getString("versao"));
+				ncm.setFonte(ncmJson.getString("fonte"));
+
+				// PRENCHE O PRODUTO EM SI
 				produto.setId(jsonObj.getLong("id"));
 				produto.setDescricao(jsonObj.getString("descricao"));
 				produto.setCodigo(jsonObj.getString("codigo"));
@@ -289,10 +286,10 @@ public class ProdutosController {
 				produto.setCusto(jsonObj.getDouble("custo"));
 				produto.setEstoque(jsonObj.getInt("estoque"));
 				produto.setUnidadeProduto(unidadeProduto);
-				produto.setCategoria(categoriaProduto); 
+				produto.setCategoria(categoriaProduto);
 				produto.setMarkup(markup);
 				produto.setTributacao(jsonObj.getString("tributacao"));
-				produto.setNcm(jsonObj.getInt("ncm"));
+				produto.setNcm(ncm);
 				produto.setCest(jsonObj.getString("cest"));
 				produto.setDataInclusao(LocalDateTime.parse(dataInclusao, format));
 				produto.setEAN_GTIN(jsonObj.getString("ean_GTIN"));
@@ -313,13 +310,13 @@ public class ProdutosController {
 		Scene scene = new Scene(painel, 800, 680);
 		stage.setTitle("Cadasto de Produtos");
 		stage.setScene(scene);
-		stage.show(); 
+		stage.show();
 
 	}
 
 	@SuppressWarnings("exports")
 	public void editar(ActionEvent action) throws IOException {
-		// VERIFICA SE FOIS SELECIONADO UM CLIENTE PARA EDITAR 
+		// VERIFICA SE FOIS SELECIONADO UM CLIENTE PARA EDITAR
 		if (ProdutosController.getTabelaprodutos().getSelectionModel().isEmpty()) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setHeaderText(null);

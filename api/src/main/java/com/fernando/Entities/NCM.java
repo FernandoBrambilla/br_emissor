@@ -6,8 +6,6 @@ import java.time.LocalDate;
 
 import org.springframework.hateoas.RepresentationModel;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,15 +21,16 @@ public class NCM extends RepresentationModel<NCM> implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 
-	private String ncm;
-
+	private Long ncm;	
+	
 	private String ex;
 
 	private String tipo;
 
+	@Column(length=512)
 	private String descricao;
 
 	private Double nacionalfederal;
@@ -42,12 +41,10 @@ public class NCM extends RepresentationModel<NCM> implements Serializable {
 
 	private Double municipal;
 
-	@JsonFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "data_inicio")
 	@Temporal(TemporalType.DATE)
 	private LocalDate vigenciainicio;
 
-	@JsonFormat(pattern = "dd/MM/yyyy")
 	@Column(name = "data_fim")
 	@Temporal(TemporalType.DATE)
 	private LocalDate vigenciafim;
@@ -62,7 +59,7 @@ public class NCM extends RepresentationModel<NCM> implements Serializable {
 		return id;
 	}
 
-	public String getNcm() {
+	public Long getNcm() {
 		return ncm;
 	}
 
@@ -118,7 +115,7 @@ public class NCM extends RepresentationModel<NCM> implements Serializable {
 		this.id = id;
 	}
 
-	public void setNcm(String ncm) {
+	public void setNcm(Long ncm) {
 		this.ncm = ncm;
 	}
 

@@ -5,15 +5,16 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import org.springframework.format.annotation.NumberFormat;
 import org.springframework.hateoas.RepresentationModel;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
@@ -29,10 +30,11 @@ public class Product extends RepresentationModel<Product> implements Serializabl
 
 	private String codigo;
 
-	@Column(precision = 13 , scale = 2)
+	@Column(precision = 13, scale = 2)
 	private BigDecimal valorVenda;
 
-	@Column(precision = 13 , scale = 2)
+	@Column(precision = 13, scale = 2)
+	@NumberFormat(pattern = "R$ #,###.00")
 	private BigDecimal custo;
 
 	private Integer estoque;
@@ -40,27 +42,32 @@ public class Product extends RepresentationModel<Product> implements Serializabl
 	@Column(name = "use_markup")
 	private boolean utilizarMarkup = false;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	private ProductUnity unidadeProduto = new ProductUnity("");
-	
-	@OneToOne(cascade = CascadeType.ALL)
+	@ManyToOne()
+	@JoinColumn(name = "unidade_produto_id")
+	private ProductUnity unidadeProduto;
+
+	@ManyToOne()
+	@JoinColumn(name = "markup_id")
 	private Markup markup;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@ManyToOne()
+	@JoinColumn(name = "categoria_id")
 	private ProductCategory categoria;
 
 	private String fornecedor;
 
 	private String tributacao;
 
-	private Integer ncm;
+	@ManyToOne()
+	@JoinColumn(name = "ncm_id")
+	private NCM ncm;
 
 	private String cest;
 
 	private LocalDateTime dataInclusao;
 
 	private String EAN_GTIN;
-	
+
 	private boolean status;
 
 	public Long getId() {
@@ -111,8 +118,12 @@ public class Product extends RepresentationModel<Product> implements Serializabl
 		return tributacao;
 	}
 
-	public Integer getNcm() {
+	public NCM getNcm() {
 		return ncm;
+	}
+
+	public void setNcm(NCM ncm) {
+		this.ncm = ncm;
 	}
 
 	public String getCest() {
@@ -177,10 +188,6 @@ public class Product extends RepresentationModel<Product> implements Serializabl
 
 	public void setTributacao(String tributacao) {
 		this.tributacao = tributacao;
-	}
-
-	public void setNcm(Integer ncm) {
-		this.ncm = ncm;
 	}
 
 	public void setCest(String cest) {

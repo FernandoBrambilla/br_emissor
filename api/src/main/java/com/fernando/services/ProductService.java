@@ -38,7 +38,7 @@ public class ProductService {
 		//LINK HATEOAS
 		entity.stream().forEach(product -> product.add(linkTo(methodOn(ProductController.class)
 				.findById(product.getId())).withSelfRel()));
-		return entity;
+		return entity; 
 	}
 
 	//FindByDesc
