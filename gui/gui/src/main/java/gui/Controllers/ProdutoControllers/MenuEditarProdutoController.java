@@ -14,9 +14,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
-public class MenuNovoProdutoController {
+public class MenuEditarProdutoController {
 	
-	public static MenuNovoProdutoController MenuNovoProdutoController;
+	public static MenuEditarProdutoController MenuNovoProdutoController;
 
 
 	@FXML
@@ -98,11 +98,9 @@ public class MenuNovoProdutoController {
 
 	public void initialize() throws IOException {
 		MenuNovoProdutoController = this;
-		
 		carregarTelaTributacao();
-		
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(App.class.getResource("ProdutoViews/NovoProduto.fxml"));
+		loader.setLocation(App.class.getResource("ProdutoViews/EditarProduto.fxml"));
 		getTelaBase().setCenter(loader.load());
 		getBtnCadastro().setStyle("-fx-background-color:  deedfc; ");
 		
@@ -113,7 +111,7 @@ public class MenuNovoProdutoController {
 	public void btnCadastro(ActionEvent action) throws IOException {
 		limparSelecaoBtns();
 		FXMLLoader loader = new FXMLLoader();
-		loader.setLocation(App.class.getResource("ProdutoViews/NovoProduto.fxml"));
+		loader.setLocation(App.class.getResource("ProdutoViews/EditarProduto.fxml"));
 		getTelaBase().setCenter(loader.load());
 		getBtnCadastro().setStyle("-fx-background-color:  deedfc; ");
 

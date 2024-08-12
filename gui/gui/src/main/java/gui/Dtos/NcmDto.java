@@ -56,7 +56,7 @@ public class NcmDto {
 	}
 	
 	public NcmDto(NcmDto selectedItem) {
-		this.ncm = selectedItem.getNcm();
+		this.ncm = selectedItem.getNcmObj();
 		this.ex = selectedItem.getEx();
 		this.tipo = selectedItem.getTipo();
 		this.descricao = selectedItem.getDescricao();
@@ -79,8 +79,12 @@ public class NcmDto {
 		this.id = id;
 	}
 
-	public Long getNcm() {
+	public Long getNcmObj() {
 		return ncm;
+	}
+	
+	public String getNcm() {
+		return id == 1 ? descricao : ncm.toString();
 	}
 
 	public String getEx() {
@@ -183,10 +187,6 @@ public class NcmDto {
 		this.fonte = fonte;
 	}
 
-	@Override
-	public String toString() {
-		return "" + ncm +   "";
-	}
 	
-	
+	 
 }

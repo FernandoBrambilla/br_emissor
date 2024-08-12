@@ -153,9 +153,9 @@ public class MarkupPadraoController {
 		atualizarMarkup(markup);
 		Stage stage = (Stage) getBtnSalvar().getScene().getWindow();
 		stage.close();
-		NovoOuEditarProdutoController.getCheckBox().setSelected(buscarMarkup().isUtilizar()? true : false);
-		NovoOuEditarProdutoController.getMarkupText().setText(markup.isUtilizar() ? (Mascaras.decimal(markup.getMarkup()) + " %") : "");
-		NovoOuEditarProdutoController.getMarkupText().setEditable(markup.isUtilizar()? false : true);
+		NovoProdutoController.getCheckBox().setSelected(buscarMarkup().isUtilizar()? true : false);
+		NovoProdutoController.getMarkupText().setText(markup.isUtilizar() ? (Mascaras.decimal(markup.getMarkup()) + " %") : "");
+		NovoProdutoController.getMarkupText().setEditable(markup.isUtilizar()? false : true);
 		
 	}
 

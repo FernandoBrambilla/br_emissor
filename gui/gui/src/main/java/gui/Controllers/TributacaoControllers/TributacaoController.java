@@ -5,6 +5,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import gui.App;
+import gui.Dtos.NcmDto;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,7 +13,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -20,7 +20,9 @@ import javafx.stage.Stage;
 
 public class TributacaoController implements Initializable {
 	
-	public static TributacaoController INSTANCE;
+	public static TributacaoController tributacaoController;
+	
+	public static NcmDto ncmS;
 	
 	@FXML
 	private TextField ncm;
@@ -115,16 +117,22 @@ public class TributacaoController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-	INSTANCE = this;
+	tributacaoController = this;
+	try {
+		ncmS = NCMController.buscarNcmById(1l);
+		getNcm().setText(ncmS.getDescricao());
+	} catch (Exception e) {
+		e.printStackTrace();
 	}
-	
+	}
+	 
 	public void pesquisarNCM(@SuppressWarnings("exports") MouseEvent event) throws IOException {
 		Stage stage = new Stage();
 		Parent painel = FXMLLoader.load(App.class.getResource("TributacaoViews/NCM.fxml"));
 		Scene scene = new Scene(painel);
 		stage.setTitle("NCM");
 		stage.setScene(scene);
-		stage.show();
+		stage.show(); 
 		
 	}
 	

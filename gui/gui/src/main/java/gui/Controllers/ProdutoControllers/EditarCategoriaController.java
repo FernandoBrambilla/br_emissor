@@ -81,7 +81,7 @@ public class EditarCategoriaController {
 	}
 
 	public void initialize() throws Exception {
-		categoriaParaEditar = NovoOuEditarProdutoController.getCategoria().getSelectionModel().getSelectedItem();
+		categoriaParaEditar = NovoProdutoController.getCategoria().getSelectionModel().getSelectedItem();
 		getCategoria().setText(categoriaParaEditar.getDescricao());
 
 	}
@@ -112,8 +112,8 @@ public class EditarCategoriaController {
 					alert.showAndWait();
 					Stage stage = (Stage) getBtnSalvar().getScene().getWindow();
 					stage.close();
-					NovoOuEditarProdutoController.atualizarListaCategorias();
-					NovoOuEditarProdutoController.getCategoria().show();
+					NovoProdutoController.atualizarListaCategorias();
+					NovoProdutoController.getCategoria().show();
 				}
 			}
 		} catch (

@@ -33,7 +33,7 @@ public class NovaCategoriaController {
 	private TextField categoria;
 
 	@FXML
-	private Label info; 
+	private Label info;
 
 	@FXML
 	private Button btnSalvar;
@@ -67,7 +67,7 @@ public class NovaCategoriaController {
 	}
 
 	@SuppressWarnings("exports")
-	public void setCategoria(TextField categoria) { 
+	public void setCategoria(TextField categoria) {
 		this.categoria = categoria;
 	}
 
@@ -102,8 +102,8 @@ public class NovaCategoriaController {
 				JSONObject jsonObj = responseJson.getJSONObject(i);
 				categoriaProdutoDto.setId(jsonObj.getInt("id"));
 				categoriaProdutoDto.setDescricao(jsonObj.getString("descricao"));
-				listaCategorias.add(categoriaProdutoDto); 
- 
+				listaCategorias.add(categoriaProdutoDto);
+
 			}
 			return listaCategorias;
 
@@ -119,18 +119,14 @@ public class NovaCategoriaController {
 			HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(endpoint))
 					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-			JSONArray responseJson = new JSONArray(response.body());
+			JSONObject jsonObj = new JSONObject(response.body());
 			CategoriaProdutoDto categoriaProdutoDto = new CategoriaProdutoDto();
-
-			for (int i = 0; i < responseJson.length(); i++) {
-				JSONObject jsonObj = responseJson.getJSONObject(i);
-				categoriaProdutoDto.setId(jsonObj.getInt("id"));
-				categoriaProdutoDto.setDescricao(jsonObj.getString("descricao"));
-			}
+			categoriaProdutoDto.setId(jsonObj.getInt("id"));
+			categoriaProdutoDto.setDescricao(jsonObj.getString("descricao"));
 			return categoriaProdutoDto;
 
 		} catch (Exception e) {
-			throw new Exception(e.getMessage());
+			throw new Exception("Categoria não encontrada !" + e.getMessage() + e.getCause());
 		}
 	}
 
@@ -165,8 +161,8 @@ public class NovaCategoriaController {
 				alert1.setHeaderText(null);
 				alert1.setContentText("Categoria apagada com sucesso! ");
 				alert1.showAndWait();
-				NovoOuEditarProdutoController.getCategoria().getItems().remove(categoria);
-				NovoOuEditarProdutoController.getCategoria().show();
+				NovoProdutoController.getCategoria().getItems().remove(categoria);
+				NovoProdutoController.getCategoria().show();
 			}
 
 		} catch (Exception e) {
@@ -220,8 +216,8 @@ public class NovaCategoriaController {
 					alert.showAndWait();
 					Stage stage = (Stage) getBtnSalvar().getScene().getWindow();
 					stage.close();
-					NovoOuEditarProdutoController.atualizarListaCategorias();
-					NovoOuEditarProdutoController.getCategoria().show();
+					NovoProdutoController.atualizarListaCategorias();
+					NovoProdutoController.getCategoria().show();
 				}
 			}
 
@@ -236,7 +232,6 @@ public class NovaCategoriaController {
 		}
 
 	}
-	
 
 	@SuppressWarnings("exports")
 	public void cancelar(ActionEvent action) throws IOException {

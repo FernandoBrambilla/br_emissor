@@ -67,6 +67,8 @@ public class Product extends RepresentationModel<Product> implements Serializabl
 	private LocalDateTime dataInclusao;
 
 	private String EAN_GTIN;
+	
+	private String obs;
 
 	private boolean status;
 
@@ -204,6 +206,14 @@ public class Product extends RepresentationModel<Product> implements Serializabl
 
 	public void setStatus(boolean status) {
 		this.status = status;
+	}
+
+	public String getObs() {
+		return obs;
+	}
+
+	public void setObs(String obs) {
+		this.obs = obs;
 	}
 
 }

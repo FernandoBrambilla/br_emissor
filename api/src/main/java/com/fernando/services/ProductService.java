@@ -94,6 +94,7 @@ public class ProductService {
                 entity.setCest(product.getCest());
                 entity.setDataInclusao(product.getDataInclusao());
                 entity.setEAN_GTIN(product.getEAN_GTIN());
+                entity.setObs(product.getObs());
                
              
 		//LINK HATEOAS

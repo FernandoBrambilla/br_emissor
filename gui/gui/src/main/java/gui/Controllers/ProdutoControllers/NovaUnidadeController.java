@@ -119,18 +119,15 @@ public class NovaUnidadeController {
 			HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(endpoint))
 					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
 			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-			JSONArray responseJson = new JSONArray(response.body());
+			JSONObject jsonObj = new JSONObject(response.body());
 			UnidadeProdutoDto unidadeProdutoDto = new UnidadeProdutoDto();
+			unidadeProdutoDto.setId(jsonObj.getInt("id"));
+			unidadeProdutoDto.setDescricao(jsonObj.getString("descricao"));
 
-			for (int i = 0; i < responseJson.length(); i++) {
-				JSONObject jsonObj = responseJson.getJSONObject(i);
-				unidadeProdutoDto.setId(jsonObj.getInt("id"));
-				unidadeProdutoDto.setDescricao(jsonObj.getString("descricao"));
-			}
 			return unidadeProdutoDto;
 
 		} catch (Exception e) {
-			throw new Exception(e.getMessage());
+			throw new Exception("Unidade não encontrada! " + e.getMessage() + e.getCause());
 		}
 	}
 
@@ -165,8 +162,8 @@ public class NovaUnidadeController {
 				alert1.setHeaderText(null);
 				alert1.setContentText("Unidade apagada com sucesso! ");
 				alert1.showAndWait();
-				NovoOuEditarProdutoController.getUnidade().getItems().remove(unidade);
-				NovoOuEditarProdutoController.getUnidade().show();
+				NovoProdutoController.getUnidade().getItems().remove(unidade);
+				NovoProdutoController.getUnidade().show();
 			}
 
 		} catch (Exception e) {
@@ -219,8 +216,8 @@ public class NovaUnidadeController {
 					alert.showAndWait();
 					Stage stage = (Stage) getBtnSalvar().getScene().getWindow();
 					stage.close();
-					NovoOuEditarProdutoController.atualizarListaUnidades();
-					NovoOuEditarProdutoController.getUnidade().show();
+					NovoProdutoController.atualizarListaUnidades();
+					NovoProdutoController.getUnidade().show();
 				}
 			}
 

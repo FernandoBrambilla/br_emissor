@@ -53,8 +53,6 @@ public abstract class Mascaras {
 			}
 		});
 	}
-	
-	
 
 	public static void onlyDecimal(final TextField valor) {
 		valor.textProperty().addListener(new ChangeListener<String>() {
@@ -77,8 +75,13 @@ public abstract class Mascaras {
 		return (df.format(valor));
 	}
 
+	public static String monetario(final Double valor) {
+		DecimalFormat df = new DecimalFormat("¤ #,###,##0.00");
+		return (df.format(valor));
+	}
+
 	public static String percentual(final Double valor) {
-		DecimalFormat df = new DecimalFormat("#,###.00");
+		DecimalFormat df = new DecimalFormat("#0.00");
 		return (df.format(valor));
 	}
 
@@ -151,7 +154,7 @@ public abstract class Mascaras {
 	 *
 	 * @param textField TextField
 	 */
-	public static void monetaryField(final TextField textField) {
+	public static void monetaryField(TextField textField) {
 		textField.setAlignment(Pos.CENTER_RIGHT);
 		textField.lengthProperty().addListener(new ChangeListener<Number>() {
 			@Override
@@ -163,7 +166,7 @@ public abstract class Mascaras {
 				value = value.replaceAll("([0-9]{1})([0-9]{8})$", "$1.$2");
 				value = value.replaceAll("([0-9]{1})([0-9]{5})$", "$1.$2");
 				value = value.replaceAll("([0-9]{1})([0-9]{2})$", "$1,$2");
-				textField.setText(value);
+				textField.setText("R$ " + value);
 				positionCaret(textField);
 
 				textField.textProperty().addListener(new ChangeListener<String>() {
@@ -183,7 +186,7 @@ public abstract class Mascaras {
 					Boolean fieldChange) {
 				if (!fieldChange) {
 					final int length = textField.getText().length();
-					if (length > 0 && length < 3) {
+					if (length > 3 && length < 6) {
 						textField.setText(textField.getText() + "00");
 					}
 				}

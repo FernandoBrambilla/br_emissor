@@ -6,20 +6,18 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import gui.App;
 import gui.Controllers.PrincipalControllers.PrincipalController;
+import gui.Controllers.TributacaoControllers.NCMController;
 import gui.Dtos.CategoriaProdutoDto;
 import gui.Dtos.MarkupDto;
 import gui.Dtos.NcmDto;
@@ -38,6 +36,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
@@ -81,34 +80,42 @@ public class ProdutosController {
 		ProdutosController.observableList = observableList;
 	}
 
+	@SuppressWarnings("exports")
 	public BorderPane getTelaBase() {
 		return telaBase;
 	}
 
+	@SuppressWarnings("exports")
 	public void setTelaBase(BorderPane telaBase) {
 		this.telaBase = telaBase;
 	}
 
+	@SuppressWarnings("exports")
 	public Button getBtnNovo() {
 		return btnNovo;
 	}
 
+	@SuppressWarnings("exports")
 	public Button getBtnEditar() {
 		return btnEditar;
 	}
 
+	@SuppressWarnings("exports")
 	public Button getBtnApagar() {
 		return btnApagar;
 	}
 
+	@SuppressWarnings("exports")
 	public void setBtnNovo(Button btnNovo) {
 		this.btnNovo = btnNovo;
 	}
 
+	@SuppressWarnings("exports")
 	public void setBtnEditar(Button btnEditar) {
 		this.btnEditar = btnEditar;
 	}
 
+	@SuppressWarnings("exports")
 	public void setBtnApagar(Button btnApagar) {
 		this.btnApagar = btnApagar;
 	}
@@ -138,9 +145,17 @@ public class ProdutosController {
 			markup.setUtilizar(false);
 			MarkupPadraoController.criarMarkup(markup);
 		}
+		
+		//CRIA UM NCM VAZIO
+		if(NCMController.buscarNcms().isEmpty()) {
+			NCMController.criarNcmVazio(); 
+		}
 
 	}
 
+	/**
+	 * Método aplica efeitos nos botões
+	 */
 	public void aplicaEfeitos() {
 		Style efeitos = new Style();
 		efeitos.hover(getBtnNovo());
@@ -148,6 +163,12 @@ public class ProdutosController {
 		efeitos.hover(getBtnApagar());
 
 	}
+	
+	/**
+	 * Método constrói e popula tabela de produtos
+	 * @return TableView de produtos
+	 * @throws Exception
+	 */
 
 	@SuppressWarnings("unchecked")
 	public TableView<ProdutoDto> construirTabela() throws Exception {
@@ -159,7 +180,6 @@ public class ProdutosController {
 
 		TableColumn<ProdutoDto, String> colunaCod = new TableColumn<ProdutoDto, String>("Código");
 		colunaCod.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("codigo"));
-		colunaCod.setMinWidth(90);
 
 		TableColumn<ProdutoDto, String> colunaDesc = new TableColumn<ProdutoDto, String>("Descrição");
 		colunaDesc.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("descricao"));
@@ -174,27 +194,32 @@ public class ProdutosController {
 
 		TableColumn<ProdutoDto, String> colunaValor = new TableColumn<ProdutoDto, String>("Preço");
 		colunaValor.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("valorVenda"));
-		// colunaValor.setMinWidth(90);
 
 		TableColumn<ProdutoDto, String> colunaUni = new TableColumn<ProdutoDto, String>("Unidade");
 		colunaUni.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("unidadeProduto"));
-		colunaUni.setMinWidth(90);
-
+	
+ 
 		TableColumn<ProdutoDto, String> colunaCateg = new TableColumn<ProdutoDto, String>("Categoria");
 		colunaCateg.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("categoria"));
+	
 
-		TableColumn<ProdutoDto, Long> colunaNcm = new TableColumn<ProdutoDto, Long>("NCM");
-		colunaNcm.setCellValueFactory(new PropertyValueFactory<ProdutoDto, Long>("ncm"));
+		TableColumn<ProdutoDto, NcmDto> colunaNcm = new TableColumn<ProdutoDto, NcmDto>("NCM");
+		colunaNcm.setCellValueFactory(new PropertyValueFactory<ProdutoDto, NcmDto>("ncm"));
+		
 
+		TableColumn<ProdutoDto, String> colunaObs = new TableColumn<ProdutoDto, String>("Observações");
+		colunaObs.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("obs"));
+		
 		TableColumn<ProdutoDto, String> colunaFornecedor = new TableColumn<ProdutoDto, String>("Fornecedor");
 		colunaFornecedor.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("fornecedor"));
+		
 
 		// POPULA A TABELA
 		popularTabela();
 
 		// ADICIONA AS COLUNAS
 		getTabelaprodutos().getColumns().addAll(colunaId, colunaCod, colunaDesc, colunaEstoque, colunaCusto,
-				colunaValor, colunaUni, colunaCateg, colunaNcm, colunaFornecedor);
+				colunaValor, colunaUni, colunaCateg, colunaNcm, colunaObs, colunaFornecedor);
 
 		if (getTabelaprodutos() == null) {
 			getTabelaprodutos().setPlaceholder(new Label("Nenhum Produto Cadastrado."));
@@ -228,10 +253,8 @@ public class ProdutosController {
 			ProdutoDto produto;
 			UnidadeProdutoDto unidadeProduto;
 			CategoriaProdutoDto categoriaProduto;
-			;
 			MarkupDto markup;
 			NcmDto ncm;
-			Locale brasil = new Locale("pt", "BR");
 
 			// LOOP CONVERTE JSON EM CLIENTS
 			for (int i = 0; i < responseJson.length(); i++) {
@@ -254,7 +277,7 @@ public class ProdutosController {
 				unidadeProduto.setDescricao(unidadeJson.getString("descricao"));
 
 				// PRENCHE CATEGORIA PRODUTO
-				categoriaProduto.setId(categoriaJson.getInt("id"));
+				categoriaProduto.setId(categoriaJson.getInt("id")); 
 				categoriaProduto.setDescricao(categoriaJson.getString("descricao"));
 
 				// PRENCHE MARKUP PRODUTO
@@ -280,7 +303,7 @@ public class ProdutosController {
 
 				// PRENCHE O PRODUTO EM SI
 				produto.setId(jsonObj.getLong("id"));
-				produto.setDescricao(jsonObj.getString("descricao"));
+				produto.setDescricao(jsonObj.getString("descricao").toUpperCase());
 				produto.setCodigo(jsonObj.getString("codigo"));
 				produto.setValorVenda(jsonObj.getDouble("valorVenda"));
 				produto.setCusto(jsonObj.getDouble("custo"));
@@ -293,12 +316,13 @@ public class ProdutosController {
 				produto.setCest(jsonObj.getString("cest"));
 				produto.setDataInclusao(LocalDateTime.parse(dataInclusao, format));
 				produto.setEAN_GTIN(jsonObj.getString("ean_GTIN"));
+				produto.setObs(jsonObj.getString("obs"));
 				produtos.add(produto);
 
 			}
 			return produtos;
 		} catch (Exception e) {
-			throw new Exception(e.getMessage() + e.getCause());
+			throw new Exception("Não foi possível encontrar produtos! " + e.getMessage() + e.getCause());
 		}
 
 	}
@@ -316,8 +340,11 @@ public class ProdutosController {
 
 	@SuppressWarnings("exports")
 	public void editar(ActionEvent action) throws IOException {
+		
+		ProdutoDto produtoParaEditar = ProdutosController.getTabelaprodutos().getSelectionModel().getSelectedItem();
+				
 		// VERIFICA SE FOIS SELECIONADO UM CLIENTE PARA EDITAR
-		if (ProdutosController.getTabelaprodutos().getSelectionModel().isEmpty()) {
+		if (produtoParaEditar == null) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
 			alert.setHeaderText(null);
 			alert.setContentText("Selecione um Produto para editar.");
@@ -325,26 +352,20 @@ public class ProdutosController {
 			alert.showAndWait();
 			return;
 		}
+		
 
 		else {
 			Stage stage = new Stage();
-			Parent painel = FXMLLoader.load(App.class.getResource("ProdutoViews/MenuNovoProduto.fxml"));
+			Parent painel = FXMLLoader.load(App.class.getResource("ProdutoViews/MenuEditarProduto.fxml"));
 			Scene scene = new Scene(painel, 800, 680);
 			stage.setTitle("Cadasto de Produtos");
 			stage.setScene(scene);
 			stage.show();
-
-			/*
-			 * Stage stage = new Stage(); Parent painel =
-			 * FXMLLoader.load(App.class.getResource("ProdutoViews/MenuEditarProduto.fxml"))
-			 * ; Scene scene = new Scene(painel, 800, 680);
-			 * stage.setTitle("Editar Produto"); stage.setScene(scene); stage.show();
-			 */
-
 		}
 
 	}
 
+	@SuppressWarnings("exports")
 	public void apagar(ActionEvent action) throws IOException {
 
 	}

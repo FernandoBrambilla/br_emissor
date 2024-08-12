@@ -39,6 +39,8 @@ public class ProdutoDto {
 	private LocalDateTime dataInclusao;
 
 	private String EAN_GTIN;
+	
+	private String obs; 
 
 	public ProdutoDto(ProdutoDto p) {
 		this.descricao = p.getDescricao();
@@ -51,14 +53,15 @@ public class ProdutoDto {
 		this.markup = p.getMarkup();
 		this.fornecedor = p.getFornecedor();
 		this.tributacao = p.getTributacao();
-		this.ncm = p.getNcm();
+		this.ncm = p.getNcmObjDto();
 		this.cest = p.getCest();
 		this.dataInclusao = p.getDataInclusao();
 		this.EAN_GTIN = p.getEAN_GTIN();
+		this.obs = p.getObs();
 	}
 
 	public ProdutoDto() {
-		super();
+		
 	}
 
 	public Long getId() {
@@ -161,10 +164,15 @@ public class ProdutoDto {
 		this.tributacao = tributacao;
 	}
 
-	public NcmDto getNcm() {
-		return ncm;
+	public NcmDto getNcmObjDto() {
+		return  ncm;
 	}
+	
 
+	public String getNcm() {
+		return id == 1 ? ncm.getDescricao() : ncm.getNcm().toString() ;
+	}
+ 
 	public void setNcm(NcmDto ncm) {
 		this.ncm = ncm;
 	}
@@ -181,8 +189,12 @@ public class ProdutoDto {
 		EAN_GTIN = eAN_GTIN;
 	}
 
-	public String toReal() {
-		return "" + valorVenda + "]";
+	public String getObs() {
+		return obs;
+	}
+
+	public void setObs(String obs) {
+		this.obs = obs;
 	}
 
 }

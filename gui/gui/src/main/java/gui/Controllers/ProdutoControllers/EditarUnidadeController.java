@@ -81,7 +81,7 @@ public class EditarUnidadeController {
 	}
 
 	public void initialize() throws Exception {
-		unidadeParaEditar = NovoOuEditarProdutoController.getUnidade().getSelectionModel().getSelectedItem();
+		unidadeParaEditar = NovoProdutoController.getUnidade().getSelectionModel().getSelectedItem();
 		getUnidade().setText(unidadeParaEditar.getDescricao());
 
 	}
@@ -112,8 +112,8 @@ public class EditarUnidadeController {
 					alert.showAndWait();
 					Stage stage = (Stage) getBtnSalvar().getScene().getWindow();
 					stage.close();
-					NovoOuEditarProdutoController.atualizarListaUnidades();
-					NovoOuEditarProdutoController.getUnidade().show();
+					NovoProdutoController.atualizarListaUnidades();
+					NovoProdutoController.getUnidade().show();
 				}
 			}
 		} catch (

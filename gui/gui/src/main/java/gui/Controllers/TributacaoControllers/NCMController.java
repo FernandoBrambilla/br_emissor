@@ -20,8 +20,6 @@ import java.util.stream.Collectors;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import gui.App;
-import gui.Controllers.ClienteControllers.ClientesController;
 import gui.Controllers.PrincipalControllers.PrincipalController;
 import gui.Dtos.NcmDto;
 import javafx.beans.value.ChangeListener;
@@ -34,9 +32,6 @@ import javafx.concurrent.Worker;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -54,7 +49,7 @@ import javafx.stage.Stage;
 
 public class NCMController {
 
-	TributacaoController controller = TributacaoController.INSTANCE;
+	TributacaoController controller = TributacaoController.tributacaoController;
 
 	private static String url = PrincipalController.getUrl();
 
@@ -63,6 +58,8 @@ public class NCMController {
 	private static TableView<NcmDto> tabelaNCM;
 
 	public static ObservableList<NcmDto> observableList;
+
+	public static NcmDto ncmSelecionado;
 
 	List<NcmDto> allNcms = new ArrayList<>();
 
@@ -95,74 +92,92 @@ public class NCMController {
 	@FXML
 	private Button btnCancelarImport;
 
+	@SuppressWarnings("exports")
 	public TextField getNcm() {
 		return ncm;
 	}
 
+	@SuppressWarnings("exports")
 	public ImageView getPesquisarNcm() {
 		return pesquisarNcm;
 	}
 
+	@SuppressWarnings("exports")
 	public Button getImportNcm() {
 		return importNcm;
 	}
 
+	@SuppressWarnings("exports")
 	public ProgressBar getBarraProgresso() {
 		return barraProgresso;
 	}
 
+	@SuppressWarnings("exports")
 	public void setBarraProgresso(ProgressBar barraProgresso) {
 		this.barraProgresso = barraProgresso;
 	}
 
+	@SuppressWarnings("exports")
 	public Button getBtnCancelarImport() {
 		return btnCancelarImport;
 	}
 
+	@SuppressWarnings("exports")
 	public void setBtnCancelarImport(Button btnCancelarImport) {
 		this.btnCancelarImport = btnCancelarImport;
 	}
 
+	@SuppressWarnings("exports")
 	public BorderPane getBase() {
 		return base;
 	}
 
+	@SuppressWarnings("exports")
 	public Label getInfo() {
 		return info;
 	}
 
+	@SuppressWarnings("exports")
 	public void setInfo(Label info) {
 		this.info = info;
 	}
 
+	@SuppressWarnings("exports")
 	public Button getBtnSelecionar() {
 		return btnSelecionar;
 	}
 
+	@SuppressWarnings("exports")
 	public Button getBtnCancelar() {
 		return btnCancelar;
 	}
 
+	@SuppressWarnings("exports")
 	public void setNcm(TextField ncm) {
 		this.ncm = ncm;
 	}
 
+	@SuppressWarnings("exports")
 	public void setPesquisarNcm(ImageView pesquisarNcm) {
 		this.pesquisarNcm = pesquisarNcm;
 	}
 
+	@SuppressWarnings("exports")
 	public void setImportNcm(Button importNcm) {
 		this.importNcm = importNcm;
 	}
 
+	@SuppressWarnings("exports")
 	public void setBase(BorderPane base) {
 		this.base = base;
 	}
 
+	@SuppressWarnings("exports")
 	public void setBtnSelecionar(Button btnSelecionar) {
 		this.btnSelecionar = btnSelecionar;
 	}
 
+	@SuppressWarnings("exports")
 	public void setBtnCancelar(Button btnCancelar) {
 		this.btnCancelar = btnCancelar;
 	}
@@ -205,24 +220,30 @@ public class NCMController {
 
 	@SuppressWarnings("unchecked")
 	public void initialize() throws Exception {
+
+		// CRIA UM NCM VAZIO
+
+		// CONSTROI E PRENCHE A TABELA DE NCM
 		getBase().setTop(construirTabela());
 
+		// SELECIONA O NCM ATRAVÉ DO DUPLO CLIQUE
 		getTabelaNCM().setOnMouseClicked((mouseEvent) -> {
-			NcmDto ncmSelecionado = getTabelaNCM().getSelectionModel().getSelectedItem();
 			if (mouseEvent.getClickCount() == 2) {
+				ncmSelecionado = getTabelaNCM().getSelectionModel().getSelectedItem();
 				controller.getNcm().setText(ncmSelecionado.getNcm() + "   |   " + ncmSelecionado.getDescricao());
 				Stage stage = (Stage) getBtnSelecionar().getScene().getWindow();
 				stage.close();
 			}
-		});
+		}); 
+
+		// ABRA A TELA DE IMPORTAR NCM ATRAVÉ DO BOTÃO IMPORTAR TABELA
 		getImportNcm().setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
 				Stage stage = (Stage) getBase().getScene().getWindow();
-
 				try {
 					ncms = load(stage);
-					allNcms = getAllNCM();
+					allNcms = buscarNcms();
 					if (ncms == null) {
 						return;
 					}
@@ -239,11 +260,9 @@ public class NCMController {
 						return new Task() {
 							@Override
 							protected ObservableList<NcmDto> call() throws Exception {
-								if (allNcms.size() == 0) {
-									// SALVA TABELA CASO BANCO ESTEJA VAZIO
+								// SALVA TABELA CASO BANCO ESTEJA VAZIO
+								if (allNcms.size() == 1) {
 									JSONObject toSalvar = new JSONObject();
-									System.out.println("salvando");
-									System.out.println(ncms.size());
 									for (int i = 0; i < ncms.size(); i++) {
 										toSalvar.put("ncm", ncms.get(i).getNcm());
 										toSalvar.put("ex", ncms.get(i).getEx());
@@ -279,8 +298,8 @@ public class NCMController {
 								} else {
 									// ATUALIZA BANCO COM TABELA NOVA
 									JSONObject toUpdate = new JSONObject();
-									System.out.println("atualizando");
-									progresso = 0 ;
+
+									progresso = 0;
 									NcmDto ncm;
 									int tamanhoBanco = allNcms.size();
 									int tamanhoTbela = ncms.size();
@@ -395,6 +414,45 @@ public class NCMController {
 
 	}
 
+	public static void criarNcmVazio() throws IOException, InterruptedException {
+		NcmDto ncmVazio = new NcmDto();
+		ncmVazio.setChave("");
+		ncmVazio.setDataFim(LocalDate.of(2100, 01, 01));
+		ncmVazio.setDataInicio(LocalDate.of(1900, 01, 01));
+		ncmVazio.setDescricao("NCM Não Informado");
+		ncmVazio.setEstadual(0D);
+		ncmVazio.setEx("");
+		ncmVazio.setFonte("");
+		ncmVazio.setImportadosfederal(0D);
+		ncmVazio.setMunicipal(0D);
+		ncmVazio.setNacionalfederal(0D);
+		ncmVazio.setNcm(00000000L);
+		ncmVazio.setTipo("");
+		ncmVazio.setVersao("");
+
+		JSONObject json = new JSONObject();
+		json.put("ncm", ncmVazio.getNcm());
+		json.put("ex", ncmVazio.getEx());
+		json.put("tipo", ncmVazio.getTipo());
+		json.put("descricao", ncmVazio.getDescricao());
+		json.put("nacionalfederal", ncmVazio.getNacionalfederal());
+		json.put("importadosfederal", ncmVazio.getImportadosfederal());
+		json.put("estadual", ncmVazio.getEstadual());
+		json.put("municipal", ncmVazio.getMunicipal());
+		json.put("vigenciainicio", ncmVazio.getDataInicio());
+		json.put("vigenciafim", ncmVazio.getDataFim());
+		json.put("chave", ncmVazio.getChave());
+		json.put("versao", ncmVazio.getVersao());
+		json.put("fonte", ncmVazio.getFonte());
+
+		HttpClient client = HttpClient.newHttpClient();
+		String endpoint = url + "ncm";
+		HttpRequest request = HttpRequest.newBuilder().uri(URI.create(endpoint))
+				.header("Authorization", "Bearer " + token).header("Content-Type", "application/json")
+				.POST(HttpRequest.BodyPublishers.ofString(json.toString())).build();
+		client.send(request, HttpResponse.BodyHandlers.ofString());
+	}
+
 	private void esconderControles() {
 		getBase().setVisible(false);
 		getInfo().setVisible(true);
@@ -458,13 +516,13 @@ public class NCMController {
 	}
 
 	public static void popularTabela() throws Exception {
-		List<NcmDto> ncms = getAllNCM();
+		List<NcmDto> ncms = buscarNcms();
 		setObservableList(FXCollections.observableArrayList(ncms));
 		getTabelaNCM().setItems(observableList);
 
 	}
 
-	private static List<NcmDto> getAllNCM() throws Exception {
+	public static List<NcmDto> buscarNcms() throws Exception {
 
 		try {
 			// BUSCA TODOS NCMs
@@ -506,6 +564,39 @@ public class NCMController {
 		}
 	}
 
+	public static NcmDto buscarNcmById(Long id) throws Exception {
+		try {
+			String endpoint = url + "ncm/" + id;
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(endpoint))
+					.header("Authorization", "Bearer " + getToken()).header("Accept", "application/json").build();
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			JSONObject jsonObj = new JSONObject(response.body());
+			NcmDto ncm = new NcmDto();
+			String dataInicio = jsonObj.getString("vigenciainicio");
+			String dataFim = jsonObj.getString("vigenciafim");
+			ncm.setId(jsonObj.getLong("id"));
+			ncm.setNcm(jsonObj.getLong("ncm"));
+			ncm.setEx(jsonObj.getString("ex"));
+			ncm.setTipo(jsonObj.getString("tipo"));
+			ncm.setDescricao(jsonObj.getString("descricao"));
+			ncm.setNacionalfederal(jsonObj.getDouble("nacionalfederal"));
+			ncm.setImportadosfederal(jsonObj.getDouble("importadosfederal"));
+			ncm.setEstadual(jsonObj.getDouble("estadual"));
+			ncm.setMunicipal(jsonObj.getDouble("municipal"));
+			ncm.setDataInicio(LocalDate.parse(dataInicio));
+			ncm.setDataFim(LocalDate.parse(dataFim));
+			ncm.setChave(jsonObj.getString("chave"));
+			ncm.setVersao(jsonObj.getString("versao"));
+			ncm.setFonte(jsonObj.getString("fonte"));
+			return ncm;
+			
+
+		} catch (Exception e) {
+			throw new Exception("NCM não encontrado! " + e.getMessage() + e.getCause());
+		}
+	}
+
 	private List<NcmDto> load(Stage stage) throws Exception {
 		FileChooser caixaDialogo = new FileChooser();
 		FileChooser.ExtensionFilter filtroCsv = new FileChooser.ExtensionFilter("Arquivo (*.csv)", "*.csv");
@@ -514,7 +605,7 @@ public class NCMController {
 		caixaDialogo.setSelectedExtensionFilter(filtroCsv);
 
 		try {
-			File csv = caixaDialogo.showOpenDialog(stage);
+			File csv = caixaDialogo.showOpenDialog(stage); 
 			if (csv != null) {
 				BufferedReader br = null;
 				Locale localeBr = new Locale("pt", "BR");
@@ -556,6 +647,10 @@ public class NCMController {
 
 	@SuppressWarnings("exports")
 	public void selecionar(ActionEvent action) throws Exception {
+		TributacaoController.ncmS = getTabelaNCM().getSelectionModel().getSelectedItem(); 
+		controller.getNcm().setText(TributacaoController.ncmS.getNcm() + "   |   " + TributacaoController.ncmS.getDescricao());
+		Stage stage = (Stage) getBtnSelecionar().getScene().getWindow();
+		stage.close();
 
 	}
 

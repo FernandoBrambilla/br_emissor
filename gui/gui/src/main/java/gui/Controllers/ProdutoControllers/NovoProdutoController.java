@@ -1,7 +1,6 @@
 package gui.Controllers.ProdutoControllers;
 
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -12,12 +11,17 @@ import org.json.JSONObject;
 
 import gui.App;
 import gui.Controllers.PrincipalControllers.PrincipalController;
+import gui.Controllers.TributacaoControllers.NCMController;
+import gui.Controllers.TributacaoControllers.TributacaoController;
 import gui.Dtos.CategoriaProdutoDto;
 import gui.Dtos.MarkupDto;
+import gui.Dtos.NcmDto;
 import gui.Dtos.ProdutoDto;
 import gui.Dtos.Style;
 import gui.Dtos.UnidadeProdutoDto;
 import gui.Utilities.Mascaras;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -44,8 +48,8 @@ import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-public class NovoOuEditarProdutoController {
-	
+public class NovoProdutoController {
+
 	private static String url = PrincipalController.getUrl();
 
 	private static String token = PrincipalController.getAccessToken();
@@ -63,6 +67,8 @@ public class NovoOuEditarProdutoController {
 	private static ComboBox<UnidadeProdutoDto> unidade;
 
 	private static MarkupDto markup = new MarkupDto();
+
+	private static NcmDto ncm = new NcmDto();
 
 	@FXML
 	private Pane root;
@@ -137,11 +143,11 @@ public class NovoOuEditarProdutoController {
 	}
 
 	public static void setUnidade(ComboBox<UnidadeProdutoDto> unidade) {
-		NovoOuEditarProdutoController.unidade = unidade;
+		NovoProdutoController.unidade = unidade;
 	}
 
 	public static void setMarkup(MarkupDto markup) {
-		NovoOuEditarProdutoController.markup = markup;
+		NovoProdutoController.markup = markup;
 	}
 
 	@SuppressWarnings("exports")
@@ -218,26 +224,26 @@ public class NovoOuEditarProdutoController {
 	}
 
 	public static void setListCategorias(ObservableList<CategoriaProdutoDto> listCategorias) {
-		NovoOuEditarProdutoController.listCategorias = listCategorias;
+		NovoProdutoController.listCategorias = listCategorias;
 	}
 
 	@SuppressWarnings("exports")
 	public static void setCheckBoxMarkupPane(BorderPane checkBoxMarkupPane) {
-		NovoOuEditarProdutoController.checkBoxMarkupPane = checkBoxMarkupPane;
+		NovoProdutoController.checkBoxMarkupPane = checkBoxMarkupPane;
 	}
 
 	@SuppressWarnings("exports")
 	public static void setCheckBox(CheckBox checkBox) {
-		NovoOuEditarProdutoController.checkBox = checkBox;
+		NovoProdutoController.checkBox = checkBox;
 	}
 
 	@SuppressWarnings("exports")
 	public static void setCategoriaPane(BorderPane categoriaPane) {
-		NovoOuEditarProdutoController.categoriaPane = categoriaPane;
+		NovoProdutoController.categoriaPane = categoriaPane;
 	}
 
 	public static void setCategoria(ComboBox<CategoriaProdutoDto> categoria) {
-		NovoOuEditarProdutoController.categoria = categoria;
+		NovoProdutoController.categoria = categoria;
 	}
 
 	@SuppressWarnings("exports")
@@ -287,7 +293,7 @@ public class NovoOuEditarProdutoController {
 
 	@SuppressWarnings("exports")
 	public static void setMarkupText(TextField markupText) {
-		NovoOuEditarProdutoController.markupText = markupText;
+		NovoProdutoController.markupText = markupText;
 	}
 
 	@SuppressWarnings("exports")
@@ -306,17 +312,25 @@ public class NovoOuEditarProdutoController {
 	}
 
 	public void initialize() throws Exception {
+		// INICIA MARKUP AO CARREGAR A TELA
 		markup = MarkupPadraoController.buscarMarkup();
+		ncm = NCMController.ncmSelecionado;
+
+		// SETA MÁSCARAS NOS CAMPOS
 		Mascaras.monetaryField(getValor());
 		Mascaras.monetaryField(getCusto());
-		Mascaras.numericField(getCusto());
+		Mascaras.numericField(getEstoque());
 
+		// CRIA E ADICIONA NA TELA CAMPOS
 		getRoot().getChildren().add(3, criarComboBoxCategorias());
 		getRoot().getChildren().add(4, criarComboBoxUnidades());
 		getRoot().getChildren().add(7, criarMarkupText());
 		getRoot().getChildren().add(8, criarCheckBoxMarkup());
 
+		// SELECIONA COMBOBOX SE UTILIZAR MARKUP
 		getMarkupText().setEditable(markup.isUtilizar() ? false : true);
+
+		// CARREGA TELA MARKUP SE AÇÃO NO COMBOBOX
 		getCheckBox().setOnAction(e -> {
 			try {
 				mostrarTelaMarkup(e);
@@ -325,21 +339,13 @@ public class NovoOuEditarProdutoController {
 			}
 		});
 
-		getRoot().setOnKeyReleased((keyEvent) -> {
-			if (keyEvent.getCode() == KeyCode.F2)
-				criarProduto();
-		});
-
-		getRoot().setOnKeyReleased((keyEvent) -> {
-			if (keyEvent.getCode() == KeyCode.ESCAPE)
-				fecharTela();
-		});
-
+		// MUDA FOCUS PARA DESCRIÇÃO
 		getEan_getin().setOnKeyPressed((keyEvent) -> {
 			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB)
 				getDescricao().requestFocus();
 		});
 
+		// MUDA FOCUS PARA CATEGORIA E ABRE A ABA
 		getDescricao().setOnKeyPressed((keyEvent) -> {
 			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB) {
 				getCategoria().requestFocus();
@@ -347,6 +353,7 @@ public class NovoOuEditarProdutoController {
 			}
 		});
 
+		// MUDA FOCUS PARA UNIDADE E ABRE A ABA
 		getCategoria().setOnKeyPressed((keyEvent) -> {
 			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB) {
 				getUnidade().requestFocus();
@@ -354,12 +361,38 @@ public class NovoOuEditarProdutoController {
 			}
 		});
 
+		// MUDA FOCUS PARA CUSTO
 		getUnidade().setOnKeyPressed((keyEvent) -> {
 			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB) {
 				getCusto().requestFocus();
 			}
+
 		});
 
+		// CALCULA VALOR DE VENDA QUANDO FOCUS SAI DO CAMPO CUSTO
+		getCusto().focusedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue,
+					Boolean newPropertyValue) {
+				if (!newPropertyValue) {
+					calcularValorVenda();
+				}
+			}
+		});
+
+		// CALCULA PERCENTUAL DE MARKUP QUANDO FOCUS SAI DO VALOR VENDA
+		getValor().focusedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue,
+					Boolean newPropertyValue) {
+				if (!newPropertyValue) {
+					if (!getCheckBox().isSelected())
+						calcularMarkup();
+				}
+			}
+		});
+
+		// MUDA FOCUS PARA VALOR E CALCULA VALOR DE VENDA E MARKUP
 		getCusto().setOnKeyPressed((keyEvent) -> {
 			if (getAuto().isSelected()) {
 				calcularValorVenda();
@@ -368,19 +401,19 @@ public class NovoOuEditarProdutoController {
 				getValor().requestFocus();
 				calcularValorVenda();
 				calcularMarkup();
-
 			}
 		});
 
+		// MUDA FOCUS PARA CHECKBOX AUTOMÁTICO
 		getValor().setOnKeyPressed((keyEvent) -> {
 			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB) {
 				getAuto().requestFocus();
 				if (!markup.isUtilizar())
 					calcularMarkup();
 			}
-
 		});
 
+		// MUDA FOCUS PARA VALOR MARKUP
 		getAuto().setOnKeyPressed((keyEvent) -> {
 			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB) {
 				getMarkupText().requestFocus();
@@ -388,24 +421,44 @@ public class NovoOuEditarProdutoController {
 			}
 		});
 
+		// MUDA FOCUS PARA BOTÃO BARKUP
 		getMarkupText().setOnKeyPressed((keyEvent) -> {
 			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB) {
 				getBtnMarkup().requestFocus();
 				calcularValorVenda();
 			}
-
 		});
 
+		// MUDA FOCUS PARA ESTOQUE
 		getBtnMarkup().setOnKeyPressed((keyEvent) -> {
+			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB)
+				getEstoque().requestFocus();
+		});
+
+		// MUDA FOCUS PARA OBSERVAÇÕES
+		getEstoque().setOnKeyPressed((keyEvent) -> {
 			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB)
 				getObs().requestFocus();
 		});
 
+		// MUDA FOCUS PARA BOTÃO SALVAR
 		getObs().setOnKeyPressed((keyEvent) -> {
 			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB)
 				getBtnSalvar().requestFocus();
 		});
 
+		// EVENTO ATRAVÉS DAS TECLAS F2 OU ESC
+		getRoot().setOnKeyPressed((keyEvent) -> {
+			if (keyEvent.getCode() == KeyCode.F2)
+				try {
+					criarProduto();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+
+			if (keyEvent.getCode() == KeyCode.ESCAPE)
+				fecharTela();
+		});
 	}
 
 	@SuppressWarnings("exports")
@@ -816,9 +869,9 @@ public class NovoOuEditarProdutoController {
 		if (!getMarkupText().getText().isEmpty() && !getCusto().getText().isEmpty()) {
 			Double percentualMarkup = Double.parseDouble(getMarkupText().getText().replace(",", ".").replace("%", ""));
 			percentualMarkup = percentualMarkup / 100;
-			BigDecimal custo = new BigDecimal(getCusto().getText().replace(".", "").replace(",", "."));
-			BigDecimal venda = custo.add(custo.multiply(new BigDecimal(percentualMarkup)));
-			getValor().setText(Mascaras.decimal(venda));
+			Double custo = Double.parseDouble(getCusto().getText().replace("R$ ", "").replace(",", "."));
+			Double venda = (custo * percentualMarkup) + custo;
+			getValor().setText("R$ " + String.valueOf(Mascaras.monetario(venda)));
 		} else {
 			return;
 		}
@@ -828,117 +881,142 @@ public class NovoOuEditarProdutoController {
 	private void calcularMarkup() {
 		getMarkupText().clear();
 		if (!getValor().getText().isEmpty()) {
-			BigDecimal custo = new BigDecimal(getCusto().getText().replace(".", "").replace(",", "."));
-			BigDecimal venda = new BigDecimal(getValor().getText().replace(".", "").replace(",", "."));
-			Double percentual = venda.subtract(custo).doubleValue();
-			percentual = percentual * 100;
-			percentual = percentual / custo.doubleValue();
+			Double custo = Double.parseDouble(getCusto().getText().replace("R$ ", "").replace(",", "."));
+			Double venda = Double.parseDouble(getValor().getText().replace("R$ ", "").replace(",", "."));
+			Double percentual = ((venda - custo) * 100) / custo;
 			getMarkupText().setText(Mascaras.percentual(percentual) + " %");
 		}
 	}
 
 	/**
 	 * Salva Produto no Banco de dados
+	 * 
+	 * @throws Exception
 	 */
-	
-	
-	public void criarProduto() {
-		Style style = new Style();
-		if (getEan_getin().getText().isEmpty() || getDescricao().getText().isEmpty()) {
-			getInfo().setText("Campos Obrigatórios!");
 
-			style.campoObrigatorio(getEan_getin());
+	public void criarProduto() throws Exception {
+		Style style = new Style();
+		if (getDescricao().getText().isEmpty()) {
+			getInfo().setText("Campo Obrigatório!");
 			style.campoObrigatorio(getDescricao());
 		} else {
-			style.campoObrigatorioRemove(getEan_getin());
 			style.campoObrigatorioRemove(getDescricao());
 			getInfo().setText(null);
-			
-		
-			
-			//CRIAR NOVO PRODUTO
+
+			// CRIAR NOVO PRODUTO
 			ProdutoDto p = new ProdutoDto();
-			p.setEAN_GTIN(getEan_getin().getText());
+			
+			//SETA EAN_GETIN COM VAZIO CASO NAO SEJA PASSADO VALOR
+			p.setEAN_GTIN(getEan_getin().getText().isEmpty() ? "" : getEan_getin().getText());
+			
 			p.setDescricao(getDescricao().getText());
+			
 			p.setCodigo("00789");
-			p.setValorVenda(Double.parseDouble(getValor().getText()));
-			p.setCusto(Double.parseDouble(getCusto().getText()));
-			p.setEstoque(Integer.parseInt(getEstoque().getText()));
-			p.setUnidadeProduto(getUnidade().getSelectionModel().getSelectedItem());
-			p.setCategoria(getCategoria().getSelectionModel().getSelectedItem());
+			
+			//SETA VALOR DE VENDA COM 0 CASO NAO SEJA PASSADO VALOR
+			p.setValorVenda(getValor().getText().isEmpty() ? 0d
+					: Double.parseDouble(getValor().getText().replace("R$ ", "").replace(",", ".")));
+			
+			//SETA CUSTO COM 0 CASO NAO SEJA PASSADO VALOR
+			p.setCusto(getCusto().getText().isEmpty() ? 0d
+					: Double.parseDouble(getCusto().getText().replace("R$ ", "").replace(",", ".")));
+			
+			System.out.println(p.getCusto());
+			
+			//SETA ESTOQUE COM 0 CASO NÃO SEJA PASSADO VALOR
+			p.setEstoque(getEstoque().getText().isBlank() ? 0 : Integer.parseInt(getEstoque().getText()));
+
+			// SELECIONA UNIDADE VAZIA OU A SELECIONADA
+			p.setUnidadeProduto(getUnidade().getSelectionModel().getSelectedItem() == null
+					? NovaUnidadeController.buscarUnidadeProduto(1)
+					: getUnidade().getSelectionModel().getSelectedItem());
+
+			// SELECIONA CATEGORIA VAZIA OU A SELECIONADA
+			p.setCategoria(getCategoria().getSelectionModel().getSelectedItem() == null
+					? NovaCategoriaController.buscarCategoriaProduto(1)
+					: getCategoria().getSelectionModel().getSelectedItem());
+			
 			p.setMarkup(getMarkup());
 			p.setFornecedor("Reval");
-			p.setTributacao("1"); 
-			
+			p.setTributacao("1");
+			p.setObs(getObs().getText().isEmpty() ? "" : getObs().getText());
+
+			// SETA NCM VAZIO CASO NAO SEJA INFORMADO NENHUM NCM
+			p.setNcm(TributacaoController.tributacaoController.getNcm().getText() == null ? TributacaoController.ncmS
+					: NCMController.ncmSelecionado);
+
 			p.setCest("");
 			p.setDataInclusao(LocalDateTime.now());
-			
-		try {
-			JSONObject unidade = new JSONObject();
-			unidade.put("id", p.getUnidadeProduto().getId());
-			
-			JSONObject markup = new JSONObject();
-			markup.put("id", p.getMarkup().getId());
-			
-			JSONObject categoria = new JSONObject();
-			categoria.put("id", p.getCategoria().getId());
-			
-			JSONObject ncm = new JSONObject();
-			ncm.put("id", 3);
-			
-			JSONObject json = new JSONObject();
-			json.put("descricao", p.getDescricao());
-			json.put("codigo", p.getCodigo());
-			json.put("valorVenda", p.getValorVenda());
-			json.put("custo", p.getCusto());
-			json.put("estoque", p.getEstoque());
-			json.put("utilizarMarkup", p.getMarkup().isUtilizar());
-			json.put("unidadeProduto", unidade);
-			json.put("markup", markup);
-			json.put("categoria", categoria);
-			json.put("fornecedor", 1); //<<<<<<<<<<<<<<<<<<<<<<<VER FORNCECEDOR
-			json.put("tributacao", 1);
-			json.put("ncm", ncm);
-			json.put("cest", 1);
-			json.put("dataInclusao" , p.getDataInclusao());
-			json.put("status" , 1);
-			json.put("ean_GTIN", p.getEAN_GTIN());
-	
-			
-			// REQUIÇÃO
-			String endpoint = url + "products";
-			HttpClient client = HttpClient.newHttpClient();
-			HttpRequest request = HttpRequest.newBuilder().uri(URI.create(endpoint))
-					.header("Authorization", "Bearer " + token).header("Content-Type", "application/json")
-					.POST(HttpRequest.BodyPublishers.ofString(json.toString())).build();
-			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-			String message = response.body();
-			int status = response.statusCode();
 
-			if (status == 200) {
-				Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-				alert.setHeaderText(null);
-				alert.setContentText("Produto \"" + getDescricao().getText() + "\" cadastrado com sucesso! ");
-				alert.showAndWait();
-				Stage stage = (Stage) btnCancelar.getScene().getWindow();
-				stage.close();
-				
-				// ATUALIZA A TABELA
-				ProdutosController.popularTabela();
-		
-			} else {
+			try {
+				JSONObject unidade = new JSONObject();
+				unidade.put("id", p.getUnidadeProduto().getId());
 
-				Alert alert = new Alert(Alert.AlertType.ERROR);
-				alert.setHeaderText(null);
-				alert.setContentText("Produto \"" + getDescricao().getText() + "\" não cadastrado! Motivo: " + message);
-				alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-				alert.showAndWait();
+				JSONObject markup = new JSONObject();
+				markup.put("id", p.getMarkup().getId());
 
+				JSONObject categoria = new JSONObject();
+				categoria.put("id", p.getCategoria().getId());
+
+				JSONObject ncm = new JSONObject();
+				ncm.put("id", 3);
+
+				JSONObject json = new JSONObject();
+				json.put("descricao", p.getDescricao());
+				json.put("codigo", p.getCodigo());
+				json.put("valorVenda", p.getValorVenda().replace("R$ ", "").replace(",", "."));
+				json.put("custo", p.getCusto().replace("R$ ", "").replace(",", "."));
+				json.put("estoque", p.getEstoque());
+				json.put("utilizarMarkup", p.getMarkup().isUtilizar());
+				json.put("unidadeProduto", unidade);
+				json.put("markup", markup);
+				json.put("categoria", categoria);
+				json.put("fornecedor", 1); // <<<<<<<<<<<<<<<<<<<<<<<VER FORNCECEDOR
+				json.put("tributacao", 1);
+				json.put("ncm", ncm);
+				json.put("cest", 1);
+				json.put("dataInclusao", p.getDataInclusao());
+				json.put("status", 1);
+				json.put("ean_GTIN", p.getEAN_GTIN());
+				json.put("obs", p.getObs());
+				System.out.println(json);
+
+				// REQUIÇÃO
+				String endpoint = url + "products";
+				HttpClient client = HttpClient.newHttpClient();
+				HttpRequest request = HttpRequest.newBuilder().uri(URI.create(endpoint))
+						.header("Authorization", "Bearer " + token).header("Content-Type", "application/json")
+						.POST(HttpRequest.BodyPublishers.ofString(json.toString())).build();
+				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+				String message = response.body();
+				int status = response.statusCode();
+				System.out.println(response.body());
+
+				if (status == 200) {
+					Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+					alert.setHeaderText(null);
+					alert.setContentText("Produto \"" + getDescricao().getText() + "\" cadastrado com sucesso! ");
+					alert.showAndWait();
+					Stage stage = (Stage) btnCancelar.getScene().getWindow();
+					stage.close();
+
+					// ATUALIZA A TABELA
+					ProdutosController.popularTabela();
+
+				} else {
+
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setHeaderText(null);
+					alert.setContentText(
+							"Produto \"" + getDescricao().getText() + "\" não cadastrado! Motivo: " + message);
+					alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+					alert.showAndWait();
+
+				}
+
+			} catch (Exception e) {
+				// TODO: handle exception
 			}
-		
-		}catch (Exception e) {
-			// TODO: handle exception
-		}
 		}
 	}
 
