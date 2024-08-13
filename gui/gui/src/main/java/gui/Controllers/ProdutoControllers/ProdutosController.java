@@ -40,6 +40,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class ProdutosController {
@@ -51,6 +52,8 @@ public class ProdutosController {
 	public static TableView<ProdutoDto> tabelaprodutos;
 
 	public static ObservableList<ProdutoDto> observableList;
+	
+	public static ProdutosController produtosController;
 
 	@FXML
 	private BorderPane telaBase;
@@ -121,13 +124,14 @@ public class ProdutosController {
 	}
 
 	@FXML
-	public void initialize() throws Exception {
+	public void initialize() throws Exception { 
+		produtosController = this;
 
 		// CRIA UMA CATEGORIA PADRÃO CASO O BANCO SEJA NULL
 		if (NovaCategoriaController.buscarCategoriasProduto().isEmpty()) {
 			CategoriaProdutoDto categoria = new CategoriaProdutoDto();
 			categoria.setDescricao(" ");
-			NovaCategoriaController.criarCategoria(categoria);
+			NovaCategoriaController.criarCategoria(categoria); 
 		}
 
 		// CRIA UMA UNIDADE PADRÃO CASO O BANCO SEJA NULL
@@ -331,10 +335,11 @@ public class ProdutosController {
 	public void novo(ActionEvent action) throws IOException {
 		Stage stage = new Stage();
 		Parent painel = FXMLLoader.load(App.class.getResource("ProdutoViews/MenuNovoProduto.fxml"));
-		Scene scene = new Scene(painel, 800, 680);
+		Scene scene = new Scene(painel, 800, 720);
 		stage.setTitle("Cadasto de Produtos");
 		stage.setScene(scene);
-		stage.show();
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.showAndWait();
 
 	}
 
@@ -357,10 +362,11 @@ public class ProdutosController {
 		else {
 			Stage stage = new Stage();
 			Parent painel = FXMLLoader.load(App.class.getResource("ProdutoViews/MenuEditarProduto.fxml"));
-			Scene scene = new Scene(painel, 800, 680);
+			Scene scene = new Scene(painel, 800, 720);
 			stage.setTitle("Cadasto de Produtos");
 			stage.setScene(scene);
-			stage.show();
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.showAndWait();
 		}
 
 	}

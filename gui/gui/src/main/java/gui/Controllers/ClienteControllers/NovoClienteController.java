@@ -388,7 +388,7 @@ public class NovoClienteController {
 	@SuppressWarnings({ "exports" })
 	public void setPF(ActionEvent action) {
 		getLabelCpf_Cnpj().setText("CPF");
-		getCpf_cnpj().setPromptText("999.999.999-99");
+		getCpf_cnpj().setPromptText("999.999.999-99"); 
 		getLabelRgIe().setText("RG");
 		getRg_ie().setPromptText("99999999");
 		getLabelDataNascConst().setVisible(true);

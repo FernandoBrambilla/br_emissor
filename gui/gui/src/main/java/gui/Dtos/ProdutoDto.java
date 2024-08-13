@@ -51,7 +51,7 @@ public class ProdutoDto {
 		this.unidadeProduto = p.getUnidadeProduto();
 		this.categoria = p.getCategoria();
 		this.markup = p.getMarkup();
-		this.fornecedor = p.getFornecedor();
+		this.fornecedor = p.getFornecedor(); 
 		this.tributacao = p.getTributacao();
 		this.ncm = p.getNcmObjDto();
 		this.cest = p.getCest();

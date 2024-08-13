@@ -3,21 +3,23 @@ package gui.Controllers.ProdutoControllers;
 import java.io.IOException;
 
 import gui.App;
-import gui.Controllers.TributacaoControllers.TributacaoController;
+import gui.Controllers.TributacaoControllers.NCMController;
+import gui.Dtos.ProdutoDto;
+import gui.Dtos.Style;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 public class MenuNovoProdutoController {
-	
-	public static MenuNovoProdutoController MenuNovoProdutoController;
 
+	public static MenuNovoProdutoController menuNovoProdutoController;
+
+	public static ProdutoDto novoProduto;
 
 	@FXML
 	BorderPane telaBase;
@@ -40,6 +42,12 @@ public class MenuNovoProdutoController {
 	@FXML
 	private Button btnOpcoes;
 
+	@FXML
+	private Button btnSalvar;
+
+	@FXML
+	private Button btnCancelar;
+
 	public BorderPane getTelaBase() {
 		return telaBase;
 	}
@@ -55,7 +63,7 @@ public class MenuNovoProdutoController {
 	public Button getBtnCadastro() {
 		return btnCadastro;
 	}
- 
+
 	public Button getBtnTributacao() {
 		return btnTributacao;
 	}
@@ -66,6 +74,14 @@ public class MenuNovoProdutoController {
 
 	public Button getBtnOpcoes() {
 		return btnOpcoes;
+	}
+
+	public Button getBtnSalvar() {
+		return btnSalvar;
+	}
+
+	public Button getBtnCancelar() {
+		return btnCancelar;
 	}
 
 	public void setTelaBase(BorderPane telaBase) {
@@ -96,50 +112,82 @@ public class MenuNovoProdutoController {
 		this.btnOpcoes = btnOpcoes;
 	}
 
+	public void setBtnSalvar(Button btnSalvar) {
+		this.btnSalvar = btnSalvar;
+	}
+
+	public void setBtnCancelar(Button btnCancelar) {
+		this.btnCancelar = btnCancelar;
+	}
+
 	public void initialize() throws IOException {
-		MenuNovoProdutoController = this;
-		
-		carregarTelaTributacao();
-		
+		menuNovoProdutoController = this;
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(App.class.getResource("ProdutoViews/NovoProduto.fxml"));
 		getTelaBase().setCenter(loader.load());
 		getBtnCadastro().setStyle("-fx-background-color:  deedfc; ");
 		
-		
 	}
 
 	@SuppressWarnings("exports")
-	public void btnCadastro(ActionEvent action) throws IOException {
+	public void btnCadastro(ActionEvent action) throws Exception {
 		limparSelecaoBtns();
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(App.class.getResource("ProdutoViews/NovoProduto.fxml"));
 		getTelaBase().setCenter(loader.load());
 		getBtnCadastro().setStyle("-fx-background-color:  deedfc; ");
+		capturarNovoProduto();
 
 	}
 
 	@SuppressWarnings("exports")
-	public void btnTributacao(ActionEvent action) throws IOException {
-		carregarTelaTributacao();
-	}
-	
-	
-	public void carregarTelaTributacao() throws IOException {
+	public void btnTributacao(ActionEvent action) throws Exception {
+		limparSelecaoBtns();
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(App.class.getResource("TributacaoViews/Tributacao.fxml"));
 		getTelaBase().setCenter(loader.load());
 		getBtnTributacao().setStyle("-fx-background-color:  deedfc; ");
+		capturarNovoProduto();
+
+	}
+
+	private void capturarNovoProduto() throws Exception {
+		novoProduto = new ProdutoDto(); 
+		novoProduto.setEAN_GTIN(NovoProdutoController.novoProdutoController.getEan_getin().getText());
+		novoProduto.setDescricao(NovoProdutoController.novoProdutoController.getDescricao().getText());
+		novoProduto.setCategoria(NovoProdutoController.getCategoria().getSelectionModel().getSelectedItem());
+		novoProduto.setUnidadeProduto(NovoProdutoController.getUnidade().getSelectionModel().getSelectedItem());
+
+		novoProduto.setCusto(NovoProdutoController.novoProdutoController.getCusto().getText().isEmpty() ? 0D
+				: Double.parseDouble(NovoProdutoController.novoProdutoController.getCusto().getText().replace("R$ ", "")
+						.replace(",", ".")));
+
+		novoProduto.setValorVenda(NovoProdutoController.novoProdutoController.getValor().getText().isEmpty() ? 0D
+				: Double.parseDouble(NovoProdutoController.novoProdutoController.getValor().getText().replace("R$ ", "")
+						.replace(",", ".")));
+
+		novoProduto.setEstoque(NovoProdutoController.novoProdutoController.getEstoque().getText().isEmpty() ? 0
+				: Integer.parseInt(NovoProdutoController.novoProdutoController.getEstoque().getText()));
+
+		novoProduto.setObs(NovoProdutoController.novoProdutoController.getObs().getText());
+
+		// SELECIONA NCM PADRÃO OU NCM SELECIONADO
+		if (NCMController.ncmSelecionado == null) {
+			novoProduto.setNcm(NCMController.buscarNcmById(1L));
+		} else {
+			novoProduto.setNcm(NCMController.ncmSelecionado);
+		}
 
 	}
 
 	@SuppressWarnings("exports")
-	public void btnFornecedor(ActionEvent action) throws IOException {
+	public void btnFornecedor(ActionEvent action) throws Exception {
 		limparSelecaoBtns();
 		FXMLLoader loader = new FXMLLoader();
 		loader.setLocation(App.class.getResource("ProdutoViews/Fornecedor.fxml"));
 		getTelaBase().setCenter(loader.load());
 		getBtnFornecedor().setStyle("-fx-background-color:  deedfc; ");
+		capturarNovoProduto();
 
 	}
 
@@ -159,6 +207,22 @@ public class MenuNovoProdutoController {
 		getBtnFornecedor().setStyle("-fx-background-color:  white;");
 		getBtnOpcoes().setStyle("-fx-background-color:  white;");
 
+	}
+
+	@SuppressWarnings("exports")
+	public void salvar(ActionEvent action) throws Exception {
+		NovoProdutoController.novoProdutoController.criarProduto();
+	
+	} 
+	
+	public void fecharTela() {
+		Stage stage = (Stage) getBtnCancelar().getScene().getWindow();
+		stage.close();
+	}
+
+	@SuppressWarnings("exports")
+	public void cancelar(ActionEvent action) {
+		fecharTela();
 	}
 
 }

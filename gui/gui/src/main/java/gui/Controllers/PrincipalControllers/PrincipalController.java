@@ -24,6 +24,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class PrincipalController {
@@ -198,7 +199,7 @@ public class PrincipalController {
 	}
 
 	public Style getStyle() {
-		return style;
+		return style; 
 	}
 
 	public static void setUsuarioLogado(LoginDto usuarioLogado) {
@@ -337,7 +338,8 @@ public class PrincipalController {
 		Scene scene = new Scene(painel, 800, 680);
 		stage.setTitle("Configurações");
 		stage.setScene(scene);
-		stage.show();
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.showAndWait();
 		getStyle().adicinarCorBotaoSelecionado(getBtnConfiguracoes()); 
 	}
 

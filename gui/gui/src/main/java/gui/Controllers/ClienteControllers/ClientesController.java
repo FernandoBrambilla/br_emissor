@@ -33,6 +33,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class ClientesController {
@@ -148,7 +149,7 @@ public class ClientesController {
 		Style efeitos = new Style();
 		efeitos.hover(getBtnNovo());
 		efeitos.hover(getBtnEditar());
-		efeitos.hover(getBtnApagar());
+		efeitos.hover(getBtnApagar()); 
 	}
 
 	@SuppressWarnings("unchecked")
@@ -316,7 +317,8 @@ public class ClientesController {
 		Scene scene = new Scene(painel, 800, 610);
 		stage.setTitle("Cadasto de Usuários");
 		stage.setScene(scene);
-		stage.show();
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.showAndWait();
 
 	}
 
@@ -339,7 +341,8 @@ public class ClientesController {
 			Scene scene = new Scene(painel, 800, 610);
 			stage.setTitle("Editar Cliente");
 			stage.setScene(scene);
-			stage.show();
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.showAndWait();
 
 		}
 

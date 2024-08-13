@@ -323,7 +323,7 @@ public class EditarProdutoController {
 		//CARREGA DADOS DO PRODUTO A SER EDITADO
 		getId().setText(produtoParaEditar.getId().toString());
 		getEan_getin().setText(produtoParaEditar.getEAN_GTIN());
-		getDescricao().setText(produtoParaEditar.getDescricao());
+		getDescricao().setText(produtoParaEditar.getDescricao()); 
 		getCategoria().getSelectionModel().select(produtoParaEditar.getCategoria().getId());
 		getUnidade().getSelectionModel().select(produtoParaEditar.getUnidadeProduto().getId());
 		getCusto().setText(produtoParaEditar.getCusto());

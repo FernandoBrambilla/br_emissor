@@ -21,6 +21,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import gui.Controllers.PrincipalControllers.PrincipalController;
+import gui.Controllers.ProdutoControllers.MenuNovoProdutoController;
+import gui.Controllers.ProdutoControllers.NovoProdutoController;
 import gui.Dtos.NcmDto;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -50,6 +52,8 @@ import javafx.stage.Stage;
 public class NCMController {
 
 	TributacaoController controller = TributacaoController.tributacaoController;
+	
+	public static NCMController ncmController;
 
 	private static String url = PrincipalController.getUrl();
 
@@ -219,9 +223,11 @@ public class NCMController {
 	double progressso = 0;
 
 	@SuppressWarnings("unchecked")
-	public void initialize() throws Exception {
-
+	public void initialize() throws Exception { 
+		ncmController = this;
+		ncmSelecionado = null;
 		// CRIA UM NCM VAZIO
+		
 
 		// CONSTROI E PRENCHE A TABELA DE NCM
 		getBase().setTop(construirTabela());
@@ -230,12 +236,18 @@ public class NCMController {
 		getTabelaNCM().setOnMouseClicked((mouseEvent) -> {
 			if (mouseEvent.getClickCount() == 2) {
 				ncmSelecionado = getTabelaNCM().getSelectionModel().getSelectedItem();
+				MenuNovoProdutoController.novoProduto.setNcm(ncmSelecionado);
 				controller.getNcm().setText(ncmSelecionado.getNcm() + "   |   " + ncmSelecionado.getDescricao());
 				Stage stage = (Stage) getBtnSelecionar().getScene().getWindow();
 				stage.close();
 			}
 		}); 
-
+	
+			
+		
+		
+		
+		
 		// ABRA A TELA DE IMPORTAR NCM ATRAVÉ DO BOTÃO IMPORTAR TABELA
 		getImportNcm().setOnAction(new EventHandler<ActionEvent>() {
 			@Override

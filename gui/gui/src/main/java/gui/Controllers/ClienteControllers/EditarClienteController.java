@@ -395,7 +395,7 @@ public class EditarClienteController {
 			getRg_ie().setDisable(false);
 			getLabelRgIe().setDisable(false);
 		}
-	}
+	} 
 
 	public void initialize() {
 		getPf().setDisable(true); 

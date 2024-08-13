@@ -12,7 +12,6 @@ import org.json.JSONObject;
 import gui.App;
 import gui.Controllers.PrincipalControllers.PrincipalController;
 import gui.Controllers.TributacaoControllers.NCMController;
-import gui.Controllers.TributacaoControllers.TributacaoController;
 import gui.Dtos.CategoriaProdutoDto;
 import gui.Dtos.MarkupDto;
 import gui.Dtos.NcmDto;
@@ -68,16 +67,12 @@ public class NovoProdutoController {
 
 	private static MarkupDto markup = new MarkupDto();
 
-	private static NcmDto ncm = new NcmDto();
+	public static NcmDto ncmSelecionado;
+
+	public static NovoProdutoController novoProdutoController;
 
 	@FXML
 	private Pane root;
-
-	@FXML
-	private Button btnSalvar;
-
-	@FXML
-	private Button btnCancelar;
 
 	@FXML
 	private TextField id;
@@ -156,16 +151,6 @@ public class NovoProdutoController {
 	}
 
 	@SuppressWarnings("exports")
-	public Button getBtnSalvar() {
-		return btnSalvar;
-	}
-
-	@SuppressWarnings("exports")
-	public Button getBtnCancelar() {
-		return btnCancelar;
-	}
-
-	@SuppressWarnings("exports")
 	public TextField getId() {
 		return id;
 	}
@@ -205,10 +190,20 @@ public class NovoProdutoController {
 		return markupText;
 	}
 
+	public static NcmDto getNcmSelecionado() {
+		return ncmSelecionado;
+	}
+
+	public static void setNcmSelecionado(NcmDto ncmSelecionado) {
+		NovoProdutoController.ncmSelecionado = ncmSelecionado;
+	}
+
+	@SuppressWarnings("exports")
 	public TextField getEstoque() {
 		return estoque;
 	}
 
+	@SuppressWarnings("exports")
 	public void setEstoque(TextField estoque) {
 		this.estoque = estoque;
 	}
@@ -249,16 +244,6 @@ public class NovoProdutoController {
 	@SuppressWarnings("exports")
 	public void setRoot(Pane root) {
 		this.root = root;
-	}
-
-	@SuppressWarnings("exports")
-	public void setBtnSalvar(Button btnSalvar) {
-		this.btnSalvar = btnSalvar;
-	}
-
-	@SuppressWarnings("exports")
-	public void setBtnCancelar(Button btnCancelar) {
-		this.btnCancelar = btnCancelar;
 	}
 
 	@SuppressWarnings("exports")
@@ -312,14 +297,15 @@ public class NovoProdutoController {
 	}
 
 	public void initialize() throws Exception {
+		novoProdutoController = this;
+
 		// INICIA MARKUP AO CARREGAR A TELA
 		markup = MarkupPadraoController.buscarMarkup();
-		ncm = NCMController.ncmSelecionado;
-
 		// SETA MÁSCARAS NOS CAMPOS
 		Mascaras.monetaryField(getValor());
 		Mascaras.monetaryField(getCusto());
 		Mascaras.numericField(getEstoque());
+		getEstoque().setAlignment(Pos.CENTER_RIGHT);
 
 		// CRIA E ADICIONA NA TELA CAMPOS
 		getRoot().getChildren().add(3, criarComboBoxCategorias());
@@ -329,6 +315,26 @@ public class NovoProdutoController {
 
 		// SELECIONA COMBOBOX SE UTILIZAR MARKUP
 		getMarkupText().setEditable(markup.isUtilizar() ? false : true);
+
+		if (MenuNovoProdutoController.novoProduto != null) {
+			getEan_getin().setText(MenuNovoProdutoController.novoProduto.getEAN_GTIN());
+			
+			getDescricao().setText(MenuNovoProdutoController.novoProduto.getDescricao().isEmpty() ? ""
+					: MenuNovoProdutoController.novoProduto.getDescricao());
+			
+			if (MenuNovoProdutoController.novoProduto.getCategoria() != null) {
+				getCategoria().getSelectionModel().select(MenuNovoProdutoController.novoProduto.getCategoria().getId());
+			}
+			if (MenuNovoProdutoController.novoProduto.getUnidadeProduto() != null) {
+				getUnidade().getSelectionModel()
+						.select(MenuNovoProdutoController.novoProduto.getUnidadeProduto().getId());
+			}
+			getCusto().setText(MenuNovoProdutoController.novoProduto.getCusto().replace("R$ ", "").replace(",", "."));
+			getValor().setText(
+					MenuNovoProdutoController.novoProduto.getValorVenda().replace("R$ ", "").replace(",", "."));
+			getEstoque().setText(String.valueOf(MenuNovoProdutoController.novoProduto.getEstoque()));
+			getObs().setText(MenuNovoProdutoController.novoProduto.getObs());
+		}
 
 		// CARREGA TELA MARKUP SE AÇÃO NO COMBOBOX
 		getCheckBox().setOnAction(e -> {
@@ -441,12 +447,6 @@ public class NovoProdutoController {
 				getObs().requestFocus();
 		});
 
-		// MUDA FOCUS PARA BOTÃO SALVAR
-		getObs().setOnKeyPressed((keyEvent) -> {
-			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB)
-				getBtnSalvar().requestFocus();
-		});
-
 		// EVENTO ATRAVÉS DAS TECLAS F2 OU ESC
 		getRoot().setOnKeyPressed((keyEvent) -> {
 			if (keyEvent.getCode() == KeyCode.F2)
@@ -456,8 +456,6 @@ public class NovoProdutoController {
 					e1.printStackTrace();
 				}
 
-			if (keyEvent.getCode() == KeyCode.ESCAPE)
-				fecharTela();
 		});
 	}
 
@@ -869,7 +867,8 @@ public class NovoProdutoController {
 		if (!getMarkupText().getText().isEmpty() && !getCusto().getText().isEmpty()) {
 			Double percentualMarkup = Double.parseDouble(getMarkupText().getText().replace(",", ".").replace("%", ""));
 			percentualMarkup = percentualMarkup / 100;
-			Double custo = Double.parseDouble(getCusto().getText().replace("R$ ", "").replace(",", "."));
+			Double custo = Double
+					.parseDouble(getCusto().getText().replace("R$ ", "").replace(".", "").replace(",", "."));
 			Double venda = (custo * percentualMarkup) + custo;
 			getValor().setText("R$ " + String.valueOf(Mascaras.monetario(venda)));
 		} else {
@@ -881,8 +880,12 @@ public class NovoProdutoController {
 	private void calcularMarkup() {
 		getMarkupText().clear();
 		if (!getValor().getText().isEmpty()) {
-			Double custo = Double.parseDouble(getCusto().getText().replace("R$ ", "").replace(",", "."));
-			Double venda = Double.parseDouble(getValor().getText().replace("R$ ", "").replace(",", "."));
+			System.out.println(getCusto().getText().replace("R$ ", "").replace(".", "").replace(",", "."));
+			Double custo = Double
+					.parseDouble(getCusto().getText().replace("R$ ", "").replace(".", "").replace(",", "."));
+
+			Double venda = Double
+					.parseDouble(getValor().getText().replace("R$ ", "").replace(".", "").replace(",", "."));
 			Double percentual = ((venda - custo) * 100) / custo;
 			getMarkupText().setText(Mascaras.percentual(percentual) + " %");
 		}
@@ -899,31 +902,34 @@ public class NovoProdutoController {
 		if (getDescricao().getText().isEmpty()) {
 			getInfo().setText("Campo Obrigatório!");
 			style.campoObrigatorio(getDescricao());
+			MenuNovoProdutoController.menuNovoProdutoController.btnCadastro(null);
+			novoProdutoController.getInfo().setText("Campo Obrigatório!");
+			style.campoObrigatorio(novoProdutoController.getDescricao());
+			
+			return;
 		} else {
 			style.campoObrigatorioRemove(getDescricao());
 			getInfo().setText(null);
 
 			// CRIAR NOVO PRODUTO
 			ProdutoDto p = new ProdutoDto();
-			
-			//SETA EAN_GETIN COM VAZIO CASO NAO SEJA PASSADO VALOR
+
+			// SETA EAN_GETIN COM VAZIO CASO NAO SEJA PASSADO VALOR
 			p.setEAN_GTIN(getEan_getin().getText().isEmpty() ? "" : getEan_getin().getText());
-			
+
 			p.setDescricao(getDescricao().getText());
-			
+
 			p.setCodigo("00789");
-			
-			//SETA VALOR DE VENDA COM 0 CASO NAO SEJA PASSADO VALOR
+
+			// SETA VALOR DE VENDA COM 0 CASO NAO SEJA PASSADO VALOR
 			p.setValorVenda(getValor().getText().isEmpty() ? 0d
-					: Double.parseDouble(getValor().getText().replace("R$ ", "").replace(",", ".")));
-			
-			//SETA CUSTO COM 0 CASO NAO SEJA PASSADO VALOR
+					: Double.parseDouble(getValor().getText().replace("R$ ", "").replace(".", "").replace(",", ".")));
+
+			// SETA CUSTO COM 0 CASO NAO SEJA PASSADO VALOR
 			p.setCusto(getCusto().getText().isEmpty() ? 0d
-					: Double.parseDouble(getCusto().getText().replace("R$ ", "").replace(",", ".")));
-			
-			System.out.println(p.getCusto());
-			
-			//SETA ESTOQUE COM 0 CASO NÃO SEJA PASSADO VALOR
+					: Double.parseDouble(getCusto().getText().replace("R$ ", "").replace(".", "").replace(",", ".")));
+
+			// SETA ESTOQUE COM 0 CASO NÃO SEJA PASSADO VALOR
 			p.setEstoque(getEstoque().getText().isBlank() ? 0 : Integer.parseInt(getEstoque().getText()));
 
 			// SELECIONA UNIDADE VAZIA OU A SELECIONADA
@@ -935,15 +941,14 @@ public class NovoProdutoController {
 			p.setCategoria(getCategoria().getSelectionModel().getSelectedItem() == null
 					? NovaCategoriaController.buscarCategoriaProduto(1)
 					: getCategoria().getSelectionModel().getSelectedItem());
-			
+
 			p.setMarkup(getMarkup());
 			p.setFornecedor("Reval");
 			p.setTributacao("1");
 			p.setObs(getObs().getText().isEmpty() ? "" : getObs().getText());
 
 			// SETA NCM VAZIO CASO NAO SEJA INFORMADO NENHUM NCM
-			p.setNcm(TributacaoController.tributacaoController.getNcm().getText() == null ? TributacaoController.ncmS
-					: NCMController.ncmSelecionado);
+			p.setNcm(MenuNovoProdutoController.novoProduto.getNcmObjDto());
 
 			p.setCest("");
 			p.setDataInclusao(LocalDateTime.now());
@@ -959,7 +964,7 @@ public class NovoProdutoController {
 				categoria.put("id", p.getCategoria().getId());
 
 				JSONObject ncm = new JSONObject();
-				ncm.put("id", 3);
+				ncm.put("id", p.getNcmObjDto().getId());
 
 				JSONObject json = new JSONObject();
 				json.put("descricao", p.getDescricao());
@@ -979,7 +984,6 @@ public class NovoProdutoController {
 				json.put("status", 1);
 				json.put("ean_GTIN", p.getEAN_GTIN());
 				json.put("obs", p.getObs());
-				System.out.println(json);
 
 				// REQUIÇÃO
 				String endpoint = url + "products";
@@ -990,21 +994,18 @@ public class NovoProdutoController {
 				HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 				String message = response.body();
 				int status = response.statusCode();
-				System.out.println(response.body());
 
 				if (status == 200) {
 					Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 					alert.setHeaderText(null);
 					alert.setContentText("Produto \"" + getDescricao().getText() + "\" cadastrado com sucesso! ");
 					alert.showAndWait();
-					Stage stage = (Stage) btnCancelar.getScene().getWindow();
-					stage.close();
-
 					// ATUALIZA A TABELA
 					ProdutosController.popularTabela();
+					MenuNovoProdutoController.novoProduto = null;
+					MenuNovoProdutoController.menuNovoProdutoController.fecharTela();
 
 				} else {
-
 					Alert alert = new Alert(Alert.AlertType.ERROR);
 					alert.setHeaderText(null);
 					alert.setContentText(
@@ -1013,9 +1014,8 @@ public class NovoProdutoController {
 					alert.showAndWait();
 
 				}
-
 			} catch (Exception e) {
-				// TODO: handle exception
+				throw new Exception("Não foi possível realizar a operação! " + e.getMessage() + e.getCause());
 			}
 		}
 	}
@@ -1023,21 +1023,6 @@ public class NovoProdutoController {
 	@SuppressWarnings("exports")
 	public void calcularValorVendaAutomatico(ActionEvent action) {
 		calcularValorVenda();
-	}
-
-	private void fecharTela() {
-		Stage stage = (Stage) getBtnCancelar().getScene().getWindow();
-		stage.close();
-	}
-
-	@SuppressWarnings("exports")
-	public void salvar(ActionEvent action) throws Exception {
-		criarProduto();
-	}
-
-	@SuppressWarnings("exports")
-	public void cancelar(ActionEvent action) throws IOException {
-		fecharTela();
 	}
 
 }

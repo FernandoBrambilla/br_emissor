@@ -6,6 +6,14 @@ public class CategoriaProdutoDto {
 	
 	private String descricao;
 
+	public CategoriaProdutoDto(CategoriaProdutoDto selectedItem) {
+		this.id = selectedItem.getId();
+		this.descricao = selectedItem.getDescricao();
+	}
+	
+	public CategoriaProdutoDto() {
+	}
+
 	public Integer getId() {
 		return id;
 	}

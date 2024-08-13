@@ -74,7 +74,7 @@ public class EditarUsuarioController {
 	@SuppressWarnings("exports")
 	public TextField getPassword2() {
 		return password2;
-	}
+	} 
 
 	@SuppressWarnings("exports")
 	public void setFullName(TextField fullName) {

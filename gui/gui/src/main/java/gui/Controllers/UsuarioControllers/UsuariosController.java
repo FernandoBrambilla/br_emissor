@@ -35,6 +35,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class UsuariosController extends Application {
@@ -300,7 +301,7 @@ public class UsuariosController extends Application {
 		efeitos.hover(getBtnNovo());
 		efeitos.hover(getBtnEditar());
 		efeitos.hover(getBtnApagar());
-		efeitos.hover(getBtnInativar());
+		efeitos.hover(getBtnInativar()); 
 	}
 
 	@SuppressWarnings({ "unchecked" })
@@ -497,7 +498,8 @@ public class UsuariosController extends Application {
 		Scene scene = new Scene(painel, 600, 450);
 		stage.setTitle("Cadasto de Usuários");
 		stage.setScene(scene);
-		stage.show();
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.showAndWait();
 	}
 
 	// CHAMA TELA DE EDITAR USUÁRIO
@@ -520,7 +522,8 @@ public class UsuariosController extends Application {
 			Scene scene = new Scene(painel, 600, 450);
 			stage.setTitle("Editar Usuário");
 			stage.setScene(scene);
-			stage.show();
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.showAndWait();
 
 		}
 

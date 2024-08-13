@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane fx:id="telaBase" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controllers.ProdutoControllers.MenuNovoProdutoController">
+<BorderPane fx:id="telaBase" prefHeight="422.0" prefWidth="800.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controllers.ProdutoControllers.MenuNovoProdutoController">
    <top>
       <Pane cacheShape="false" prefHeight="170.0" prefWidth="800.0" style="-fx-background-color: white;" BorderPane.alignment="CENTER">
          <children>
@@ -60,4 +60,20 @@
          </children>
       </Pane>
    </top>
+   <bottom>
+      <Pane prefHeight="75.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="btnSalvar" layoutX="497.0" layoutY="22.0" mnemonicParsing="false" onAction="#salvar" prefHeight="30.0" prefWidth="113.0" style="-fx-background-color: #2484BF;" text="Salvar  (F2)" textFill="WHITE">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+            <Button fx:id="btnCancelar" layoutX="643.0" layoutY="22.0" mnemonicParsing="false" onAction="#cancelar" prefHeight="30.0" prefWidth="113.0" style="-fx-background-color: #2484BF;" text="Cancelar" textFill="WHITE">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+         </children>
+      </Pane>
+   </bottom>
 </BorderPane>
