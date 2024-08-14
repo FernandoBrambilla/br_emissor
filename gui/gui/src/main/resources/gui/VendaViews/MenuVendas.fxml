@@ -9,9 +9,9 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane prefHeight="130.0" prefWidth="490.0" style="-fx-background-color: #171B36;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controllers.ClienteControllers.ClientesController">
+<Pane prefHeight="130.0" prefWidth="802.0" style="-fx-background-color: #171B36;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controllers.VendaControllers.VendasController">
    <children>
-      <Button fx:id="btnNovo" alignment="CENTER" graphicTextGap="10.0" layoutX="10.0" layoutY="20.0" mnemonicParsing="false" onAction="#novo" onMouseEntered="#aplicaEfeitos" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #363848;" text="Novo" textFill="WHITE">
+      <Button fx:id="btnNovaVenda" alignment="CENTER" graphicTextGap="10.0" layoutX="10.0" layoutY="20.0" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="40.0" prefWidth="140.0" style="-fx-background-color: #363848;" text="Venda Caixa" textFill="WHITE">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
@@ -21,7 +21,7 @@
          <graphic>
             <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: pointer;">
                <image>
-                  <Image url="@../img/adicionar.png" />
+                  <Image url="@../img/caixa.png" />
                </image>
             </ImageView>
          </graphic>
@@ -29,7 +29,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </Button>
-      <Button fx:id="btnEditar" alignment="CENTER" graphicTextGap="10.0" layoutX="130.0" layoutY="20.0" mnemonicParsing="false" onAction="#editar" onMouseEntered="#aplicaEfeitos" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #363848;" text="Editar" textFill="WHITE">
+      <Button fx:id="btnEditarVenda" alignment="CENTER" graphicTextGap="10.0" layoutX="330.0" layoutY="20.0" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="40.0" prefWidth="140.0" style="-fx-background-color: #363848;" text="Editar" textFill="WHITE">
          <graphic>
             <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                <image>
@@ -47,7 +47,7 @@
             <Insets left="5.0" top="5.0" />
          </padding>
       </Button>
-      <Button fx:id="btnApagar" alignment="CENTER" graphicTextGap="10.0" layoutX="250.0" layoutY="20.0" mnemonicParsing="false" onAction="#apagar" onMouseEntered="#aplicaEfeitos" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #363848;" text="Apagar" textFill="WHITE">
+      <Button fx:id="btnCancelarVenda" alignment="CENTER" graphicTextGap="10.0" layoutX="490.0" layoutY="20.0" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="40.0" prefWidth="140.0" style="-fx-background-color: #363848;" text="Cancelar" textFill="WHITE">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
@@ -65,12 +65,48 @@
             <Insets left="5.0" top="5.0" />
          </padding>
       </Button>
-      <TextField layoutX="10.0" layoutY="80.0" prefHeight="30.0" prefWidth="470.0" promptText="Digite o nome do cliente para pesquisar">
+      <Button fx:id="btnNovaVenda1" alignment="CENTER" graphicTextGap="10.0" layoutX="170.0" layoutY="20.0" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="40.0" prefWidth="140.0" style="-fx-background-color: #363848;" text="Venda Crédito" textFill="WHITE">
+         <font>
+            <Font name="Calibri" size="15.0" />
+         </font>
+         <padding>
+            <Insets left="5.0" top="5.0" />
+         </padding>
+         <graphic>
+            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true" style="-fx-cursor: pointer;">
+               <image>
+                  <Image url="@../img/pendente.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="btnCancelarVenda1" alignment="CENTER" graphicTextGap="10.0" layoutX="650.0" layoutY="20.0" mnemonicParsing="false" onMouseEntered="#aplicaEfeitos" prefHeight="40.0" prefWidth="140.0" style="-fx-background-color: #363848;" text="Imprimir" textFill="WHITE">
+         <font>
+            <Font name="Calibri" size="15.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+         <graphic>
+            <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../img/impressora.png" />
+               </image>
+            </ImageView>
+         </graphic>
+         <padding>
+            <Insets left="5.0" top="5.0" />
+         </padding>
+      </Button>
+      <TextField layoutX="10.0" layoutY="80.0" prefHeight="30.0" prefWidth="781.0" promptText="Digite nome do cliente, produto ou data de venda para pesquisar venda...">
          <font>
             <Font name="Calibri" size="15.0" />
          </font>
       </TextField>
-      <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="446.0" layoutY="84.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="25.0" fitWidth="25.0" layoutX="765.0" layoutY="83.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../img/lupa.png" />
          </image>

@@ -212,6 +212,21 @@
                               <Font name="Calibri" size="16.0" />
                            </font>
                         </Hyperlink>
+                        <Label fx:id="emissor" layoutY="80.0" text="Emissor:" textFill="WHITE">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="usuario" layoutY="120.0" text="Usuário:" textFill="WHITE">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                        <Label fx:id="plano" layoutY="100.0" text="Plano:" textFill="WHITE">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
                      </children>
                   </Pane>
                </children>
@@ -235,23 +250,8 @@
                   </Label>
                </center>
             </BorderPane>
-            <Pane fx:id="menuSuperior" layoutX="210.0" minHeight="130.0" minWidth="810.0" style="-fx-background-color: #171B36;">
+            <Pane fx:id="menuSuperior" layoutX="210.0" minHeight="130.0" minWidth="810.0" prefWidth="222.0" style="-fx-background-color: #171B36;">
                <children>
-                  <Label fx:id="usuario" layoutX="491.0" layoutY="27.0" text="Usuário:" textFill="WHITE">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="emissor" layoutX="491.0" layoutY="4.0" text="Emissor:" textFill="WHITE">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-                  <Label fx:id="plano" layoutX="491.0" layoutY="50.0" text="Plano:" textFill="WHITE">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
                   <BorderPane fx:id="menu" prefHeight="129.0" prefWidth="470.0" style="-fx-background-color: #171B36;" />
                </children>
             </Pane>

@@ -115,6 +115,7 @@ public class PrincipalController {
 		return usuariosController;
 	}
 
+	@SuppressWarnings("exports")
 	public static ClientesController getClientesController() {
 		return clientesController;
 	}
@@ -296,18 +297,22 @@ public class PrincipalController {
 		this.usuario = usuario;
 	}
 
+	@SuppressWarnings("exports")
 	public Label getPlano() {
 		return plano;
 	}
 
+	@SuppressWarnings("exports")
 	public Label getEmissor() {
 		return emissor;
 	}
 
+	@SuppressWarnings("exports")
 	public void setPlano(Label plano) {
 		this.plano = plano;
 	}
 
+	@SuppressWarnings("exports")
 	public void setEmissor(Label emissor) {
 		this.emissor = emissor;
 	}
@@ -369,6 +374,39 @@ public class PrincipalController {
 		getPlano().setText("Plano: Free");
 		getEmissor().setText("Emissor: Brambilla Informática");
 
+		//ACÃO BOTÃO VENDAS
+		getBtnVendas().setOnAction((event) -> {
+			try {
+				getStyle().adicinarCorBotaoSelecionado(getBtnVendas());
+				getStyle().removerCorBotaoSelecionado(getBtnCaixa());
+				getStyle().removerCorBotaoSelecionado(getBtnClientes());
+				getStyle().removerCorBotaoSelecionado(getBtnEstatisticas());
+				getStyle().removerCorBotaoSelecionado(getBtnOrcamento());
+				getStyle().removerCorBotaoSelecionado(getBtnProdutos());
+				getStyle().removerCorBotaoSelecionado(getBtnUsuarios());
+				getStyle().removerCorBotaoSelecionado(getBtnConfiguracoes());
+
+				// CARREGA O MENU DE VENDAS
+				FXMLLoader loader = new FXMLLoader(App.class.getResource("VendaViews/MenuVendas.fxml"));
+				getMenu().setTop(loader.load());
+				
+				/*
+				// CARREGA A TABELA DE USUARIOS
+				setTabelaUsuarios(getUsuariosController().construirTabela());
+				getTelaBase().setCenter(tabelaUsuarios);
+				tabelaUsuarios.autosize();
+				
+				usuariosController.setTelaBase(telaBase);
+				UsuariosController.setTabelaUsuarios(tabelaUsuarios);
+				*/
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}); 
+		
+		
 		getBtnUsuarios().setOnAction((event) -> {
 			try {
 				setUsuariosController(new UsuariosController());

@@ -16,7 +16,7 @@ import org.springframework.hateoas.RepresentationModel;
 
 @Entity 
 @Table(name = "clients")
-public class Clients extends RepresentationModel<Clients> implements Serializable{
+public class Cliente extends RepresentationModel<Cliente> implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -72,7 +72,7 @@ public class Clients extends RepresentationModel<Clients> implements Serializabl
 
         private String obs;
         
-    public Clients() {
+    public Cliente() {
     }
 
     public String getBairro() {

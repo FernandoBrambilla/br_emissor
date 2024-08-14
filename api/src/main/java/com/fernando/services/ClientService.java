@@ -10,7 +10,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.fernando.Controllers.ClientController;
-import com.fernando.Entities.Clients;
+import com.fernando.Entities.Cliente;
 import com.fernando.Exceptions.RequiredObjectIsNullException;
 import com.fernando.Exceptions.ResourceNotFoundException;
 import com.fernando.Repositories.ClientRepository;
@@ -28,8 +28,8 @@ public class ClientService {
 	}
 
 	// FindAll
-	public List<Clients> findAll() {
-		var entity = repository.findAll().stream().map(clients -> mapper.map(clients, Clients.class))
+	public List<Cliente> findAll() {
+		var entity = repository.findAll().stream().map(clients -> mapper.map(clients, Cliente.class))
 				.collect(Collectors.toList());
 		// LINK HATEOAS
 		entity.stream().forEach(clients -> clients
@@ -38,8 +38,8 @@ public class ClientService {
 	}
 
 	// FindByName
-	public List<Clients> findByName(String name) {
-		var entity = repository.findByName(name).stream().map(client -> mapper.map(client, Clients.class))
+	public List<Cliente> findByName(String name) {
+		var entity = repository.findByName(name).stream().map(client -> mapper.map(client, Cliente.class))
 				.collect(Collectors.toList());
 		// LINK HATEOAS
 		entity.stream().forEach(
@@ -48,9 +48,9 @@ public class ClientService {
 	}
 
 	// FindById
-	public Clients findById(Long id) {
+	public Cliente findById(Long id) {
 		var entity = repository.findById(id);
-		var clientVo = entity.map(client -> mapper.map(client, Clients.class))
+		var clientVo = entity.map(client -> mapper.map(client, Cliente.class))
 				.orElseThrow(() -> new ResourceNotFoundException());
 		// LINK HATEOAS
 		clientVo.add(linkTo(methodOn(ClientController.class).findById(id)).withSelfRel());
@@ -58,7 +58,7 @@ public class ClientService {
 	}
 
 	// Create
-	public Clients create(Clients client) {
+	public Cliente create(Cliente client) {
 		if (client == null)
 			throw new RequiredObjectIsNullException();
 		var clientVo = repository.save(client);
@@ -69,10 +69,10 @@ public class ClientService {
 	}
 
 	// Update
-	public Clients update(Clients client) {
+	public Cliente update(Cliente client) {
 		if (client == null)
 			throw new RequiredObjectIsNullException();
-		Clients entity = repository.findById(client.getId()).orElseThrow(() -> new ResourceNotFoundException());
+		Cliente entity = repository.findById(client.getId()).orElseThrow(() -> new ResourceNotFoundException());
 		entity.setTipo(client.getTipo());
 		entity.setName(client.getName());
 		entity.setPhone(client.getPhone());
@@ -96,7 +96,7 @@ public class ClientService {
 
 	// Delete
 	public void delete(Long id) {
-		Clients entity = repository.findById(id)
+		Cliente entity = repository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("No records found for this ID"));
 		repository.delete(entity);
 
