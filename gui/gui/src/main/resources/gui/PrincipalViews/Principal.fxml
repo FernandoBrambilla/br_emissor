@@ -14,7 +14,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <VBox style="-fx-background-color: #323639;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controllers.PrincipalControllers.PrincipalController">
    <children>
       <Pane style="-fx-background-color: #323639;">
@@ -217,7 +216,7 @@
                   </Pane>
                </children>
             </FlowPane>
-            <BorderPane fx:id="telaBase" layoutX="210.0" layoutY="80.0" minHeight="610.0" minWidth="810.0" style="-fx-background-color: #F0F0F0;">
+            <BorderPane fx:id="telaBase" layoutX="210.0" layoutY="130.0" minHeight="559.0" minWidth="810.0" prefHeight="559.0" prefWidth="810.0" style="-fx-background-color: #F0F0F0;">
                <center>
                   <Label graphicTextGap="10.0" prefHeight="150.0" prefWidth="443.0" text="Sistemas de Gestão" textFill="#323639" BorderPane.alignment="CENTER">
                      <font>
@@ -236,7 +235,7 @@
                   </Label>
                </center>
             </BorderPane>
-            <Pane fx:id="menuSuperior" layoutX="210.0" minHeight="80.0" minWidth="810.0" style="-fx-background-color: #171B36;">
+            <Pane fx:id="menuSuperior" layoutX="210.0" minHeight="130.0" minWidth="810.0" style="-fx-background-color: #171B36;">
                <children>
                   <Label fx:id="usuario" layoutX="491.0" layoutY="27.0" text="Usuário:" textFill="WHITE">
                      <font>
@@ -253,7 +252,7 @@
                         <Font size="14.0" />
                      </font>
                   </Label>
-                  <BorderPane fx:id="menu" prefHeight="80.0" prefWidth="470.0" style="-fx-background-color: #171B36;" />
+                  <BorderPane fx:id="menu" prefHeight="129.0" prefWidth="470.0" style="-fx-background-color: #171B36;" />
                </children>
             </Pane>
          </children>

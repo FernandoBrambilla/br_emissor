@@ -332,6 +332,14 @@ public class PrincipalController {
 
 	@SuppressWarnings("exports")
 	public void configuracoes(ActionEvent event) throws IOException {
+		getStyle().adicinarCorBotaoSelecionado(getBtnConfiguracoes()); 
+		getStyle().removerCorBotaoSelecionado(getBtnUsuarios());
+		getStyle().removerCorBotaoSelecionado(getBtnCaixa());
+		getStyle().removerCorBotaoSelecionado(getBtnClientes());
+		getStyle().removerCorBotaoSelecionado(getBtnEstatisticas());
+		getStyle().removerCorBotaoSelecionado(getBtnOrcamento());
+		getStyle().removerCorBotaoSelecionado(getBtnProdutos());
+		getStyle().removerCorBotaoSelecionado(getBtnVendas());
 		setConfiguracoes(new ConfiguracoesController());
 		Stage stage = new Stage();
 		Parent painel = FXMLLoader.load(App.class.getResource("ConfiguracoesViews/Configuracoes.fxml"));
@@ -340,7 +348,7 @@ public class PrincipalController {
 		stage.setScene(scene);
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.showAndWait();
-		getStyle().adicinarCorBotaoSelecionado(getBtnConfiguracoes()); 
+		
 	}
 
 	Style style = new Style();

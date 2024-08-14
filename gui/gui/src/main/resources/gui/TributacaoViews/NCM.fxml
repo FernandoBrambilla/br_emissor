@@ -14,7 +14,7 @@
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0" prefWidth="900.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controllers.TributacaoControllers.NCMController">
    <children>
-      <TextField fx:id="ncm" layoutX="130.0" layoutY="30.0" prefHeight="30.0" prefWidth="550.0" promptText="Digite o NCM ou F5 para pesquisar">
+      <TextField fx:id="ncmPesquisa" layoutX="130.0" layoutY="30.0" onKeyPressed="#pesquisarNcmByName" prefHeight="30.0" prefWidth="550.0" promptText="Digite para pesquisar">
          <font>
             <Font size="15.0" />
          </font>

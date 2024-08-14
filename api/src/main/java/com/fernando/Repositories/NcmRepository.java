@@ -11,6 +11,6 @@ import com.fernando.Entities.NCM;
 
 public interface NcmRepository extends JpaRepository<NCM, Long> {
 	
-	 @Query("SELECT u from NCM u WHERE u.descricao like ?1%")
-	  List<NCM> findByName(@Param("desc")String desc);
+	 @Query("SELECT u from NCM u WHERE u.descricao like %?1%")
+	  List<NCM> findByName(@Param("desc")String descricao);
 	}
