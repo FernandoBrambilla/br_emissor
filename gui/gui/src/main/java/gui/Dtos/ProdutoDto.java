@@ -4,6 +4,9 @@ import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.Locale;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class ProdutoDto {
 
 	Locale brasil = new Locale("pt", "BR");
@@ -27,7 +30,9 @@ public class ProdutoDto {
 	private CategoriaProdutoDto categoria;
 
 	private MarkupDto markup;
-
+	
+	private Boolean utilizarMarkup;
+	
 	private String fornecedor;
 
 	private String tributacao;
@@ -41,8 +46,11 @@ public class ProdutoDto {
 	private String EAN_GTIN;
 	
 	private String obs; 
+	
+	private Boolean status;
 
 	public ProdutoDto(ProdutoDto p) {
+		this.id = p.getId();
 		this.descricao = p.getDescricao();
 		this.codigo = p.getCodigo();
 		this.valorVenda = Double.valueOf(p.getValorVenda());
@@ -51,6 +59,7 @@ public class ProdutoDto {
 		this.unidadeProduto = p.getUnidadeProduto();
 		this.categoria = p.getCategoria();
 		this.markup = p.getMarkup();
+		this.utilizarMarkup = p.getUtilizarMarkup();
 		this.fornecedor = p.getFornecedor(); 
 		this.tributacao = p.getTributacao();
 		this.ncm = p.getNcmObjDto();
@@ -58,10 +67,33 @@ public class ProdutoDto {
 		this.dataInclusao = p.getDataInclusao();
 		this.EAN_GTIN = p.getEAN_GTIN();
 		this.obs = p.getObs();
+		this.status = p.getStatus();
 	}
 
-	public ProdutoDto() {
-		
+	public ProdutoDto() {		
+	}	
+	
+	
+	@SuppressWarnings("exports")
+	public ProdutoDto(JSONObject p) {
+		this.id = p.getLong("id");
+		this.descricao = p.getString("descricao");
+		this.codigo = p.getString("codigo");
+		this.valorVenda = Double.valueOf(p.getDouble("valorVenda"));
+		this.custo = Double.valueOf(p.getString("custo"));
+		this.estoque = Integer.parseInt(p.getString("estoque"));
+		this.utilizarMarkup = p.getBoolean("utilizarMarkup");
+		this.unidadeProduto = (UnidadeProdutoDto) p.get("unidadeProduto");
+		this.markup = (MarkupDto) p.get("markup");
+		this.categoria = (CategoriaProdutoDto) p.get("categoria");		
+		this.fornecedor = p.getString("fornecedor"); 
+		this.tributacao = p.getString("tributacao");
+		this.ncm = (NcmDto) p.get("ncm");
+		this.cest = p.getString("cest");
+		this.dataInclusao = (LocalDateTime) p.get("dataInclusao");
+		this.obs = p.getString("obs");
+		this.status = p.getBoolean("status");
+		this.EAN_GTIN = p.getString("ean_GTIN");	
 	}
 
 	public Long getId() {
@@ -76,6 +108,11 @@ public class ProdutoDto {
 		return codigo;
 	}
 
+	public Double getValorVendas() {
+		return valorVenda;
+	}
+
+	
 	public String getValorVenda() {
 		return realFormato.format(valorVenda);
 	}
@@ -100,6 +137,14 @@ public class ProdutoDto {
 		return markup;
 	}
 
+	public Boolean getUtilizarMarkup() {
+		return utilizarMarkup;
+	}
+
+	public void setUtilizarMarkup(Boolean utilizarMarkup) {
+		this.utilizarMarkup = utilizarMarkup;
+	}
+
 	public String getFornecedor() {
 		return fornecedor;
 	}
@@ -122,6 +167,14 @@ public class ProdutoDto {
 
 	public void setId(Long id) {
 		this.id = id;
+	} 
+	
+	public Boolean getStatus() {
+		return status;
+	}
+
+	public void setStatus(Boolean status) {
+		this.status = status;
 	}
 
 	public void setDescricao(String descricao) {

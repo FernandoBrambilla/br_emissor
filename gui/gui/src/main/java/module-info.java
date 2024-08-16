@@ -14,8 +14,6 @@ module gui{
 	requires org.yaml.snakeyaml;
 
 	
-   
-	
 	opens gui to javafx.base, javafx.fxml, application.model;
 	opens gui.Controllers.LoginControllers;
 	opens gui.Controllers.PrincipalControllers;

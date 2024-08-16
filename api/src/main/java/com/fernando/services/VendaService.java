@@ -67,12 +67,11 @@ public class VendaService {
 		entity.setDataVenda(venda.getDataVenda());
 		entity.setDesconto(venda.getDesconto());
 		entity.setMeioPgto(venda.getMeioPgto());
-		entity.setProduto(venda.getProduto());
-		entity.setQuantidade(venda.getQuantidade());
+		entity.setTroco(venda.getTroco());
 		entity.setStatus(venda.getStatus());
 		entity.setUsuario(venda.getUsuario());
 		entity.setValorPago(venda.getValorPago());
-		entity.setValorUnitario(venda.getValorUnitario());
+		
 		// LINK HATEOAS
 		entity.add(linkTo(methodOn(VendaController.class).findById(venda.getId())).withSelfRel());
 		return repository.save(entity);

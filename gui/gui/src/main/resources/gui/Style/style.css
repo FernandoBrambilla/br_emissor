@@ -33,6 +33,9 @@
    
     
 }
+.tabe-collumn .desconto{
+	-fx-text-background-color:  red;
+}
 
 /*LINHA PAR  HOVER*/
 .table-row-cell:odd:hover {

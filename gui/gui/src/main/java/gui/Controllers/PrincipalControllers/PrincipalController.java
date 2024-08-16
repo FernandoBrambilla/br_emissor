@@ -5,15 +5,18 @@ import java.awt.Toolkit;
 import java.io.IOException;
 import java.text.ParseException;
 
+
 import gui.App;
 import gui.Controllers.ClienteControllers.ClientesController;
 import gui.Controllers.ProdutoControllers.ProdutosController;
 import gui.Controllers.UsuarioControllers.UsuariosController;
+import gui.Controllers.VendaControllers.VendasController;
 import gui.Dtos.ClienteDto;
 import gui.Dtos.LoginDto;
 import gui.Dtos.ProdutoDto;
 import gui.Dtos.Style;
 import gui.Dtos.UserDto;
+import gui.Dtos.VendaDto;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -21,6 +24,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -34,6 +38,8 @@ public class PrincipalController {
 	static LoginDto usuarioLogado = null;
 
 	static String accessToken;
+	
+	static VendasController vendasController = null;
 
 	static ConfiguracoesController configuracoes = null;
 
@@ -42,12 +48,14 @@ public class PrincipalController {
 	static ClientesController clientesController = null;
 
 	static ProdutosController produtosController = null;
+	
+	private static TableView<VendaDto> tabelaVendas = null;
 
 	public static TableView<UserDto> tabelaUsuarios = null;
 
-	static TableView<ClienteDto> tabelaClients = null;
+	private static TableView<ClienteDto> tabelaClients = null;
 
-	static TableView<ProdutoDto> tabelaprodutos = null;
+	private static TableView<ProdutoDto> tabelaprodutos = null;
 
 	@FXML
 	private Pane menuSuperior;
@@ -134,6 +142,24 @@ public class PrincipalController {
 
 	public static TableView<ProdutoDto> getTabelaprodutos() {
 		return tabelaprodutos;
+	}
+	
+
+	public static VendasController getVendasController() {
+		return vendasController;
+	}
+
+	public static void setVendasController(VendasController vendasController) {
+		PrincipalController.vendasController = vendasController;
+	}
+
+	public static TableView<VendaDto> getTabelaVendas() {
+		return tabelaVendas;
+	}
+
+
+	public static void setTabelaVendas(TableView<VendaDto> tabelaVendas) {
+		PrincipalController.tabelaVendas = tabelaVendas;
 	}
 
 	public static void setProdutosController(ProdutosController produtosController) {
@@ -365,9 +391,13 @@ public class PrincipalController {
 		//-----------Configura o tamanho da tela------------------
 		Toolkit tk = Toolkit.getDefaultToolkit();
 		Dimension d = tk.getScreenSize();
+		
 		getTelaBase().setPrefHeight(d.getHeight()-150);
-		getTelaBase().setPrefWidth(d.getWidth()-220);
-		getMenuSuperior().setPrefWidth(d.getWidth()-220);
+		getTelaBase().setMinWidth(d.getWidth()-220);
+		getMenuSuperior().setMinWidth(d.getWidth()-220);
+		
+		
+		
 		//--------------------------------------------------------
 
 		getUsuario().setText("Usuário: " + getUsuarioLogado().getUserName());
@@ -377,6 +407,7 @@ public class PrincipalController {
 		//ACÃO BOTÃO VENDAS
 		getBtnVendas().setOnAction((event) -> {
 			try {
+				setVendasController(new VendasController());
 				getStyle().adicinarCorBotaoSelecionado(getBtnVendas());
 				getStyle().removerCorBotaoSelecionado(getBtnCaixa());
 				getStyle().removerCorBotaoSelecionado(getBtnClientes());
@@ -386,19 +417,22 @@ public class PrincipalController {
 				getStyle().removerCorBotaoSelecionado(getBtnUsuarios());
 				getStyle().removerCorBotaoSelecionado(getBtnConfiguracoes());
 
+				
+			
 				// CARREGA O MENU DE VENDAS
 				FXMLLoader loader = new FXMLLoader(App.class.getResource("VendaViews/MenuVendas.fxml"));
 				getMenu().setTop(loader.load());
 				
-				/*
-				// CARREGA A TABELA DE USUARIOS
-				setTabelaUsuarios(getUsuariosController().construirTabela());
-				getTelaBase().setCenter(tabelaUsuarios);
-				tabelaUsuarios.autosize();
 				
-				usuariosController.setTelaBase(telaBase);
-				UsuariosController.setTabelaUsuarios(tabelaUsuarios);
-				*/
+				// CARREGA A TABELA DE VENDAS
+				setTabelaVendas(getVendasController().construirTabela());
+				getTelaBase().setCenter(getTabelaVendas());
+				getTelaBase().setPrefHeight(getTabelaVendas().getPrefHeight());
+				getTelaBase().setPrefWidth(getTabelaVendas().getPrefWidth());
+	
+				getVendasController().setTelaBase(getTelaBase());
+				getVendasController().setTabelaVendas(getTabelaVendas());
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (Exception e) {

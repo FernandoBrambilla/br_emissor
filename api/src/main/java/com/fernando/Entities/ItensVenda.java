@@ -1,5 +1,7 @@
 package com.fernando.Entities;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -9,29 +11,24 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "pedido_venda")
-public class PedidoVenda {
+@Table(name = "itens_venda")
+public class ItensVenda {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@ManyToOne
-	@JoinColumn(name = "id_venda")
-	private Venda venda;
-
-	@ManyToOne
-	@JoinColumn(name = "id_produto")
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "produto_id")
 	private Product produto;
-
+	
 	private Integer quantidade;
+
+	@Column(name = "total_iten")
+	private Double totalIten;
 
 	public Long getId() {
 		return id;
-	}
-
-	public Venda getVenda() {
-		return venda;
 	}
 
 	public Product getProduto() {
@@ -42,12 +39,12 @@ public class PedidoVenda {
 		return quantidade;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public Double getTotalIten() {
+		return totalIten;
 	}
 
-	public void setVenda(Venda venda) {
-		this.venda = venda;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public void setProduto(Product produto) {
@@ -58,4 +55,9 @@ public class PedidoVenda {
 		this.quantidade = quantidade;
 	}
 
+	public void setTotalIten(Double totalIten) {
+		this.totalIten = totalIten;
+	}
+
+	
 }

@@ -260,7 +260,7 @@ public class ProdutosController {
 			MarkupDto markup;
 			NcmDto ncm;
 
-			// LOOP CONVERTE JSON EM CLIENTS
+			
 			for (int i = 0; i < responseJson.length(); i++) {
 				produto = new ProdutoDto();
 				unidadeProduto = new UnidadeProdutoDto();
