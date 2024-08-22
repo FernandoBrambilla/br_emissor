@@ -1,5 +1,6 @@
 package gui.Controllers.VendaControllers;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -14,6 +15,7 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import gui.App;
 import gui.Controllers.PrincipalControllers.PrincipalController;
 import gui.Dtos.CategoriaProdutoDto;
 import gui.Dtos.ClienteDto;
@@ -28,14 +30,20 @@ import gui.Dtos.UserDto;
 import gui.Dtos.VendaDto;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 public class VendasController {
 
@@ -129,10 +137,8 @@ public class VendasController {
 
 	@SuppressWarnings("unchecked")
 	public TableView<VendaDto> construirTabela() throws Exception {
-		setTabelaVendas(new TableView<VendaDto>());
-	
-		
-		
+		setTabelaVendas(new TableView<VendaDto>()); 
+
 		TableColumn<VendaDto, Integer> colunaID = new TableColumn<VendaDto, Integer>("ID");
 		colunaID.setCellValueFactory(new PropertyValueFactory<VendaDto, Integer>("id"));
 
@@ -143,9 +149,7 @@ public class VendasController {
 		colunaItens.setCellValueFactory(new PropertyValueFactory<VendaDto, String>("itens"));
 		colunaItens.setMaxWidth(400);
 		colunaItens.setMinWidth(300);
-		
-		
-	
+
 		TableColumn<VendaDto, String> colunaCliente = new TableColumn<VendaDto, String>("Cliente");
 		colunaCliente.setCellValueFactory(new PropertyValueFactory<VendaDto, String>("cliente"));
 
@@ -154,9 +158,9 @@ public class VendasController {
 
 		TableColumn<VendaDto, String> colunaDesconto = new TableColumn<VendaDto, String>("Desconto");
 		colunaDesconto.setCellValueFactory(new PropertyValueFactory<VendaDto, String>("desconto"));
-	
+
 		colunaDesconto.setPrefWidth(100);
-		colunaDesconto.setMaxWidth(100);
+		colunaDesconto.setMaxWidth(100); 
 
 		TableColumn<VendaDto, String> colunaTotalFinal = new TableColumn<VendaDto, String>("Total Final");
 		colunaTotalFinal.setCellValueFactory(new PropertyValueFactory<VendaDto, String>("totalFinal"));
@@ -218,12 +222,12 @@ public class VendasController {
 		UserDto usuario;
 		ItensVendaDto iten_da_venda;
 
-		List<ItensVendaDto> itens_da_venda = new ArrayList<>();
+		List<ItensVendaDto> itens_da_venda;
 
 		// LOOP CONVERTE JSON EM CLIENTS
 		for (int i = 0; i < responseJson.length(); i++) {
+			itens_da_venda = new ArrayList<>();
 			JSONObject vendaJson = responseJson.getJSONObject(i);
-
 			// OBJETOS QUE COMPÕE UMA VENDA
 			produto = new ProdutoDto();
 			meio = new MeioPagamentoDto();
@@ -243,81 +247,82 @@ public class VendasController {
 			MarkupDto markup;
 			NcmDto ncm;
 
-			for (int j = 0; j < itensArray.length(); j++) {
-				JSONObject produtosJson = itensArray.getJSONObject(j);
-				JSONObject produtoJson = produtosJson.getJSONObject("produto");
+			if (vendaJson.has("itensVendas")) {
+				for (int j = 0; j < itensArray.length(); j++) {
+					JSONObject produtoSJson = itensArray.getJSONObject(j);
+					JSONObject produtoJson = produtoSJson.getJSONObject("produto");
+					// JSONS DOS OBJETOS DENTRO DE PRODUTOS
+					JSONObject unidadeJson = (JSONObject) produtoJson.get("unidadeProduto");
+					JSONObject markupJson = (JSONObject) produtoJson.get("markup");
+					JSONObject categoriaJson = (JSONObject) produtoJson.get("categoria");
+					JSONObject ncmJson = (JSONObject) produtoJson.get("ncm");
 
-				// JSONS DOS OBJETOS DENTRO DE PRODUTOS
-				JSONObject unidadeJson = produtoJson.getJSONObject("unidadeProduto");
-				JSONObject markupJson = (JSONObject) produtoJson.get("markup");
-				JSONObject categoriaJson = (JSONObject) produtoJson.get("categoria");
-				JSONObject ncmJson = (JSONObject) produtoJson.get("ncm");
+					// PRENCHE O PRODUTO DO ITEN DA VENDA
+					// PRENCHE A UNIDADE DO PRODUTO
+					unidadeProduto = new UnidadeProdutoDto();
+					unidadeProduto.setId(unidadeJson.getInt("id"));
+					unidadeProduto.setDescricao(unidadeJson.getString("descricao"));
 
-				// PRENCHE O PRODUTO DO ITEN DA VENDA
-				// PRENCHE A UNIDADE DO PRODUTO
-				unidadeProduto = new UnidadeProdutoDto();
-				unidadeProduto.setId(unidadeJson.getInt("id"));
-				unidadeProduto.setDescricao(unidadeJson.getString("descricao"));
+					// PRENCHE MARKUP PRODUTO
+					markup = new MarkupDto();
+					markup.setId(markupJson.getInt("id"));
+					markup.setMarkup(new BigDecimal(markupJson.getBigInteger("markup")));
+					markup.setUtilizar(markupJson.getBoolean("utilizar"));
 
-				// PRENCHE MARKUP PRODUTO
-				markup = new MarkupDto();
-				markup.setId(markupJson.getInt("id"));
-				markup.setMarkup(new BigDecimal(markupJson.getBigInteger("markup")));
-				markup.setUtilizar(markupJson.getBoolean("utilizar"));
+					// PRENCHE CATEGORIA PRODUTO
+					categoriaProduto = new CategoriaProdutoDto();
+					categoriaProduto.setId(categoriaJson.getInt("id"));
+					categoriaProduto.setDescricao(categoriaJson.getString("descricao"));
 
-				// PRENCHE CATEGORIA PRODUTO
-				categoriaProduto = new CategoriaProdutoDto();
-				categoriaProduto.setId(categoriaJson.getInt("id"));
-				categoriaProduto.setDescricao(categoriaJson.getString("descricao"));
+					// PRENCHE NCM PRODUTO
+					ncm = new NcmDto();
+					ncm.setId(ncmJson.getLong("id"));
+					ncm.setNcm(ncmJson.getLong("ncm"));
+					ncm.setEx(ncmJson.getString("ex"));
+					ncm.setTipo(ncmJson.getString("tipo"));
+					ncm.setDescricao(ncmJson.getString("descricao"));
+					ncm.setNacionalfederal(ncmJson.getDouble("nacionalfederal"));
+					ncm.setImportadosfederal(ncmJson.getDouble("importadosfederal"));
+					ncm.setEstadual(ncmJson.getDouble("estadual"));
+					ncm.setMunicipal(ncmJson.getDouble("municipal"));
+					ncm.setDataInicio(LocalDate.parse(ncmJson.getString("vigenciainicio")));
+					ncm.setDataFim(LocalDate.parse(ncmJson.getString("vigenciafim")));
+					ncm.setChave(ncmJson.getString("chave"));
+					ncm.setVersao(ncmJson.getString("versao"));
+					ncm.setFonte(ncmJson.getString("fonte"));
 
-				// PRENCHE NCM PRODUTO
-				ncm = new NcmDto();
-				ncm.setId(ncmJson.getLong("id"));
-				ncm.setNcm(ncmJson.getLong("ncm"));
-				ncm.setEx(ncmJson.getString("ex"));
-				ncm.setTipo(ncmJson.getString("tipo"));
-				ncm.setDescricao(ncmJson.getString("descricao"));
-				ncm.setNacionalfederal(ncmJson.getDouble("nacionalfederal"));
-				ncm.setImportadosfederal(ncmJson.getDouble("importadosfederal"));
-				ncm.setEstadual(ncmJson.getDouble("estadual"));
-				ncm.setMunicipal(ncmJson.getDouble("municipal"));
-				ncm.setDataInicio(LocalDate.parse(ncmJson.getString("vigenciainicio")));
-				ncm.setDataFim(LocalDate.parse(ncmJson.getString("vigenciafim")));
-				ncm.setChave(ncmJson.getString("chave"));
-				ncm.setVersao(ncmJson.getString("versao"));
-				ncm.setFonte(ncmJson.getString("fonte"));
+					// PRENCHE O PRODUTO DO ITEN
+					produto = new ProdutoDto();
+					produto.setId(produtoJson.getLong("id"));
+					produto.setDescricao(produtoJson.getString("descricao").toUpperCase());
+					produto.setCodigo(produtoJson.getString("codigo"));
+					produto.setValorVenda(produtoJson.getDouble("valorVenda"));
+					produto.setCusto(produtoJson.getDouble("custo"));
+					produto.setEstoque(produtoJson.getInt("estoque"));
+					produto.setUtilizarMarkup(produtoJson.getBoolean("utilizarMarkup"));
+					produto.setUnidadeProduto(unidadeProduto);
+					produto.setMarkup(markup);
+					produto.setCategoria(categoriaProduto);
+					produto.setFornecedor(produtoJson.getString("fornecedor"));
+					produto.setTributacao(produtoJson.getString("tributacao"));
+					produto.setNcm(ncm);
+					produto.setCest(produtoJson.getString("cest"));
+					String dataInclusao = produtoJson.getString("dataInclusao").substring(0, 19).replaceAll("T", " ");
+					produto.setDataInclusao(LocalDateTime.parse(dataInclusao, formatoDateTime));
+					produto.setObs(produtoJson.getString("obs"));
+					produto.setStatus(produtoJson.getBoolean("status"));
+					produto.setEAN_GTIN(produtoJson.getString("ean_GTIN"));
 
-				// PRENCHE O PRODUTO DO ITEN
-				produto = new ProdutoDto();
-				produto.setId(produtoJson.getLong("id"));
-				produto.setDescricao(produtoJson.getString("descricao").toUpperCase());
-				produto.setCodigo(produtoJson.getString("codigo"));
-				produto.setValorVenda(produtoJson.getDouble("valorVenda"));
-				produto.setCusto(produtoJson.getDouble("custo"));
-				produto.setEstoque(produtoJson.getInt("estoque"));
-				produto.setUtilizarMarkup(produtoJson.getBoolean("utilizarMarkup"));
-				produto.setUnidadeProduto(unidadeProduto);
-				produto.setMarkup(markup);
-				produto.setCategoria(categoriaProduto);
-				produto.setFornecedor(produtoJson.getString("fornecedor"));
-				produto.setTributacao(produtoJson.getString("tributacao"));
-				produto.setNcm(ncm);
-				produto.setCest(produtoJson.getString("cest"));
-				String dataInclusao = produtoJson.getString("dataInclusao").substring(0, 19).replaceAll("T", " ");
-				produto.setDataInclusao(LocalDateTime.parse(dataInclusao, formatoDateTime));
-				produto.setObs(produtoJson.getString("obs"));
-				produto.setStatus(produtoJson.getBoolean("status"));
-				produto.setEAN_GTIN(produtoJson.getString("ean_GTIN"));
+					// PRENCHE O ITEM DA VENDA EM SI
+					iten_da_venda = new ItensVendaDto();
+					iten_da_venda.setId(produtoSJson.getLong("id"));
+					iten_da_venda.setProduto(produto);
+					iten_da_venda.setQuantidade(produtoSJson.getInt("quantidade"));
+					iten_da_venda.setTotalIten(produtoSJson.getDouble("totalIten"));
 
-				// PRENCHE O ITEM DA VENDA EM SI
-				iten_da_venda = new ItensVendaDto();
-				iten_da_venda.setId(produtosJson.getLong("id"));
-				iten_da_venda.setProduto(produto);
-				iten_da_venda.setQuantidade(produtosJson.getInt("quantidade"));
-				iten_da_venda.setTotalIten(produtosJson.getDouble("totalIten"));
-
-				// ADICIONA O ITEM NA LISTA DE ITENS
-				itens_da_venda.add(iten_da_venda);
+					// ADICIONA O ITEM NA LISTA DE ITENS
+					itens_da_venda.add(iten_da_venda);
+				}
 			}
 
 			// PRECHE MEIO PAGAMENTO
@@ -363,5 +368,19 @@ public class VendasController {
 			vendas.add(venda);
 		}
 		return vendas;
+	}
+	
+	@SuppressWarnings("exports")
+	public void novaVenda(ActionEvent action) throws IOException {
+		Stage stage = new Stage();
+		Parent painel = FXMLLoader.load(App.class.getResource("VendaViews/PDV.fxml"));
+		Scene scene = new Scene(painel, 1500, 800);
+		stage.setFullScreen(true);
+		stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
+		stage.setTitle("PDV - Vendas");
+		stage.setScene(scene);
+		stage.initModality(Modality.APPLICATION_MODAL);
+		stage.showAndWait();
+			
 	}
 }

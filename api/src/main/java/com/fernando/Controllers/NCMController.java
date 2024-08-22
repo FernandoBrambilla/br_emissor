@@ -31,7 +31,7 @@ public class NCMController {
 		return service.findAll();
 	}
 
-	// FindByName Controller
+	// FindByName Controller 
 	@GetMapping(value = "/descricao", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<NCM>> findByName(@RequestParam String desc) {
 		return new ResponseEntity<List<NCM>>(service.findByName(desc), HttpStatus.OK);

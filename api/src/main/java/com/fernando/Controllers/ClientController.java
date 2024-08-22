@@ -34,8 +34,7 @@ public class ClientController {
 	}
 	
 	//FindByName Controller
-	
-	@GetMapping(value= "/name", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value= "/descricao", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Cliente>> findByName(@RequestParam String name){
 		return new ResponseEntity<List<Cliente>> (service.findByName(name),HttpStatus.OK);
 	}

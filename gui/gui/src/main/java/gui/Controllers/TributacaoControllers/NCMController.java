@@ -227,7 +227,7 @@ public class NCMController {
 		ncmController = this;
 		ncmSelecionado = null;
 		// CRIA UM NCM VAZIO
-
+ 
 		// CONSTROI E PRENCHE A TABELA DE NCM
 		getBase().setTop(construirTabela());
 
@@ -241,7 +241,7 @@ public class NCMController {
 				stage.close();
 			}
 		});
-
+ 
 		// ABRA A TELA DE IMPORTAR NCM ATRAVÉ DO BOTÃO IMPORTAR TABELA
 		getImportNcm().setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -712,7 +712,7 @@ public class NCMController {
 		Stage stage = (Stage) getBtnSelecionar().getScene().getWindow();
 		stage.close();
 
-	}
+	} 
 
 	@SuppressWarnings("exports")
 	public void cancelar(ActionEvent action) throws IOException {

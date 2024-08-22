@@ -35,7 +35,7 @@ public class ProductController {
 	}
 	
 	//FindByName Controller
-	@GetMapping(value= "/desc", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value= "/descricao", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<Product>> findByName(@RequestParam String desc){
 		return new ResponseEntity<List<Product>> (service.findByName(desc),HttpStatus.OK);
 	}

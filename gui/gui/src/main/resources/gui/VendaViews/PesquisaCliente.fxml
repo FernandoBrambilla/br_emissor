@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="510.0" prefWidth="900.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controllers.VendaControllers.PesquisaClienteController">
+   <children>
+      <TextField fx:id="clientePesquisa" layoutX="130.0" layoutY="30.0" prefHeight="30.0" prefWidth="550.0" promptText="Digite para pesquisar">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </TextField>
+      <ImageView fx:id="pesquisar" fitHeight="25.0" fitWidth="25.0" layoutX="645.0" layoutY="33.0" opacity="0.54" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../img/lupa.png" />
+         </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </ImageView>
+      <Button fx:id="btnSelecionar" layoutX="515.0" layoutY="450.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="155.0" style="-fx-background-color: #2484BF;" text="Selecionar Cliente" textFill="WHITE">
+         <font>
+            <Font size="15.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="btnCancelar" layoutX="725.0" layoutY="450.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="113.0" style="-fx-background-color: #2484BF;" text="Cancelar" textFill="WHITE">
+         <font>
+            <Font size="15.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Separator layoutX="6.0" layoutY="431.0" prefHeight="4.0" prefWidth="886.0" />
+      <Label alignment="CENTER_RIGHT" layoutX="15.0" layoutY="30.0" prefHeight="30.0" prefWidth="100.0" text="Cliente">
+         <font>
+            <Font name="Calibri" size="15.0" />
+         </font>
+      </Label>
+      <Label fx:id="info" alignment="CENTER" layoutX="5.0" layoutY="5.0" prefHeight="18.0" prefWidth="740.0" textFill="RED">
+         <font>
+            <Font name="Calibri" size="14.0" />
+         </font>
+      </Label>
+      <ProgressBar fx:id="barraProgresso" layoutX="225.0" layoutY="255.0" prefHeight="32.0" prefWidth="502.0" progress="0.0" visible="false" />
+      <Label fx:id="info" alignment="CENTER" layoutX="229.0" layoutY="227.0" prefHeight="18.0" prefWidth="494.0" visible="false">
+         <font>
+            <Font name="Calibri" size="15.0" />
+         </font>
+      </Label>
+      <BorderPane fx:id="telaBase" layoutX="13.0" layoutY="92.0" maxHeight="340.0" maxWidth="875.0" prefHeight="306.0" prefWidth="875.0" />
+      <Button fx:id="btnCancelarImport" layoutX="725.0" layoutY="450.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="113.0" style="-fx-background-color: #2484BF;" text="Cancelar" textFill="WHITE" visible="false">
+         <font>
+            <Font size="15.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+   </children>
+</Pane>

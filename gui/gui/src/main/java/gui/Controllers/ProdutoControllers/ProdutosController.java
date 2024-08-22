@@ -52,7 +52,7 @@ public class ProdutosController {
 	public static TableView<ProdutoDto> tabelaprodutos;
 
 	public static ObservableList<ProdutoDto> observableList;
-	
+
 	public static ProdutosController produtosController;
 
 	@FXML
@@ -124,14 +124,14 @@ public class ProdutosController {
 	}
 
 	@FXML
-	public void initialize() throws Exception { 
+	public void initialize() throws Exception {
 		produtosController = this;
 
 		// CRIA UMA CATEGORIA PADRÃO CASO O BANCO SEJA NULL
 		if (NovaCategoriaController.buscarCategoriasProduto().isEmpty()) {
 			CategoriaProdutoDto categoria = new CategoriaProdutoDto();
 			categoria.setDescricao(" ");
-			NovaCategoriaController.criarCategoria(categoria); 
+			NovaCategoriaController.criarCategoria(categoria);
 		}
 
 		// CRIA UMA UNIDADE PADRÃO CASO O BANCO SEJA NULL
@@ -149,10 +149,10 @@ public class ProdutosController {
 			markup.setUtilizar(false);
 			MarkupPadraoController.criarMarkup(markup);
 		}
-		
-		//CRIA UM NCM VAZIO
-		if(NCMController.buscarNcms().isEmpty()) {
-			NCMController.criarNcmVazio(); 
+
+		// CRIA UM NCM VAZIO
+		if (NCMController.buscarNcms().isEmpty()) {
+			NCMController.criarNcmVazio();
 		}
 
 	}
@@ -167,9 +167,10 @@ public class ProdutosController {
 		efeitos.hover(getBtnApagar());
 
 	}
-	
+
 	/**
 	 * Método constrói e popula tabela de produtos
+	 * 
 	 * @return TableView de produtos
 	 * @throws Exception
 	 */
@@ -201,22 +202,18 @@ public class ProdutosController {
 
 		TableColumn<ProdutoDto, String> colunaUni = new TableColumn<ProdutoDto, String>("Unidade");
 		colunaUni.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("unidadeProduto"));
-	
- 
+
 		TableColumn<ProdutoDto, String> colunaCateg = new TableColumn<ProdutoDto, String>("Categoria");
 		colunaCateg.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("categoria"));
-	
 
 		TableColumn<ProdutoDto, NcmDto> colunaNcm = new TableColumn<ProdutoDto, NcmDto>("NCM");
 		colunaNcm.setCellValueFactory(new PropertyValueFactory<ProdutoDto, NcmDto>("ncm"));
-		
 
 		TableColumn<ProdutoDto, String> colunaObs = new TableColumn<ProdutoDto, String>("Observações");
 		colunaObs.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("obs"));
-		
+
 		TableColumn<ProdutoDto, String> colunaFornecedor = new TableColumn<ProdutoDto, String>("Fornecedor");
 		colunaFornecedor.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("fornecedor"));
-		
 
 		// POPULA A TABELA
 		popularTabela();
@@ -225,7 +222,7 @@ public class ProdutosController {
 		getTabelaprodutos().getColumns().addAll(colunaId, colunaCod, colunaDesc, colunaEstoque, colunaCusto,
 				colunaValor, colunaUni, colunaCateg, colunaNcm, colunaObs, colunaFornecedor);
 
-		if (getTabelaprodutos() == null) {
+		if (getTabelaprodutos().getItems().isEmpty()) {
 			getTabelaprodutos().setPlaceholder(new Label("Nenhum Produto Cadastrado."));
 		}
 		return getTabelaprodutos();
@@ -239,8 +236,7 @@ public class ProdutosController {
 
 	}
 
-	private static List<ProdutoDto> getAllProducts() throws Exception {
-
+	public static List<ProdutoDto> getAllProducts() throws Exception {
 		try {
 			// BUSCA TODOS PRODUTOS
 			String endpoint = url + "products";
@@ -260,7 +256,6 @@ public class ProdutosController {
 			MarkupDto markup;
 			NcmDto ncm;
 
-			
 			for (int i = 0; i < responseJson.length(); i++) {
 				produto = new ProdutoDto();
 				unidadeProduto = new UnidadeProdutoDto();
@@ -281,7 +276,7 @@ public class ProdutosController {
 				unidadeProduto.setDescricao(unidadeJson.getString("descricao"));
 
 				// PRENCHE CATEGORIA PRODUTO
-				categoriaProduto.setId(categoriaJson.getInt("id")); 
+				categoriaProduto.setId(categoriaJson.getInt("id"));
 				categoriaProduto.setDescricao(categoriaJson.getString("descricao"));
 
 				// PRENCHE MARKUP PRODUTO
@@ -331,6 +326,94 @@ public class ProdutosController {
 
 	}
 
+	public static List<ProdutoDto> pesquisarProdutoByDescricao(String descricao) throws Exception {
+		try {
+			String endpoint = url + "products/descricao?desc=" + descricao;
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(endpoint))
+					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			JSONArray responseJson = new JSONArray(response.body());
+			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+			List<ProdutoDto> produtos = new ArrayList<>();
+			ProdutoDto produto;
+			UnidadeProdutoDto unidadeProduto;
+			CategoriaProdutoDto categoriaProduto;
+			MarkupDto markup;
+			NcmDto ncm;
+
+			// DateTimeFormatter parser = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			for (int i = 0; i < responseJson.length(); i++) {
+				produto = new ProdutoDto();
+				unidadeProduto = new UnidadeProdutoDto();
+				categoriaProduto = new CategoriaProdutoDto();
+				markup = new MarkupDto();
+				ncm = new NcmDto();
+
+				JSONObject jsonObj = responseJson.getJSONObject(i);
+				JSONObject unidadeJson = (JSONObject) jsonObj.get("unidadeProduto");
+				JSONObject categoriaJson = (JSONObject) jsonObj.get("categoria");
+				JSONObject markupJson = (JSONObject) jsonObj.get("markup");
+				JSONObject ncmJson = jsonObj.getJSONObject("ncm");
+
+				String dataInclusao = jsonObj.getString("dataInclusao").substring(0, 19).replaceAll("T", " ");
+
+				// PRECHE UNIDADE PRODUTO
+				unidadeProduto.setId(unidadeJson.getInt("id"));
+				unidadeProduto.setDescricao(unidadeJson.getString("descricao"));
+
+				// PRENCHE CATEGORIA PRODUTO
+				categoriaProduto.setId(categoriaJson.getInt("id"));
+				categoriaProduto.setDescricao(categoriaJson.getString("descricao"));
+
+				// PRENCHE MARKUP PRODUTO
+				markup.setId(markupJson.getInt("id"));
+				markup.setMarkup(new BigDecimal(markupJson.getBigInteger("markup")));
+				markup.setUtilizar(markupJson.getBoolean("utilizar"));
+
+				// PRENCHE NCM PRODUTO
+				ncm.setId(ncmJson.getLong("id"));
+				ncm.setNcm(ncmJson.getLong("ncm"));
+				ncm.setEx(ncmJson.getString("ex"));
+				ncm.setTipo(ncmJson.getString("tipo"));
+				ncm.setDescricao(ncmJson.getString("descricao"));
+				ncm.setNacionalfederal(ncmJson.getDouble("nacionalfederal"));
+				ncm.setImportadosfederal(ncmJson.getDouble("importadosfederal"));
+				ncm.setEstadual(ncmJson.getDouble("estadual"));
+				ncm.setMunicipal(ncmJson.getDouble("municipal"));
+				ncm.setDataInicio(LocalDate.parse(ncmJson.getString("vigenciainicio")));
+				ncm.setDataFim(LocalDate.parse(ncmJson.getString("vigenciafim")));
+				ncm.setChave(ncmJson.getString("chave"));
+				ncm.setVersao(ncmJson.getString("versao"));
+				ncm.setFonte(ncmJson.getString("fonte"));
+
+				// PRENCHE O PRODUTO EM SI
+				produto.setId(jsonObj.getLong("id"));
+				produto.setDescricao(jsonObj.getString("descricao").toUpperCase());
+				produto.setCodigo(jsonObj.getString("codigo"));
+				produto.setValorVenda(jsonObj.getDouble("valorVenda"));
+				produto.setCusto(jsonObj.getDouble("custo"));
+				produto.setEstoque(jsonObj.getInt("estoque"));
+				produto.setUnidadeProduto(unidadeProduto);
+				produto.setCategoria(categoriaProduto);
+				produto.setMarkup(markup);
+				produto.setTributacao(jsonObj.getString("tributacao"));
+				produto.setNcm(ncm);
+				produto.setCest(jsonObj.getString("cest"));
+				produto.setDataInclusao(LocalDateTime.parse(dataInclusao, format));
+				produto.setEAN_GTIN(jsonObj.getString("ean_GTIN"));
+				produto.setObs(jsonObj.getString("obs"));
+				produtos.add(produto);
+			}
+
+			return produtos;
+		} catch (Exception e) {
+			throw new Exception(e.getMessage() + e.getCause());
+		}
+
+	}
+
 	@SuppressWarnings("exports")
 	public void novo(ActionEvent action) throws IOException {
 		Stage stage = new Stage();
@@ -345,9 +428,9 @@ public class ProdutosController {
 
 	@SuppressWarnings("exports")
 	public void editar(ActionEvent action) throws IOException {
-		
+
 		ProdutoDto produtoParaEditar = ProdutosController.getTabelaprodutos().getSelectionModel().getSelectedItem();
-				
+
 		// VERIFICA SE FOIS SELECIONADO UM CLIENTE PARA EDITAR
 		if (produtoParaEditar == null) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -357,7 +440,6 @@ public class ProdutosController {
 			alert.showAndWait();
 			return;
 		}
-		
 
 		else {
 			Stage stage = new Stage();

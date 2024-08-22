@@ -14,8 +14,6 @@ import static javafx.scene.input.KeyCode.F8;
 import static javafx.scene.input.KeyCode.F9;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -159,6 +157,7 @@ public abstract class Mascaras {
 		textField.lengthProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+
 				String value = textField.getText();
 				value = value.replaceAll("[^0-9]", "");
 				value = value.replaceAll("([0-9]{1})([0-9]{14})$", "$1.$2");

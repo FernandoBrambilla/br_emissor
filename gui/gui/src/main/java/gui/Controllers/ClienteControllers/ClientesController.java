@@ -40,6 +40,8 @@ public class ClientesController {
 
 	private static String token = PrincipalController.getAccessToken();
 
+	private static String url = PrincipalController.getUrl();
+
 	static TableView<ClienteDto> tabelaClientes;
 
 	static ObservableList<ClienteDto> observableList;
@@ -55,7 +57,7 @@ public class ClientesController {
 	private Button btnNovo;
 
 	@FXML
-	private Button btnEditar; 
+	private Button btnEditar;
 
 	@FXML
 	private Button btnApagar;
@@ -140,6 +142,13 @@ public class ClientesController {
 		this.btnApagar = btnApagar;
 	}
 
+	public static String getUrl() {
+		return url;
+	}
+
+	public static void setUrl(String url) {
+		ClientesController.url = url;
+	}
 
 	public void initialize() {
 
@@ -149,7 +158,7 @@ public class ClientesController {
 		Style efeitos = new Style();
 		efeitos.hover(getBtnNovo());
 		efeitos.hover(getBtnEditar());
-		efeitos.hover(getBtnApagar()); 
+		efeitos.hover(getBtnApagar());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -177,7 +186,8 @@ public class ClientesController {
 		TableColumn<ClienteDto, String> colunaRg_Ie = new TableColumn<ClienteDto, String>("Rg/Ie");
 		colunaRg_Ie.setCellValueFactory(new PropertyValueFactory<ClienteDto, String>("rg_ie"));
 
-		TableColumn<ClienteDto, LocalDate> colunaDateNasc_cons = new TableColumn<ClienteDto, LocalDate>("Data Nasc/Const.");
+		TableColumn<ClienteDto, LocalDate> colunaDateNasc_cons = new TableColumn<ClienteDto, LocalDate>(
+				"Data Nasc/Const.");
 		colunaDateNasc_cons.setCellValueFactory(new PropertyValueFactory<ClienteDto, LocalDate>("dateNasc_const"));
 
 		TableColumn<ClienteDto, LocalDate> colunaDateExp = new TableColumn<ClienteDto, LocalDate>("Data de Expedição");
@@ -206,17 +216,17 @@ public class ClientesController {
 
 		TableColumn<ClienteDto, String> colunaTipo = new TableColumn<ClienteDto, String>("Pessoa");
 		colunaTipo.setCellValueFactory(new PropertyValueFactory<ClienteDto, String>("tipo"));
-		
+
 		TableColumn<ClienteDto, String> colunaObs = new TableColumn<ClienteDto, String>("Obs");
 		colunaObs.setCellValueFactory(new PropertyValueFactory<ClienteDto, String>("obs"));
 
-		// POPULA A TABELA 
+		// POPULA A TABELA
 		popularTabela();
 
 		// ADICIONA AS COLUNAS
-		getTabelaClientes().getColumns().addAll(colunaID, colunaName, colunaEmail, colunaPhone,
-				colunaCpf_Cnpj, colunaRg_Ie, colunaEndereco, colunaNum, colunaComplement, colunaCity, 
-				colunaUf, colunaBairro, colunaCep, colunaDateNasc_cons, colunaDateExp, colunaTipo,  colunaObs);
+		getTabelaClientes().getColumns().addAll(colunaID, colunaName, colunaEmail, colunaPhone, colunaCpf_Cnpj,
+				colunaRg_Ie, colunaEndereco, colunaNum, colunaComplement, colunaCity, colunaUf, colunaBairro, colunaCep,
+				colunaDateNasc_cons, colunaDateExp, colunaTipo, colunaObs);
 
 		if (getTabelaClientes() == null) {
 			getTabelaClientes().setPlaceholder(new Label("Nenhum Cliente Cadastrado."));
@@ -230,10 +240,10 @@ public class ClientesController {
 		getTabelaClientes().setItems(observableList);
 	}
 
-	private static List<ClienteDto> getAllClients() throws Exception {
+	public static List<ClienteDto> getAllClients() throws Exception {
 		try {
 			// BUSCA TODOS CLIENTES
-			String url = "http://localhost:8080/clients";
+			String url = getUrl() + "clients";
 			HttpClient client = HttpClient.newHttpClient();
 			HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(url))
 					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
@@ -243,7 +253,7 @@ public class ClientesController {
 			ClienteDto cliente;
 			List<ClienteDto> clientes = new ArrayList<>();
 			DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
- 
+
 			// LOOP CONVERTE JSON EM CLIENTS
 			for (int i = 0; i < responseJson.length(); i++) {
 				JSONObject jsonObj = responseJson.getJSONObject(i);
@@ -269,37 +279,6 @@ public class ClientesController {
 				cliente.setCep(jsonObj.getString("cep"));
 				cliente.setObs(jsonObj.getString("obs"));
 				clientes.add(cliente);
-
-				/*
-				JSONObject json = new JSONObject();
-				json.put("id", cliente.getId());
-				json.put("name", cliente.getName());
-				json.put("tipo", cliente.getCpf_cnpj().length() > 11 ? "Jurídica" : "Física");
-				json.put("phone", cliente.getPhone());
-				json.put("email", cliente.getEmail());
-				json.put("cpf_cnpj", cliente.getCpf_cnpj());
-				json.put("rg_ie", cliente.getRg_ie());
-				json.put("dateNasc_const", format.format(LocalDate.of(1900, 1, 1)));
-				json.put("dateExp", format.format(LocalDate.of(1900, 1, 1)));
-				json.put("address", cliente.getAddress());
-				json.put("addressNumber", cliente.getAddressNumber());
-				json.put("addressComplement", cliente.getAddressComplement());
-				json.put("bairro", cliente.getBairro());
-				json.put("city", cliente.getCity());
-				json.put("uf", cliente.getUf().getDescricao());
-				json.put("cep", cliente.getCep());
-				json.put("obs", cliente.getObs());
-
-				System.out.println(json);
-
-				String urlUpdate = "http://localhost:8080/clients";
-				HttpClient clients = HttpClient.newHttpClient();
-				HttpRequest requests = HttpRequest.newBuilder().uri(URI.create(urlUpdate))
-						.header("Authorization", "Bearer " + token).header("Content-Type", "application/json")
-						.PUT(HttpRequest.BodyPublishers.ofString(json.toString())).build();
-				HttpResponse<String> responses = clients.send(requests, HttpResponse.BodyHandlers.ofString());
-				System.out.println(responses.body());
-				*/
 			}
 			return clientes;
 		} catch (Exception e) {
@@ -307,8 +286,51 @@ public class ClientesController {
 		}
 	}
 
-	// CHAMA TELA DE CADSTRAR USUÁRIO
-	@SuppressWarnings("exports")
+	public static List<ClienteDto> pesquisarClientesByDescricao(String descricao) throws Exception {
+		try {
+			// BUSCA TODOS CLIENTES
+			String endpoint = getUrl() + "clients/descricao?name=" + descricao;
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(endpoint))
+					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			JSONArray responseJson = new JSONArray(response.body());
+
+			ClienteDto cliente;
+			List<ClienteDto> clientes = new ArrayList<>();
+			DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+
+			// LOOP CONVERTE JSON EM CLIENTS
+			for (int i = 0; i < responseJson.length(); i++) {
+				JSONObject jsonObj = responseJson.getJSONObject(i);
+				String dateNasc_const = jsonObj.getString("dateNasc_const");
+				String dateExp = jsonObj.getString("dateExp");
+
+				cliente = new ClienteDto();
+				cliente.setId(jsonObj.getLong("id"));
+				cliente.setTipo(jsonObj.getString("tipo"));
+				cliente.setName(jsonObj.getString("name"));
+				cliente.setPhone(jsonObj.getString("phone"));
+				cliente.setEmail(jsonObj.getString("email"));
+				cliente.setCpf_cnpj(jsonObj.getString("cpf_cnpj"));
+				cliente.setRg_ie(jsonObj.getString("rg_ie"));
+				cliente.setDateNasc_const(LocalDate.parse(dateNasc_const, format));
+				cliente.setDateExp(LocalDate.parse(dateExp, format));
+				cliente.setAddress(jsonObj.getString("address"));
+				cliente.setAddressNumber(jsonObj.getString("addressNumber"));
+				cliente.setAddressComplement(jsonObj.getString("addressComplement"));
+				cliente.setBairro(jsonObj.getString("bairro"));
+				cliente.setCity(jsonObj.getString("city"));
+				cliente.setUf(jsonObj.getString("uf"));
+				cliente.setCep(jsonObj.getString("cep"));
+				cliente.setObs(jsonObj.getString("obs"));
+				clientes.add(cliente);
+			}
+			return clientes;
+		} catch (Exception e) {
+			throw new Exception(e.getMessage() + e.getCause());
+		}
+	}
 
 	public void novo(ActionEvent action) throws IOException {
 		setNovoClient(new NovoClienteController());
@@ -350,7 +372,7 @@ public class ClientesController {
 
 	@SuppressWarnings("exports")
 	public void apagar(ActionEvent action) throws IOException {
- 
+
 		// VERIFICA SE FOI SELECIONADO UM CLIENTE PARA APAGAR
 		if (ClientesController.getTabelaClientes().getSelectionModel().isEmpty()) {
 			Alert alert = new Alert(Alert.AlertType.ERROR);
