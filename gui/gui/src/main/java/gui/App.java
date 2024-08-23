@@ -27,11 +27,11 @@ public class App extends Application {
 		stage = primaryStage;
 		stage.setTitle("Br Sistemas de Gestão");
 		scene = new Scene(root);
-		scene.getStylesheets().add(getClass().getResource("Style/style.css").toExternalForm());
+		scene.getStylesheets().add("style.css");
 		stage.setScene(scene);
 		stage.setMaximized(true); 
 		stage.show();
-
+ 
 	}
 
 	public static void setRoot(String fxml) throws IOException {

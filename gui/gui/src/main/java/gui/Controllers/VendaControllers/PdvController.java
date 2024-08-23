@@ -9,17 +9,21 @@ import gui.Controllers.PrincipalControllers.PrincipalController;
 import gui.Dtos.ClienteDto;
 import gui.Dtos.ItensVendaDto;
 import gui.Dtos.ProdutoDto;
+import gui.Dtos.VendaDto;
 import gui.Utilities.Mascaras;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -96,6 +100,8 @@ public class PdvController {
 	public static ObservableList<ProdutoDto> observableListProduto;
 
 	public static ObservableList<ClienteDto> observableListCliente;
+	
+	private VendaDto venda;
 
 	private ItensVendaDto itenSelecionado;
 
@@ -363,7 +369,7 @@ public class PdvController {
 		getHeader().setPrefWidth(d.getWidth());
 		getProduto().setPrefWidth(d.getWidth() / 2);
 		getImgCodBarras().setLayoutX(d.getWidth() / 2 - 40);
-		getTelaBase().setPrefWidth(d.getWidth());
+		getTelaBase().setPrefWidth((d.getWidth() - 20));
 		getTelaBase().setPrefHeight(d.getHeight() - 160);
 
 		// CONTROI TABELA DE ITENS
@@ -382,6 +388,7 @@ public class PdvController {
 				getValorUnitario().setStyle("-fx-border-color: red;");
 				getValorUnitario().setText(itenSelecionado.getProduto().getValorVenda());
 				itenSelecionado.setQuantidade(Integer.parseInt(getQuantidade().getText()));
+
 			}
 		});
 
@@ -396,7 +403,7 @@ public class PdvController {
 				Double valorTotalIten = valorUnitario * itenSelecionado.getQuantidade();
 				itenSelecionado.setTotalIten(valorTotalIten);
 
-				getTotalIten().setText(String.valueOf(realFormato.format(itenSelecionado.getTotalIten())));
+				getTotalIten().setText(String.valueOf(realFormato.format(itenSelecionado.getTotalItenDouble())));
 				itenSelecionado.setDesconto(0D);
 				getTotalIten().requestFocus();
 				getTotalIten().setStyle("-fx-border-color: red;");
@@ -413,9 +420,14 @@ public class PdvController {
 
 	}
 
+	Long contador = 0L;
+
 	private void lancarIten() {
 		if (!getProduto().getText().isEmpty() && !getQuantidade().getText().isEmpty()
 				&& !getValorUnitario().getText().isEmpty() && !getTotalIten().getText().isEmpty()) {
+			contador++;
+			getItenSelecionado().setId(contador);
+			getItenSelecionado().getSpinner().getValueFactory().setValue(Integer.parseInt(getQuantidade().getText()));
 			getTabelaItens().getItems().add(itenSelecionado);
 			limparCampos();
 		}
@@ -448,6 +460,7 @@ public class PdvController {
 	private void posicionarTabelaProdutos() throws Exception {
 		getPainelPesquisa().setLayoutX(0);
 		getPainelPesquisa().setLayoutY(160);
+		getPainelPesquisa().setLayoutX(10);
 
 	}
 
@@ -503,12 +516,37 @@ public class PdvController {
 	private void selecionarItens() {
 		itenSelecionado = new ItensVendaDto();
 		itenSelecionado.setProduto(getTabelaProdutosPesquisa().getSelectionModel().getSelectedItem());
+
+		// CRIA O SPINNER
+		Spinner<Integer> spinner = new Spinner<>(1, 9999, 1);
+		getItenSelecionado().setSpinner(spinner);
+		spinner.setOnMouseClicked((mouseEvent) -> {
+			getItenSelecionado().setQuantidade(spinner.getValue());
+		});
+
 		getProduto().setText(itenSelecionado.getProduto().getDescricao());
 		getQuantidade().setText("1");
 		getQuantidade().requestFocus();
 		getQuantidade().setEditable(true);
 		getQuantidade().setStyle("-fx-border-color: red;");
 		getPainelPesquisa().setVisible(false);
+
+		// CRIA A IMAGEM DE EXCLUIR
+		Button btnExcluir = new Button();
+		btnExcluir.setStyle("-fx-background-color: none; -fx-border: none;");
+		btnExcluir.setCursor(Cursor.HAND);
+		Image imagem = new Image(this.getClass().getResource("excluir.png").toString());
+		ImageView excluir = new ImageView(imagem);
+		btnExcluir.setGraphic(excluir);
+		excluir.setFitHeight(30);
+		excluir.setFitWidth(30);
+		getItenSelecionado().setExcluir(btnExcluir);
+
+		btnExcluir.setOnMouseClicked((mouseEvent) -> {
+			getTabelaItens().getItems().remove(getItenSelecionado());
+			contador--;
+		});
+		
 
 	}
 
@@ -629,29 +667,45 @@ public class PdvController {
 
 		TableColumn<ItensVendaDto, Integer> colunaID = new TableColumn<ItensVendaDto, Integer>("Iten nº");
 		colunaID.setCellValueFactory(new PropertyValueFactory<ItensVendaDto, Integer>("id"));
+		colunaID.setPrefWidth(((d.getWidth()) * 5) / 100);
 
-		TableColumn<ItensVendaDto, String> colunaQuantidade = new TableColumn<ItensVendaDto, String>("Quantidade");
-		colunaQuantidade.setCellValueFactory(new PropertyValueFactory<ItensVendaDto, String>("quantidade"));
+		TableColumn<ItensVendaDto, String> colunaCodigo = new TableColumn<ItensVendaDto, String>("Código");
+		colunaCodigo.setCellValueFactory(new PropertyValueFactory<ItensVendaDto, String>("codigo"));
+		colunaCodigo.setPrefWidth(((d.getWidth()) * 10) / 100);
 
 		TableColumn<ItensVendaDto, String> colunaDescricao = new TableColumn<ItensVendaDto, String>("Descrição");
 		colunaDescricao.setCellValueFactory(new PropertyValueFactory<ItensVendaDto, String>("descricao"));
+		colunaDescricao.setPrefWidth(((d.getWidth()) * 35) / 100);
+
+		TableColumn<ItensVendaDto, Spinner<Integer>> colunaQuantidade = new TableColumn<ItensVendaDto, Spinner<Integer>>(
+				"Quantidade");
+		colunaQuantidade.setCellValueFactory(new PropertyValueFactory<ItensVendaDto, Spinner<Integer>>("spinner"));
+		colunaQuantidade.setPrefWidth(((d.getWidth()) * 10) / 100);
 
 		TableColumn<ItensVendaDto, String> colunaValor = new TableColumn<ItensVendaDto, String>("Valor Unitário");
 		colunaValor.setCellValueFactory(new PropertyValueFactory<ItensVendaDto, String>("valorUnitario"));
+		colunaValor.setPrefWidth(((d.getWidth()) * 10) / 100);
 
 		TableColumn<ItensVendaDto, String> colunaDesconto = new TableColumn<ItensVendaDto, String>("Desconto");
 		colunaDesconto.setCellValueFactory(new PropertyValueFactory<ItensVendaDto, String>("desconto"));
+		colunaDesconto.setPrefWidth(((d.getWidth()) * 10) / 100);
 
 		TableColumn<ItensVendaDto, String> colunaTotalFinal = new TableColumn<ItensVendaDto, String>("Total do Iten");
 		colunaTotalFinal.setCellValueFactory(new PropertyValueFactory<ItensVendaDto, String>("totalIten"));
+		colunaTotalFinal.setPrefWidth(((d.getWidth()) * 10) / 100);
+
+		TableColumn<ItensVendaDto, ImageView> colunaExcluir = new TableColumn<ItensVendaDto, ImageView>("Excluir Iten");
+		colunaExcluir.setCellValueFactory(new PropertyValueFactory<ItensVendaDto, ImageView>("excluir"));
+		colunaExcluir.setPrefWidth(((d.getWidth()) * 10) / 100);
 
 		// ADICIONA AS COLUNAS
-		getTabelaItens().getColumns().addAll(colunaID, colunaQuantidade, colunaDescricao, colunaValor, colunaDesconto,
-				colunaTotalFinal);
+		getTabelaItens().getColumns().addAll(colunaID, colunaCodigo, colunaDescricao, colunaQuantidade, colunaValor,
+				colunaDesconto, colunaTotalFinal, colunaExcluir);
 
 		if (getTabelaItens().getItems().isEmpty()) {
 			getTabelaItens().setPlaceholder(new Label("Nenhum item adicionado a venda!."));
 		}
+		getTabelaItens().getStylesheets().add("styleTableItens.css");
 
 		return getTabelaItens();
 	}
@@ -684,8 +738,8 @@ public class PdvController {
 		}
 
 		getTabelaProdutosPesquisa().setPrefHeight(d.getHeight() - 260);
+		getTabelaProdutosPesquisa().setLayoutX(5);
 		getTabelaProdutosPesquisa().setPrefWidth(d.getWidth() / 2);
-		getTabelaProdutosPesquisa().setStyle("-fx-font-size: 18; -fx-font-family: Calibri;");
 		getTabelaProdutosPesquisa().setPrefWidth(d.getWidth() / 2);
 
 		return getTabelaProdutosPesquisa();
@@ -720,7 +774,6 @@ public class PdvController {
 
 		getTabelaClientesPesquisa().setPrefHeight(d.getHeight());
 		getTabelaClientesPesquisa().setPrefWidth(d.getWidth() / 2);
-		getTabelaClientesPesquisa().setStyle("-fx-font-size: 18; -fx-font-family: Calibri;");
 		getTabelaClientesPesquisa().setPrefWidth(d.getWidth() / 2);
 
 		return getTabelaClientesPesquisa();

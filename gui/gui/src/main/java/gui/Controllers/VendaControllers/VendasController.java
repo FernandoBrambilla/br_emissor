@@ -3,6 +3,7 @@ package gui.Controllers.VendaControllers;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -371,16 +372,18 @@ public class VendasController {
 	}
 	
 	@SuppressWarnings("exports")
-	public void novaVenda(ActionEvent action) throws IOException {
+	public void novaVenda(ActionEvent action) throws IOException, URISyntaxException {
 		Stage stage = new Stage();
 		Parent painel = FXMLLoader.load(App.class.getResource("VendaViews/PDV.fxml"));
 		Scene scene = new Scene(painel, 1500, 800);
+		scene.getStylesheets().add("style.css");
 		stage.setFullScreen(true);
 		stage.setFullScreenExitKeyCombination(KeyCombination.NO_MATCH);
 		stage.setTitle("PDV - Vendas");
 		stage.setScene(scene);
 		stage.initModality(Modality.APPLICATION_MODAL);
 		stage.showAndWait();
+		
 			
 	}
 }

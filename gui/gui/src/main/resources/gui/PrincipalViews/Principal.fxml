@@ -212,17 +212,17 @@
                               <Font name="Calibri" size="16.0" />
                            </font>
                         </Hyperlink>
-                        <Label fx:id="emissor" layoutY="80.0" text="Emissor:" textFill="WHITE">
+                        <Label fx:id="emissor" layoutX="5.0" layoutY="80.0" text="Emissor:" textFill="WHITE">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="usuario" layoutY="120.0" text="Usuário:" textFill="WHITE">
+                        <Label fx:id="usuario" layoutX="5.0" layoutY="120.0" text="Usuário:" textFill="WHITE">
                            <font>
                               <Font size="14.0" />
                            </font>
                         </Label>
-                        <Label fx:id="plano" layoutY="100.0" text="Plano:" textFill="WHITE">
+                        <Label fx:id="plano" layoutX="5.0" layoutY="100.0" text="Plano:" textFill="WHITE">
                            <font>
                               <Font size="14.0" />
                            </font>
