@@ -5,7 +5,6 @@ import java.awt.Toolkit;
 import java.io.IOException;
 import java.text.ParseException;
 
-
 import gui.App;
 import gui.Controllers.ClienteControllers.ClientesController;
 import gui.Controllers.ProdutoControllers.ProdutosController;
@@ -24,7 +23,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -387,6 +385,7 @@ public class PrincipalController {
 	@SuppressWarnings({ "static-access" })
 	@FXML
 	private void initialize() throws IOException, ParseException {
+		
 		
 		//-----------Configura o tamanho da tela------------------
 		Toolkit tk = Toolkit.getDefaultToolkit();

@@ -1,7 +1,12 @@
 package com.fernando.Entities;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import java.io.Serializable;
+import java.time.LocalDate;
+
+import org.springframework.hateoas.RepresentationModel;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,8 +15,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import java.time.LocalDate;
-import org.springframework.hateoas.RepresentationModel;
 
 @Entity
 @Table(name = "clients")

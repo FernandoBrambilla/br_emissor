@@ -72,6 +72,10 @@ public class VendaDto {
 	public String getDesconto() {
 		return realFormato.format(desconto);
 	}
+	
+	public Double getDescontoDouble() {
+		return desconto;
+	}
 
 	public String getValorTotal() {
 		Double valor = 0D;
@@ -85,6 +89,10 @@ public class VendaDto {
 
 	public String getTotalFinal() {
 		return realFormato.format(totalFinal);
+	}
+	
+	public Double getTotalFinalDouble() {
+		return totalFinal;
 	}
 
 	public void setTotalFinal(Double totalFinal) {

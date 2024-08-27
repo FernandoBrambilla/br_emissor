@@ -2,11 +2,12 @@
 package com.fernando.Config;
 
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 import io.swagger.oas.models.OpenAPI;
 import io.swagger.oas.models.info.Info;
 import io.swagger.oas.models.info.License;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 
 
 @Configuration

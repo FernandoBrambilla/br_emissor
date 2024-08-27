@@ -1,7 +1,5 @@
 package gui.Controllers.UsuarioControllers;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -377,6 +375,36 @@ public class UsuariosController extends Application {
 			}
 
 			return users;
+		} catch (Exception e) {
+			throw new Exception(e.getMessage() + e.getCause());
+		}
+	}
+	
+	public static UserDto getUserByID(Long id) throws Exception {
+		try {
+			// BUSCA TODOS USUARIOS
+			String url = "http://localhost:8080/users/" + id;
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(url))
+					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			JSONObject jsonObj = new JSONObject(response.body());
+			UserDto user = new UserDto();
+			
+				user.setCredentialsNonExpired(null);
+				user.setFullName(jsonObj.getString("fullName"));
+				user.setUserName(jsonObj.getString("userName"));
+				if (jsonObj.getBoolean("enabled") == true) {
+					user.setEnabled("Ativo");
+				} else {
+					user.setEnabled("Inativo");
+				}
+				user.setPassword(null);
+				user.setAccountNonExpired(jsonObj.getBoolean("accountNonExpired"));
+				user.setId(jsonObj.getInt("id"));
+				user.setEmail(jsonObj.getString("email"));
+				user.setAccountNonLocked(jsonObj.getBoolean("accountNonLocked"));
+			return user;
 		} catch (Exception e) {
 			throw new Exception(e.getMessage() + e.getCause());
 		}

@@ -2,9 +2,12 @@ package gui.Controllers.VendaControllers;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.io.IOException;
 import java.text.DecimalFormat;
+import java.time.LocalDateTime;
 import java.util.List;
 
+import gui.App;
 import gui.Controllers.PrincipalControllers.PrincipalController;
 import gui.Dtos.ClienteDto;
 import gui.Dtos.ItensVendaDto;
@@ -15,8 +18,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TableColumn;
@@ -30,9 +38,13 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class PdvController {
+
+	private static PdvController pdvController;
 
 	DecimalFormat realFormato = new DecimalFormat("¤ #,###,##0.00");
 
@@ -72,6 +84,12 @@ public class PdvController {
 	private TextField totalVenda;
 
 	@FXML
+	private Label labelSubtotal;
+
+	@FXML
+	private Label labelDesconto;
+
+	@FXML
 	private BorderPane telaBase;
 
 	@FXML
@@ -87,6 +105,15 @@ public class PdvController {
 	private Label clienteLabel;
 
 	@FXML
+	private Button btnDesconto;
+
+	@FXML
+	private Button btnSalvar;
+
+	@FXML
+	private Button btnConcluirDepois;
+
+	@FXML
 	private Button btnSair;
 
 	private TableView<ItensVendaDto> tabelaItens;
@@ -100,8 +127,8 @@ public class PdvController {
 	public static ObservableList<ProdutoDto> observableListProduto;
 
 	public static ObservableList<ClienteDto> observableListCliente;
-	
-	private VendaDto venda;
+
+	private VendaDto venda = new VendaDto();
 
 	private ItensVendaDto itenSelecionado;
 
@@ -117,6 +144,62 @@ public class PdvController {
 
 	public Toolkit getTk() {
 		return tk;
+	}
+
+	public static PdvController getPdvController() {
+		return pdvController;
+	}
+
+	public static void setPdvController(PdvController pdvController) {
+		PdvController.pdvController = pdvController;
+	}
+
+	public Button getBtnSalvar() {
+		return btnSalvar;
+	}
+
+	public Button getBtnConcluirDepois() {
+		return btnConcluirDepois;
+	}
+
+	public void setBtnSalvar(Button btnSalvar) {
+		this.btnSalvar = btnSalvar;
+	}
+
+	public void setBtnConcluirDepois(Button btnConcluirDepois) {
+		this.btnConcluirDepois = btnConcluirDepois;
+	}
+
+	public Button getBtnDesconto() {
+		return btnDesconto;
+	}
+
+	public Label getLabelSubtotal() {
+		return labelSubtotal;
+	}
+
+	public Label getLabelDesconto() {
+		return labelDesconto;
+	}
+
+	public void setLabelSubtotal(Label labelSubtotal) {
+		this.labelSubtotal = labelSubtotal;
+	}
+
+	public void setLabelDesconto(Label labelDesconto) {
+		this.labelDesconto = labelDesconto;
+	}
+
+	public Double getSomaTotalVenda() {
+		return somaTotalVenda;
+	}
+
+	public void setBtnDesconto(Button btnDesconto) {
+		this.btnDesconto = btnDesconto;
+	}
+
+	public void setSomaTotalVenda(Double somaTotalVenda) {
+		this.somaTotalVenda = somaTotalVenda;
 	}
 
 	public Dimension getD() {
@@ -359,7 +442,25 @@ public class PdvController {
 		this.pesquisaCliente = pesquisaCliente;
 	}
 
+	public VendaDto getVenda() {
+		return venda;
+	}
+
+	public Long getNumItem() {
+		return numItem;
+	}
+
+	public void setVenda(VendaDto venda) {
+		this.venda = venda;
+	}
+
+	public void setNumItem(Long numItem) {
+		this.numItem = numItem;
+	}
+
 	public void initialize() throws Exception {
+		pdvController = this;
+
 		Mascaras.monetaryField(getValorUnitario());
 		Mascaras.numericField(getQuantidade());
 
@@ -380,37 +481,51 @@ public class PdvController {
 		getQuantidade().setEditable(false);
 		getClienteText().setVisible(false);
 
+		// MUDA FOCO DA QUANTIDADE PARA O VALOR UNITÁRIO
 		getQuantidade().setOnKeyPressed((keyEvent) -> {
 			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB) {
-				getValorUnitario().requestFocus();
-				getValorUnitario().setEditable(true);
 				getQuantidade().setStyle(null);
 				getValorUnitario().setStyle("-fx-border-color: red;");
-				getValorUnitario().setText(itenSelecionado.getProduto().getValorVenda());
+				getValorUnitario().setText(itenSelecionado.getProduto().getValorVenda().replace("R$ ", ""));
 				itenSelecionado.setQuantidade(Integer.parseInt(getQuantidade().getText()));
-
 			}
 		});
 
-		// MUDA FOCUS PARA VALOR UNITARIO
+		// LIMPA O CAMPO VALOR UNITÁRIO ATRAVÉS DO CLIQUE
+		getValorUnitario().setOnMouseClicked((mouseEvent) -> {
+			if (!getValorUnitario().getText().isEmpty()) {
+				getValorUnitario().setEditable(true);
+				getValorUnitario().setText("");
+			}
+		});
+
+		// MUDA FOCO DO VALOR UNITARIO PARA TOTAL ITEM
 		getValorUnitario().setOnKeyPressed((keyEvent) -> {
-			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB) {
 
-				Double valorUnitario = Double
-						.parseDouble(getValorUnitario().getText().replace("R$ ", "").replace(",", "."));
-				itenSelecionado.setValorUnitario(valorUnitario);
+			// LIMPA CAMPO VALOR UNITÁRIO ATRAVÉS DO TECLADO
+			if (keyEvent.getCode() == KeyCode.BACK_SPACE || keyEvent.getCode() == KeyCode.DELETE) {
+				getValorUnitario().setEditable(true);
+				getValorUnitario().setText("");
+			}
 
-				Double valorTotalIten = valorUnitario * itenSelecionado.getQuantidade();
-				itenSelecionado.setTotalIten(valorTotalIten);
-
-				getTotalIten().setText(String.valueOf(realFormato.format(itenSelecionado.getTotalItenDouble())));
-				itenSelecionado.setDesconto(0D);
-				getTotalIten().requestFocus();
-				getTotalIten().setStyle("-fx-border-color: red;");
-
+			// SETA VALOR UNITÁRIO E CALCULA VALOR TOTAL DO ITEN
+			if (!getValorUnitario().getText().isEmpty()) {
+				if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB) {
+					Double valorUnitario = Double.parseDouble(
+							getValorUnitario().getText().replace("R$ ", "").replace(".", "").replace(",", "."));
+					itenSelecionado.setValorUnitario(valorUnitario);
+					Double valorTotalIten = valorUnitario * itenSelecionado.getQuantidade();
+					itenSelecionado.setTotalIten(valorTotalIten);
+					getTotalIten().setText(String.valueOf(realFormato.format(itenSelecionado.getTotalItenDouble())));
+					itenSelecionado.setDesconto(0D);
+					getTotalIten().requestFocus();
+					getValorUnitario().setStyle(null);
+					getTotalIten().setStyle("-fx-border-color: red;");
+				}
 			}
 		});
 
+		// FAZ O LANÇAMENTO DO ITEN NA VENDA
 		getTotalIten().setOnKeyPressed((keyEvent) -> {
 			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB) {
 				lancarIten();
@@ -420,17 +535,47 @@ public class PdvController {
 
 	}
 
-	Long contador = 0L;
+	Long numItem = 0L;
+	Double somaTotalVenda = 0D;
 
 	private void lancarIten() {
 		if (!getProduto().getText().isEmpty() && !getQuantidade().getText().isEmpty()
 				&& !getValorUnitario().getText().isEmpty() && !getTotalIten().getText().isEmpty()) {
-			contador++;
-			getItenSelecionado().setId(contador);
+			numItem++;
+			getItenSelecionado().setId(numItem);
 			getItenSelecionado().getSpinner().getValueFactory().setValue(Integer.parseInt(getQuantidade().getText()));
 			getTabelaItens().getItems().add(itenSelecionado);
+			somaTotalVenda += getItenSelecionado().getTotalItenDouble();
+			setarValorTotalVenda();
+
+			// HABILITA OS BOTÕES AO LANÇAR A PRIMEIRA VENDA
+			getBtnSalvar().setDisable(false);
+			getBtnDesconto().setDisable(false);
+			getBtnConcluirDepois().setDisable(false);
+
 			limparCampos();
+
+			// LANÇA ITENS NA VENDA
+
 		}
+	}
+
+	public void setarValorTotalVenda() {
+		Double desconto = getVenda().getDescontoDouble()== null ? 0D : getVenda().getDescontoDouble();
+		getTotalVenda().setText(realFormato.format(somaTotalVenda-desconto));
+	}
+	
+
+	public void criarVenda() {
+		getVenda().setCliente(clienteSelecionado);
+		getVenda().setDataVenda(LocalDateTime.now());
+		// getVenda().setDesconto(null);
+		getVenda().setItens(getTabelaItens().getItems());
+		getVenda().setMeioPgto(null);
+		getVenda().setStatus(null);
+		getVenda().setTotalFinal(getSomaTotalVenda());
+		getVenda().setTroco(null);
+		getVenda().setUsuario(null);
 
 	}
 
@@ -520,16 +665,14 @@ public class PdvController {
 		// CRIA O SPINNER
 		Spinner<Integer> spinner = new Spinner<>(1, 9999, 1);
 		getItenSelecionado().setSpinner(spinner);
+
+		// ATUALIZA A QUANTIDADE E O TOTAL DO ITEN ATRAVÉZ DO SPINNER
 		spinner.setOnMouseClicked((mouseEvent) -> {
 			getItenSelecionado().setQuantidade(spinner.getValue());
+			getItenSelecionado().setTotalIten(getItenSelecionado().getSpinner().getValue()
+					* Double.parseDouble(getItenSelecionado().getValorUnitario().replace("R$ ", "").replace(",", ".")));
+			getTabelaItens().refresh();
 		});
-
-		getProduto().setText(itenSelecionado.getProduto().getDescricao());
-		getQuantidade().setText("1");
-		getQuantidade().requestFocus();
-		getQuantidade().setEditable(true);
-		getQuantidade().setStyle("-fx-border-color: red;");
-		getPainelPesquisa().setVisible(false);
 
 		// CRIA A IMAGEM DE EXCLUIR
 		Button btnExcluir = new Button();
@@ -542,11 +685,18 @@ public class PdvController {
 		excluir.setFitWidth(30);
 		getItenSelecionado().setExcluir(btnExcluir);
 
+		// EXCLUI ITEN E ATUALIZA O NUMERO DE ITENS
 		btnExcluir.setOnMouseClicked((mouseEvent) -> {
 			getTabelaItens().getItems().remove(getItenSelecionado());
-			contador--;
+			numItem--;
 		});
-		
+
+		getProduto().setText(itenSelecionado.getProduto().getDescricao());
+		getQuantidade().setText("1");
+		getQuantidade().requestFocus();
+		getQuantidade().setEditable(true);
+		getQuantidade().setStyle("-fx-border-color: red;");
+		getPainelPesquisa().setVisible(false);
 
 	}
 
@@ -598,43 +748,12 @@ public class PdvController {
 
 	}
 
-	@SuppressWarnings("exports")
-	public void btnCliente(ActionEvent action) throws Exception {
-		getClienteLabel().setVisible(false);
-		limparCampos();
-		getPainelPesquisa().setVisible(true);
-		posicionarTabelaClientes();
-		getPainelPesquisa().setLeft(construirTabelaCientesPesquisa());
-		popularTabelaPesquisaAllClientes();
-
-		// SELECIONA CLIENTE ATRAVÉZ DO DUPLO CLIQUE
-		getTabelaClientesPesquisa().setOnMouseClicked((mouseEvent) -> {
-			if (mouseEvent.getClickCount() == 2) {
-				selecionarCliente();
-			}
-		});
-
-		// SELECIONA O PRODUTO ATRAVÉZ DA TECLA ENTER
-		getTabelaClientesPesquisa().setOnKeyPressed((keyEvent) -> {
-			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB) {
-				selecionarCliente();
-			}
-		});
-		/*
-		 * getClienteText().setOnKeyPressed((keyEvent) -> { if (keyEvent.getCode() ==
-		 * KeyCode.ESCAPE) { fecharTabelaPesquisaCliente(); } });
-		 * 
-		 * getTabelaClientesPesquisa().setOnKeyPressed((keyEvent) -> { if
-		 * (keyEvent.getCode() == KeyCode.ESCAPE) { fecharTabelaPesquisaCliente(); } });
-		 */
-	}
-
-	public void sair(ActionEvent action) {
-		Stage stage = (Stage) getBtnSair().getScene().getWindow();
-		stage.close();
-
-	}
-
+	/**
+	 * Popula a tabela de produtos com a descrição passada por parâmetro
+	 * 
+	 * @param descricao
+	 * @throws Exception
+	 */
 	private void popularTabelaPesquisaProdutos(String descricao) throws Exception {
 		List<ProdutoDto> produtos = gui.Controllers.ProdutoControllers.ProdutosController
 				.pesquisarProdutoByDescricao(descricao);
@@ -642,12 +761,23 @@ public class PdvController {
 		getTabelaProdutosPesquisa().setItems(getObservableListProduto());
 	}
 
+	/**
+	 * Popula a tabela de produtos com todos registros
+	 * 
+	 * @throws Exception
+	 */
 	private void popularTabelaPesquisaAllProdutos() throws Exception {
 		List<ProdutoDto> produtos = gui.Controllers.ProdutoControllers.ProdutosController.getAllProducts();
 		setObservableListProduto(FXCollections.observableArrayList(produtos));
 		getTabelaProdutosPesquisa().setItems(getObservableListProduto());
 	}
 
+	/**
+	 * Popula a tabela de clientes com a descrição passada por parâmetro
+	 * 
+	 * @param descricao
+	 * @throws Exception
+	 */
 	private void popularTabelaPesquisaClientes(String descricao) throws Exception {
 		List<ClienteDto> clientes = gui.Controllers.ClienteControllers.ClientesController
 				.pesquisarClientesByDescricao(descricao);
@@ -655,12 +785,23 @@ public class PdvController {
 		getTabelaClientesPesquisa().setItems(getObservableListCliente());
 	}
 
+	/**
+	 * Popula a tabela de clientes com todos registros
+	 * 
+	 * @throws Exception
+	 */
 	private void popularTabelaPesquisaAllClientes() throws Exception {
 		List<ClienteDto> clientes = gui.Controllers.ClienteControllers.ClientesController.getAllClients();
 		setObservableListCliente(FXCollections.observableArrayList(clientes));
 		getTabelaClientesPesquisa().setItems(getObservableListCliente());
 	}
 
+	/**
+	 * Contrói a tabela de itens
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	public TableView<ItensVendaDto> construirTabelaItens() throws Exception {
 		setTabelaItens(new TableView<ItensVendaDto>());
@@ -710,6 +851,12 @@ public class PdvController {
 		return getTabelaItens();
 	}
 
+	/**
+	 * Constrói a tabela de pesquisa de produtos
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	public TableView<ProdutoDto> construirTabelaProdutosPesquisa() throws Exception {
 		setTabelaProdutosPesquisa(new TableView<ProdutoDto>());
@@ -745,6 +892,12 @@ public class PdvController {
 		return getTabelaProdutosPesquisa();
 	}
 
+	/**
+	 * Constrói a tablea de pesquisa de clientes
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
 	@SuppressWarnings("unchecked")
 	public TableView<ClienteDto> construirTabelaCientesPesquisa() throws Exception {
 		setTabelaClientesPesquisa(new TableView<ClienteDto>());
@@ -777,5 +930,112 @@ public class PdvController {
 		getTabelaClientesPesquisa().setPrefWidth(d.getWidth() / 2);
 
 		return getTabelaClientesPesquisa();
+	}
+
+	// ---------------------- FUNÇÕES DOS BOTÕES --------------------------------
+
+	/**
+	 * Função bottão Cliente
+	 * 
+	 * @param action
+	 * @throws Exception
+	 */
+	@SuppressWarnings("exports")
+	public void btnCliente(ActionEvent action) throws Exception {
+		getClienteLabel().setVisible(false);
+		limparCampos();
+		getPainelPesquisa().setVisible(true);
+		posicionarTabelaClientes();
+		getPainelPesquisa().setLeft(construirTabelaCientesPesquisa());
+		popularTabelaPesquisaAllClientes();
+
+		// SELECIONA CLIENTE ATRAVÉZ DO DUPLO CLIQUE
+		getTabelaClientesPesquisa().setOnMouseClicked((mouseEvent) -> {
+			if (mouseEvent.getClickCount() == 2) {
+				selecionarCliente();
+			}
+		});
+		// SELECIONA O PRODUTO ATRAVÉZ DA TECLA ENTER
+		getTabelaClientesPesquisa().setOnKeyPressed((keyEvent) -> {
+			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB) {
+				selecionarCliente();
+			}
+		});
+
+		// FECHA TABELA DE PESQUISA DE CLIENTE QUANDO FOCUS NO CAMPO PESQUISA
+		getClienteText().setOnKeyPressed((keyEvent) -> {
+			if (keyEvent.getCode() == KeyCode.ESCAPE) {
+				fecharTabelaPesquisaCliente();
+			}
+		});
+
+		// FECHA TABELA DE PESQUISA DE CLIENTE QUANDO FOCUS NA TABELA
+		getTabelaClientesPesquisa().setOnKeyPressed((keyEvent) -> {
+			if (keyEvent.getCode() == KeyCode.ESCAPE) {
+				fecharTabelaPesquisaCliente();
+			}
+		});
+
+	}
+
+	/**
+	 * Função bottão Sair
+	 * 
+	 * @param action
+	 */
+	public void sair(ActionEvent action) {
+		// VERIFICA SE HÁ ITENS
+		if (!getTabelaItens().getItems().isEmpty()) {
+			Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+			alert.initOwner(getRoot().getScene().getWindow());
+			alert.setTitle("BR-Emissor - Vendas");
+			alert.setHeaderText(null);
+			alert.setContentText("Há itens na venda. Deseja sair ?");
+			alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+			alert.showAndWait();
+			if (alert.getResult() == ButtonType.CANCEL) {
+				alert.close();
+				return;
+			} else {
+				Stage stage = (Stage) getBtnSair().getScene().getWindow();
+				stage.close();
+			}
+		} else {
+			Stage stage = (Stage) getBtnSair().getScene().getWindow();
+			stage.close();
+		}
+	}
+
+	/**
+	 * Função botão Salvar
+	 * 
+	 * @param action
+	 */
+	public void btnSalvar(ActionEvent action) {
+
+	}
+
+	/**
+	 * Função botão Desconto
+	 * 
+	 * @param action
+	 * @throws IOException
+	 */
+	public void btnDesconto(ActionEvent action) throws IOException {
+
+		if (!getTabelaItens().getItems().isEmpty()) {
+			Stage stage = new Stage();
+			Parent painel = FXMLLoader.load(App.class.getResource("VendaViews/Desconto.fxml"));
+			Scene scene = new Scene(painel, 400, 250);
+			stage.setTitle("Desconto");
+			stage.setScene(scene);
+			stage.initOwner(getRoot().getScene().getWindow());
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.showAndWait();
+		}
+	}
+
+	public void btnConcluirDepois(ActionEvent action) {
+
 	}
 }

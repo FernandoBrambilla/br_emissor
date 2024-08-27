@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.Cursor?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="400.0" style="-fx-background-color: white;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.Controllers.VendaControllers.DescontoController">
+   <children>
+      <Button fx:id="btnSalvar" layoutX="45.0" layoutY="199.0" mnemonicParsing="false" onAction="#btnSalvar" prefHeight="31.0" prefWidth="155.0" style="-fx-background-color: #2484BF;" text=" Salvar (F2)" textFill="WHITE">
+         <font>
+            <Font size="15.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <Button fx:id="btnCancelar" layoutX="242.0" layoutY="199.0" mnemonicParsing="false" onAction="#btnCancelar" prefHeight="30.0" prefWidth="113.0" style="-fx-background-color: #2484BF;" text="Cancelar" textFill="WHITE">
+         <font>
+            <Font size="15.0" />
+         </font>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
+      </Button>
+      <TextField fx:id="descontoValor" alignment="CENTER_RIGHT" layoutX="137.0" layoutY="40.0">
+         <font>
+            <Font name="Calibri" size="17.0" />
+         </font>
+      </TextField>
+      <Label layoutX="57.0" layoutY="45.0" text="Desconto">
+         <font>
+            <Font name="Calibri" size="17.0" />
+         </font>
+      </Label>
+      <TextField fx:id="descontoPercentual" alignment="CENTER_RIGHT" layoutX="137.0" layoutY="110.0">
+         <font>
+            <Font name="Calibri" size="17.0" />
+         </font>
+      </TextField>
+      <Label layoutX="52.0" layoutY="115.0" text="Percentual">
+         <font>
+            <Font name="Calibri" size="17.0" />
+         </font>
+      </Label>
+   </children>
+</Pane>

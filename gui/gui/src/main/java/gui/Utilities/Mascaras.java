@@ -18,6 +18,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -33,6 +34,8 @@ import javafx.scene.input.KeyEvent;
  * @author rafael
  */
 public abstract class Mascaras {
+	
+	
 
 	private static List<KeyCode> ignoreKeyCodes;
 
@@ -59,6 +62,7 @@ public abstract class Mascaras {
 				if (!newValue.matches("\\d*(\\,\\d*)?")) {
 					valor.setText(oldValue);
 				}
+				
 			}
 		});
 	}
@@ -79,7 +83,7 @@ public abstract class Mascaras {
 	}
 
 	public static String percentual(final Double valor) {
-		DecimalFormat df = new DecimalFormat("#0.00");
+		DecimalFormat df = new DecimalFormat("##0.00");
 		return (df.format(valor));
 	}
 
@@ -146,18 +150,18 @@ public abstract class Mascaras {
 			}
 		});
 	}
-
+	
 	/**
 	 * Monta a mascara para Moeda.
 	 *
 	 * @param textField TextField
 	 */
-	public static void monetaryField(TextField textField) {
+	public static void monetaryField(TextField textField) { 
+		
 		textField.setAlignment(Pos.CENTER_RIGHT);
 		textField.lengthProperty().addListener(new ChangeListener<Number>() {
 			@Override
 			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-
 				String value = textField.getText();
 				value = value.replaceAll("[^0-9]", "");
 				value = value.replaceAll("([0-9]{1})([0-9]{14})$", "$1.$2");
@@ -165,9 +169,8 @@ public abstract class Mascaras {
 				value = value.replaceAll("([0-9]{1})([0-9]{8})$", "$1.$2");
 				value = value.replaceAll("([0-9]{1})([0-9]{5})$", "$1.$2");
 				value = value.replaceAll("([0-9]{1})([0-9]{2})$", "$1,$2");
-				textField.setText("R$ " + value);
+				textField.setText(value);
 				positionCaret(textField);
-
 				textField.textProperty().addListener(new ChangeListener<String>() {
 					@Override
 					public void changed(ObservableValue<? extends String> observableValue, String oldValue,
@@ -177,21 +180,46 @@ public abstract class Mascaras {
 					}
 				});
 			}
+			
 		});
-
-		textField.focusedProperty().addListener(new ChangeListener<Boolean>() {
+	}
+	
+	public static void percentualField(TextField textField) {
+		textField.setAlignment(Pos.CENTER_RIGHT);
+		textField.lengthProperty().addListener(new ChangeListener<Number>() {
 			@Override
-			public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean,
-					Boolean fieldChange) {
-				if (!fieldChange) {
-					final int length = textField.getText().length();
-					if (length > 3 && length < 6) {
-						textField.setText(textField.getText() + "00");
-					}
-				}
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				String value = textField.getText();
+				value = value.replaceAll("[^0-9]", "");
+				value = value.replaceAll("([0-9]{1})([0-9]{2})$", "$1,$2");
+				textField.setText(value + " %");
+				positionCaret(textField);
 			}
 		});
 	}
+	
+	/*
+	public static void percentField(TextField textField) {
+		textField.setAlignment(Pos.CENTER_RIGHT);
+		textField.lengthProperty().addListener(new ChangeListener<Number>() {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				Double valor = Double.parseDouble(textField.getText().replace(",", ".").replace(" %", ""));
+				maxField(textField, 8);
+				if (valor != null && valor > 100) {
+					//textField.setText("100,00");
+				}
+				if(valor != null && valor < 100) {
+					maxField(textField, 5);
+				}
+				positionCaret(textField);
+			}
+		});
+
+	}
+	*/
+	
+	
 
 	/**
 	 * Monta as mascara para CPF/CNPJ. A mascara eh exibida somente apos o campo
@@ -274,12 +302,13 @@ public abstract class Mascaras {
 	 * @param textField TextField.
 	 * @param length    Tamanho do campo.
 	 */
-	private static void maxField(final TextField textField, final Integer length) {
+	public static void maxField(final TextField textField, final Integer length) {
 		textField.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-				if (newValue.length() > length)
+				if (newValue.length() > length) {
 					textField.setText(oldValue);
+				}
 			}
 		});
 	}

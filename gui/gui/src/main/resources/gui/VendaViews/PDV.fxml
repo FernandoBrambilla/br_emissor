@@ -122,22 +122,7 @@
                         <Cursor fx:constant="HAND" />
                      </cursor>
                   </Button>
-                  <Button graphicTextGap="8.0" layoutX="325.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="130.0" style="-fx-background-color: #171B36;" text="Cancelar" textFill="WHITE">
-                     <font>
-                        <Font name="Calibri Bold" size="18.0" />
-                     </font>
-                     <cursor>
-                        <Cursor fx:constant="HAND" />
-                     </cursor>
-                     <graphic>
-                        <ImageView fitHeight="250.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../img/remover.png" />
-                           </image>
-                        </ImageView>
-                     </graphic>
-                  </Button>
-                  <Button graphicTextGap="8.0" layoutX="140.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="175.0" style="-fx-background-color: #171B36;" text="Concluir Depois" textFill="WHITE">
+                  <Button fx:id="btnConcluirDepois" disable="true" graphicTextGap="8.0" layoutX="306.0" layoutY="10.0" mnemonicParsing="false" onAction="#btnConcluirDepois" prefHeight="40.0" prefWidth="175.0" style="-fx-background-color: #171B36;" text="Concluir Depois" textFill="WHITE">
                      <font>
                         <Font name="Calibri Bold" size="18.0" />
                      </font>
@@ -152,7 +137,7 @@
                         </ImageView>
                      </graphic>
                   </Button>
-                  <Button graphicTextGap="8.0" layoutY="10.0" mnemonicParsing="false" prefHeight="40.0" prefWidth="140.0" style="-fx-background-color: #171B36;" text="Salvar (F2)" textFill="WHITE">
+                  <Button fx:id="btnSalvar" disable="true" graphicTextGap="8.0" layoutY="10.0" mnemonicParsing="false" onAction="#btnSalvar" prefHeight="40.0" prefWidth="140.0" style="-fx-background-color: #171B36;" text="Salvar (F2)" textFill="WHITE">
                      <font>
                         <Font name="Calibri Bold" size="18.0" />
                      </font>
@@ -167,6 +152,21 @@
                         </ImageView>
                      </graphic>
                   </Button>
+                  <Button fx:id="btnDesconto" disable="true" graphicTextGap="8.0" layoutX="150.0" layoutY="10.0" mnemonicParsing="false" onAction="#btnDesconto" prefHeight="40.0" prefWidth="160.0" style="-fx-background-color: #171B36;" text="Desconto (F3)" textFill="WHITE">
+                     <font>
+                        <Font name="Calibri Bold" size="18.0" />
+                     </font>
+                     <cursor>
+                        <Cursor fx:constant="HAND" />
+                     </cursor>
+                     <graphic>
+                        <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../img/desconto.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
                </children>
             </Pane>
          </right>
@@ -175,39 +175,34 @@
          <bottom>
             <BorderPane fx:id="footer" minWidth="738.0" prefHeight="100.0" prefWidth="738.0" style="-fx-background-color: #171B36;" BorderPane.alignment="CENTER">
                <left>
-                  <Pane fx:id="menuSuperior1" prefHeight="100.0" prefWidth="383.0" style="-fx-background-color: #171B36;" BorderPane.alignment="CENTER">
+                  <Pane fx:id="menuSuperior1" prefHeight="100.0" prefWidth="172.0" style="-fx-background-color: #171B36;" BorderPane.alignment="CENTER">
                      <children>
                         <Pane fx:id="menuSuperior12" layoutX="356.0" layoutY="-19.0" prefHeight="100.0" prefWidth="0.0" style="-fx-background-color: #171B36;" />
                      </children></Pane>
                </left>
                <right>
-                  <Pane fx:id="menuSuperior11" prefHeight="100.0" prefWidth="608.0" style="-fx-background-color: #171B36;" BorderPane.alignment="CENTER">
+                  <Pane fx:id="menuSuperior11" prefHeight="100.0" prefWidth="733.0" style="-fx-background-color: #171B36;" BorderPane.alignment="CENTER">
                      <children>
-                        <TextField fx:id="totalVenda" alignment="CENTER" layoutX="384.0" layoutY="20.0" prefHeight="60.0" prefWidth="200.0">
+                        <TextField fx:id="totalVenda" alignment="CENTER" editable="false" layoutX="500.0" layoutY="20.0" prefHeight="60.0" prefWidth="200.0">
                            <font>
                               <Font name="Calibri Bold" size="25.0" />
                            </font>
                         </TextField>
-                        <Label alignment="CENTER" layoutX="264.0" layoutY="20.0" prefHeight="60.0" prefWidth="100.0" text="TOTAL" textFill="WHITE">
+                        <Label alignment="CENTER" layoutX="400.0" layoutY="20.0" prefHeight="60.0" prefWidth="100.0" text="TOTAL" textFill="WHITE">
                            <font>
                               <Font name="Calibri" size="25.0" />
                            </font>
                         </Label>
-                        <Button graphicTextGap="8.0" layoutX="61.0" layoutY="28.0" mnemonicParsing="false" prefHeight="45.0" prefWidth="162.0" style="-fx-background-color: #171B36;" text="Desconto (F3)" textFill="WHITE">
+                        <Label fx:id="labelDesconto" alignment="CENTER_RIGHT" layoutY="44.0" prefHeight="54.0" prefWidth="400.0" textFill="RED">
                            <font>
-                              <Font name="Calibri Bold" size="18.0" />
+                              <Font name="Calibri" size="25.0" />
                            </font>
-                           <cursor>
-                              <Cursor fx:constant="HAND" />
-                           </cursor>
-                           <graphic>
-                              <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                 <image>
-                                    <Image url="@../img/desconto.png" />
-                                 </image>
-                              </ImageView>
-                           </graphic>
-                        </Button>
+                        </Label>
+                        <Label fx:id="labelSubtotal" alignment="CENTER_RIGHT" prefHeight="54.0" prefWidth="400.0" textFill="WHITE">
+                           <font>
+                              <Font name="Calibri" size="25.0" />
+                           </font>
+                        </Label>
                      </children>
                   </Pane>
                </right>
