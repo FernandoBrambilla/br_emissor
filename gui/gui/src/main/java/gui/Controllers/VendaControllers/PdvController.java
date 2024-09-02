@@ -19,7 +19,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -31,7 +30,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -116,13 +114,13 @@ public class PdvController {
 	@FXML
 	private Button btnSair;
 
+	private Button btnExcluir;
+
 	private TableView<ItensVendaDto> tabelaItens;
 
 	private TableView<ProdutoDto> tabelaProdutosPesquisa;
 
 	private TableView<ClienteDto> tabelaClientesPesquisa;
-
-	public static ObservableList<ItensVendaDto> observableList;
 
 	public static ObservableList<ProdutoDto> observableListProduto;
 
@@ -130,7 +128,7 @@ public class PdvController {
 
 	private VendaDto venda = new VendaDto();
 
-	private ItensVendaDto itenSelecionado;
+	private ItensVendaDto iten;
 
 	private ClienteDto clienteSelecionado;
 
@@ -139,6 +137,7 @@ public class PdvController {
 	private String pesquisaCliente = "";
 
 	public DecimalFormat getRealFormato() {
+
 		return realFormato;
 	}
 
@@ -156,6 +155,14 @@ public class PdvController {
 
 	public Button getBtnSalvar() {
 		return btnSalvar;
+	}
+
+	public Button getBtnExcluir() {
+		return btnExcluir;
+	}
+
+	public void setBtnExcluir(Button btnExcluir) {
+		this.btnExcluir = btnExcluir;
 	}
 
 	public Button getBtnConcluirDepois() {
@@ -190,16 +197,8 @@ public class PdvController {
 		this.labelDesconto = labelDesconto;
 	}
 
-	public Double getSomaTotalVenda() {
-		return somaTotalVenda;
-	}
-
 	public void setBtnDesconto(Button btnDesconto) {
 		this.btnDesconto = btnDesconto;
-	}
-
-	public void setSomaTotalVenda(Double somaTotalVenda) {
-		this.somaTotalVenda = somaTotalVenda;
 	}
 
 	public Dimension getD() {
@@ -302,10 +301,6 @@ public class PdvController {
 		return tabelaProdutosPesquisa;
 	}
 
-	public static ObservableList<ItensVendaDto> getObservableList() {
-		return observableList;
-	}
-
 	public static ObservableList<ProdutoDto> getObservableListProduto() {
 		return observableListProduto;
 	}
@@ -314,8 +309,8 @@ public class PdvController {
 		return observableListCliente;
 	}
 
-	public ItensVendaDto getItenSelecionado() {
-		return itenSelecionado;
+	public ItensVendaDto getIten() {
+		return iten;
 	}
 
 	public String getPesquisaProduto() {
@@ -418,10 +413,6 @@ public class PdvController {
 		this.tabelaClientesPesquisa = tabelaClientesPesquisa;
 	}
 
-	public static void setObservableList(ObservableList<ItensVendaDto> observableList) {
-		PdvController.observableList = observableList;
-	}
-
 	public static void setObservableListProduto(ObservableList<ProdutoDto> observableListProduto) {
 		PdvController.observableListProduto = observableListProduto;
 	}
@@ -430,8 +421,8 @@ public class PdvController {
 		PdvController.observableListCliente = observableListCliente;
 	}
 
-	public void setItenSelecionado(ItensVendaDto itenSelecionado) {
-		this.itenSelecionado = itenSelecionado;
+	public void setIten(ItensVendaDto iten) {
+		this.iten = iten;
 	}
 
 	public void setPesquisaProduto(String pesquisaProduto) {
@@ -446,16 +437,8 @@ public class PdvController {
 		return venda;
 	}
 
-	public Long getNumItem() {
-		return numItem;
-	}
-
 	public void setVenda(VendaDto venda) {
 		this.venda = venda;
-	}
-
-	public void setNumItem(Long numItem) {
-		this.numItem = numItem;
 	}
 
 	public void initialize() throws Exception {
@@ -481,14 +464,26 @@ public class PdvController {
 		getQuantidade().setEditable(false);
 		getClienteText().setVisible(false);
 
+		getTabelaItens().setOnMouseClicked((mouseEvent) -> {
+			if (getTabelaProdutosPesquisa() != null) {
+				getTabelaProdutosPesquisa().setVisible(false);
+			}
+			if (getTabelaClientesPesquisa() != null) {
+				getTabelaClientesPesquisa().setVisible(false);
+				getClienteText().setVisible(false);
+			}
+
+		});
+
 		// MUDA FOCO DA QUANTIDADE PARA O VALOR UNITÁRIO
 		getQuantidade().setOnKeyPressed((keyEvent) -> {
 			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB) {
 				getQuantidade().setStyle(null);
 				getValorUnitario().setStyle("-fx-border-color: red;");
-				getValorUnitario().setText(itenSelecionado.getProduto().getValorVenda().replace("R$ ", ""));
-				itenSelecionado.setQuantidade(Integer.parseInt(getQuantidade().getText()));
+				getValorUnitario().setText(getIten().getProduto().getValorVenda().replace("R$ ", ""));
+				getIten().setQuantidade(Integer.parseInt(getQuantidade().getText()));
 			}
+
 		});
 
 		// LIMPA O CAMPO VALOR UNITÁRIO ATRAVÉS DO CLIQUE
@@ -501,26 +496,23 @@ public class PdvController {
 
 		// MUDA FOCO DO VALOR UNITARIO PARA TOTAL ITEM
 		getValorUnitario().setOnKeyPressed((keyEvent) -> {
-
 			// LIMPA CAMPO VALOR UNITÁRIO ATRAVÉS DO TECLADO
 			if (keyEvent.getCode() == KeyCode.BACK_SPACE || keyEvent.getCode() == KeyCode.DELETE) {
 				getValorUnitario().setEditable(true);
 				getValorUnitario().setText("");
+
 			}
 
 			// SETA VALOR UNITÁRIO E CALCULA VALOR TOTAL DO ITEN
 			if (!getValorUnitario().getText().isEmpty()) {
 				if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB) {
-					Double valorUnitario = Double.parseDouble(
-							getValorUnitario().getText().replace("R$ ", "").replace(".", "").replace(",", "."));
-					itenSelecionado.setValorUnitario(valorUnitario);
-					Double valorTotalIten = valorUnitario * itenSelecionado.getQuantidade();
-					itenSelecionado.setTotalIten(valorTotalIten);
-					getTotalIten().setText(String.valueOf(realFormato.format(itenSelecionado.getTotalItenDouble())));
-					itenSelecionado.setDesconto(0D);
+					getTotalIten().setText(String.valueOf(realFormato
+							.format(getIten().getTotalItenDouble() * Double.parseDouble(getQuantidade().getText()))));
 					getTotalIten().requestFocus();
+					getTotalIten().deselect();
 					getValorUnitario().setStyle(null);
 					getTotalIten().setStyle("-fx-border-color: red;");
+
 				}
 			}
 		});
@@ -530,50 +522,71 @@ public class PdvController {
 			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB) {
 				lancarIten();
 				limparCampos();
+				selecionarItens();
 			}
 		});
 
 	}
 
-	Long numItem = 0L;
-	Double somaTotalVenda = 0D;
+	int numItem = 0;
 
 	private void lancarIten() {
 		if (!getProduto().getText().isEmpty() && !getQuantidade().getText().isEmpty()
 				&& !getValorUnitario().getText().isEmpty() && !getTotalIten().getText().isEmpty()) {
+			getTabelaItens().getItems().add(selecionarItens());
 			numItem++;
-			getItenSelecionado().setId(numItem);
-			getItenSelecionado().getSpinner().getValueFactory().setValue(Integer.parseInt(getQuantidade().getText()));
-			getTabelaItens().getItems().add(itenSelecionado);
-			somaTotalVenda += getItenSelecionado().getTotalItenDouble();
-			setarValorTotalVenda();
+			getVenda().setTotalFinal(getTabelaItens().getItems().get(numItem - 1).getTotalItenDouble());
+			atualizarIndiceEsoma();
 
 			// HABILITA OS BOTÕES AO LANÇAR A PRIMEIRA VENDA
 			getBtnSalvar().setDisable(false);
 			getBtnDesconto().setDisable(false);
 			getBtnConcluirDepois().setDisable(false);
-
 			limparCampos();
-
-			// LANÇA ITENS NA VENDA
 
 		}
 	}
 
-	public void setarValorTotalVenda() {
-		Double desconto = getVenda().getDescontoDouble()== null ? 0D : getVenda().getDescontoDouble();
-		getTotalVenda().setText(realFormato.format(somaTotalVenda-desconto));
+	public void removerIten(int index) {
+		getTabelaItens().getItems().remove(index);
+		atualizarIndiceEsoma();
+
 	}
-	
+
+	public void atualizarIndiceEsoma() {
+		Double soma = 0D;
+		for (int i = 0; i < getTabelaItens().getItems().size(); i++) {
+			getTabelaItens().getItems().get(i).setId(i);
+			soma += getTabelaItens().getItems().get(i).getTotalItenDouble();
+			getVenda().setTotalFinal(soma);
+		}
+		atualizarTotalVenda();
+
+	}
+
+	public void atualizarTotalVenda() {
+		getTotalVenda().setText(realFormato.format(getVenda().getTotalFinalDouble()));
+
+	}
+
+	public void atualizarQuantidade(int index, int quantidade) {
+		ItensVendaDto iten = getTabelaItens().getItems().get(index);
+		iten.setQuantidade(quantidade);
+		iten.getSpinner().getValueFactory().setValue(iten.getQuantidade());
+		iten.setTotalIten(iten.getValorUnitarioDouble() * iten.getQuantidade());
+		atualizarIndiceEsoma();
+		getTabelaItens().refresh();
+
+	}
 
 	public void criarVenda() {
 		getVenda().setCliente(clienteSelecionado);
 		getVenda().setDataVenda(LocalDateTime.now());
-		// getVenda().setDesconto(null);
 		getVenda().setItens(getTabelaItens().getItems());
 		getVenda().setMeioPgto(null);
 		getVenda().setStatus(null);
-		getVenda().setTotalFinal(getSomaTotalVenda());
+		getVenda().setTotalFinal(
+				Double.valueOf(getTotalIten().getText().replace("R$ ", "").replace(".", "").replace(",", ".")));
 		getVenda().setTroco(null);
 		getVenda().setUsuario(null);
 
@@ -610,7 +623,6 @@ public class PdvController {
 	}
 
 	// CARREGA TABELA COM TODOS CLIENTES
-	@SuppressWarnings("exports")
 	public void clicarCampoPesquisaProdutos(MouseEvent event) throws Exception {
 		getClienteText().setVisible(false);
 		getPainelPesquisa().setVisible(true);
@@ -634,10 +646,20 @@ public class PdvController {
 	}
 
 	public void pesquisarProduto(KeyEvent event) throws Exception {
+		String produto = "";
 		setPesquisaProduto(getProduto().getText().replace(" ", "+"));
 		posicionarTabelaProdutos();
 		getPainelPesquisa().setLeft(construirTabelaProdutosPesquisa());
 		popularTabelaPesquisaProdutos(getPesquisaProduto());
+		produto += getPesquisaProduto();
+		// PESQUISA CLIENTES POR ID
+		if (produto.matches("[0-9]+")) {
+			popularTabelaPesquisaProdutosByCodigo(produto);
+
+		}
+		else {
+			popularTabelaPesquisaProdutos(getPesquisaProduto());
+		}
 
 		// SELECIONA O PRODUTO ATRAVÉZ DO DUPLO CLIQUE
 		getTabelaProdutosPesquisa().setOnMouseClicked((mouseEvent) -> {
@@ -658,46 +680,22 @@ public class PdvController {
 		}
 	}
 
-	private void selecionarItens() {
-		itenSelecionado = new ItensVendaDto();
-		itenSelecionado.setProduto(getTabelaProdutosPesquisa().getSelectionModel().getSelectedItem());
-
-		// CRIA O SPINNER
-		Spinner<Integer> spinner = new Spinner<>(1, 9999, 1);
-		getItenSelecionado().setSpinner(spinner);
-
-		// ATUALIZA A QUANTIDADE E O TOTAL DO ITEN ATRAVÉZ DO SPINNER
-		spinner.setOnMouseClicked((mouseEvent) -> {
-			getItenSelecionado().setQuantidade(spinner.getValue());
-			getItenSelecionado().setTotalIten(getItenSelecionado().getSpinner().getValue()
-					* Double.parseDouble(getItenSelecionado().getValorUnitario().replace("R$ ", "").replace(",", ".")));
-			getTabelaItens().refresh();
-		});
-
-		// CRIA A IMAGEM DE EXCLUIR
-		Button btnExcluir = new Button();
-		btnExcluir.setStyle("-fx-background-color: none; -fx-border: none;");
-		btnExcluir.setCursor(Cursor.HAND);
-		Image imagem = new Image(this.getClass().getResource("excluir.png").toString());
-		ImageView excluir = new ImageView(imagem);
-		btnExcluir.setGraphic(excluir);
-		excluir.setFitHeight(30);
-		excluir.setFitWidth(30);
-		getItenSelecionado().setExcluir(btnExcluir);
-
-		// EXCLUI ITEN E ATUALIZA O NUMERO DE ITENS
-		btnExcluir.setOnMouseClicked((mouseEvent) -> {
-			getTabelaItens().getItems().remove(getItenSelecionado());
-			numItem--;
-		});
-
-		getProduto().setText(itenSelecionado.getProduto().getDescricao());
+	private ItensVendaDto selecionarItens() {
+		iten = new ItensVendaDto();
+		iten.setId(numItem);
+		iten.setProduto(getTabelaProdutosPesquisa().getSelectionModel().getSelectedItem());
+		iten.setCodigo(iten.getProduto().getCodigo());
+		iten.setDescricao(iten.getProduto().getDescricao());
+		iten.setValorUnitario(iten.getProduto().getValorVendas());
+		iten.setQuantidade(1);
+		iten.setTotalIten(iten.getQuantidade() * iten.getValorUnitarioDouble());
+		getProduto().setText(iten.getProduto().getDescricao());
 		getQuantidade().setText("1");
 		getQuantidade().requestFocus();
 		getQuantidade().setEditable(true);
-		getQuantidade().setStyle("-fx-border-color: red;");
+		getQuantidade().deselect();
 		getPainelPesquisa().setVisible(false);
-
+		return iten;
 	}
 
 	private void selecionarCliente() {
@@ -709,15 +707,22 @@ public class PdvController {
 		getClienteLabel().setVisible(true);
 	}
 
-	private void pesquisarProdutoByEan() {
-
-	}
-
 	public void pesquisarCliente(KeyEvent event) throws Exception {
-		posicionarTabelaClientes();
+		String pesquisa = "";
 		setPesquisaCliente(getClienteText().getText().replace(" ", "+"));
+		posicionarTabelaClientes();
 		getPainelPesquisa().setLeft(construirTabelaCientesPesquisa());
-		popularTabelaPesquisaClientes(getPesquisaCliente());
+		pesquisa += getClienteText().getText().replace(" ", "+");
+
+		// PESQUISA CLIENTES POR ID
+		if (pesquisa.matches("[0-9]+")) {
+			popularTabelaPesquisaClienteById(Integer.parseInt(pesquisa));
+
+		}
+		// PESQUISA CLIENTES POR DESCRIÇÃO
+		else {
+			popularTabelaPesquisaClientes(getPesquisaCliente());
+		}
 
 		// SELECIONA O CLIENTE ATRAVÉZ DO DUPLO CLIQUE
 		getTabelaClientesPesquisa().setOnMouseClicked((mouseEvent) -> {
@@ -736,6 +741,13 @@ public class PdvController {
 		if (event.getCode() == KeyCode.ESCAPE) {
 			fecharTabelaPesquisaCliente();
 		}
+
+		// SELECIONA CLIENTE ATRAVÉZ DO DUPLO CLIQUE
+		getTabelaClientesPesquisa().setOnMouseClicked((mouseEvent) -> {
+			if (mouseEvent.getClickCount() == 2) {
+				selecionarCliente();
+			}
+		});
 
 	}
 
@@ -757,6 +769,21 @@ public class PdvController {
 	private void popularTabelaPesquisaProdutos(String descricao) throws Exception {
 		List<ProdutoDto> produtos = gui.Controllers.ProdutoControllers.ProdutosController
 				.pesquisarProdutoByDescricao(descricao);
+		setObservableListProduto(FXCollections.observableArrayList(produtos));
+		getTabelaProdutosPesquisa().setItems(getObservableListProduto());
+	}
+	
+	/**
+	 * Popula a tabela de produtos com código ean_gtin
+	 * @param codigo
+	 * @throws Exception
+	 */
+	private void popularTabelaPesquisaProdutosByCodigo(String codigo) throws Exception {
+		List<ProdutoDto> produtos = gui.Controllers.ProdutoControllers.ProdutosController
+				.pesquisarProdutoByCodigo(codigo);
+		if(produtos.isEmpty()){
+			getTabelaProdutosPesquisa().setPlaceholder(new Label("Nenhum Produto localizado com o Código Ean/Gtin \"" + codigo + "\""));
+		}
 		setObservableListProduto(FXCollections.observableArrayList(produtos));
 		getTabelaProdutosPesquisa().setItems(getObservableListProduto());
 	}
@@ -783,6 +810,22 @@ public class PdvController {
 				.pesquisarClientesByDescricao(descricao);
 		setObservableListCliente(FXCollections.observableArrayList(clientes));
 		getTabelaClientesPesquisa().setItems(getObservableListCliente());
+	}
+
+	/**
+	 * Popula a tabela de clientes pesquisando por id
+	 * 
+	 * @param id
+	 * @throws Exception
+	 */
+	private void popularTabelaPesquisaClienteById(int id) throws Exception {
+		ClienteDto cliente = gui.Controllers.ClienteControllers.ClientesController.pesquisarClienteById(id);
+		if (cliente == null) {
+			getTabelaClientesPesquisa()
+					.setPlaceholder(new Label("Nenhum Cliente localizado com o Código \"" + id + "\""));
+		} else {
+			getTabelaClientesPesquisa().getItems().add(cliente);
+		}
 	}
 
 	/**
@@ -816,7 +859,7 @@ public class PdvController {
 
 		TableColumn<ItensVendaDto, String> colunaDescricao = new TableColumn<ItensVendaDto, String>("Descrição");
 		colunaDescricao.setCellValueFactory(new PropertyValueFactory<ItensVendaDto, String>("descricao"));
-		colunaDescricao.setPrefWidth(((d.getWidth()) * 35) / 100);
+		colunaDescricao.setPrefWidth(((d.getWidth()) * 44) / 100);
 
 		TableColumn<ItensVendaDto, Spinner<Integer>> colunaQuantidade = new TableColumn<ItensVendaDto, Spinner<Integer>>(
 				"Quantidade");
@@ -827,21 +870,17 @@ public class PdvController {
 		colunaValor.setCellValueFactory(new PropertyValueFactory<ItensVendaDto, String>("valorUnitario"));
 		colunaValor.setPrefWidth(((d.getWidth()) * 10) / 100);
 
-		TableColumn<ItensVendaDto, String> colunaDesconto = new TableColumn<ItensVendaDto, String>("Desconto");
-		colunaDesconto.setCellValueFactory(new PropertyValueFactory<ItensVendaDto, String>("desconto"));
-		colunaDesconto.setPrefWidth(((d.getWidth()) * 10) / 100);
-
 		TableColumn<ItensVendaDto, String> colunaTotalFinal = new TableColumn<ItensVendaDto, String>("Total do Iten");
 		colunaTotalFinal.setCellValueFactory(new PropertyValueFactory<ItensVendaDto, String>("totalIten"));
 		colunaTotalFinal.setPrefWidth(((d.getWidth()) * 10) / 100);
 
-		TableColumn<ItensVendaDto, ImageView> colunaExcluir = new TableColumn<ItensVendaDto, ImageView>("Excluir Iten");
-		colunaExcluir.setCellValueFactory(new PropertyValueFactory<ItensVendaDto, ImageView>("excluir"));
+		TableColumn<ItensVendaDto, Button> colunaExcluir = new TableColumn<ItensVendaDto, Button>("Excluir Iten");
+		colunaExcluir.setCellValueFactory(new PropertyValueFactory<ItensVendaDto, Button>("excluir"));
 		colunaExcluir.setPrefWidth(((d.getWidth()) * 10) / 100);
 
 		// ADICIONA AS COLUNAS
 		getTabelaItens().getColumns().addAll(colunaID, colunaCodigo, colunaDescricao, colunaQuantidade, colunaValor,
-				colunaDesconto, colunaTotalFinal, colunaExcluir);
+				colunaTotalFinal, colunaExcluir);
 
 		if (getTabelaItens().getItems().isEmpty()) {
 			getTabelaItens().setPlaceholder(new Label("Nenhum item adicionado a venda!."));
@@ -862,7 +901,7 @@ public class PdvController {
 		setTabelaProdutosPesquisa(new TableView<ProdutoDto>());
 
 		TableColumn<ProdutoDto, String> colunaCodigo = new TableColumn<ProdutoDto, String>("Código");
-		colunaCodigo.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("codigo"));
+		colunaCodigo.setCellValueFactory(new PropertyValueFactory<ProdutoDto, String>("EAN_GTIN"));
 		colunaCodigo.setPrefWidth(((d.getWidth() / 2) * 20) / 100);
 
 		TableColumn<ProdutoDto, String> colunaDescricao = new TableColumn<ProdutoDto, String>("Descrição");
@@ -940,7 +979,6 @@ public class PdvController {
 	 * @param action
 	 * @throws Exception
 	 */
-	@SuppressWarnings("exports")
 	public void btnCliente(ActionEvent action) throws Exception {
 		getClienteLabel().setVisible(false);
 		limparCampos();
@@ -948,34 +986,6 @@ public class PdvController {
 		posicionarTabelaClientes();
 		getPainelPesquisa().setLeft(construirTabelaCientesPesquisa());
 		popularTabelaPesquisaAllClientes();
-
-		// SELECIONA CLIENTE ATRAVÉZ DO DUPLO CLIQUE
-		getTabelaClientesPesquisa().setOnMouseClicked((mouseEvent) -> {
-			if (mouseEvent.getClickCount() == 2) {
-				selecionarCliente();
-			}
-		});
-		// SELECIONA O PRODUTO ATRAVÉZ DA TECLA ENTER
-		getTabelaClientesPesquisa().setOnKeyPressed((keyEvent) -> {
-			if (keyEvent.getCode() == KeyCode.ENTER || keyEvent.getCode() == KeyCode.TAB) {
-				selecionarCliente();
-			}
-		});
-
-		// FECHA TABELA DE PESQUISA DE CLIENTE QUANDO FOCUS NO CAMPO PESQUISA
-		getClienteText().setOnKeyPressed((keyEvent) -> {
-			if (keyEvent.getCode() == KeyCode.ESCAPE) {
-				fecharTabelaPesquisaCliente();
-			}
-		});
-
-		// FECHA TABELA DE PESQUISA DE CLIENTE QUANDO FOCUS NA TABELA
-		getTabelaClientesPesquisa().setOnKeyPressed((keyEvent) -> {
-			if (keyEvent.getCode() == KeyCode.ESCAPE) {
-				fecharTabelaPesquisaCliente();
-			}
-		});
-
 	}
 
 	/**

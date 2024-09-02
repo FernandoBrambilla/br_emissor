@@ -291,7 +291,7 @@ public class NovoProdutoController {
 		this.obs = obs;
 	}
 
-	@SuppressWarnings("exports")
+
 	public void setInfo(Label info) {
 		this.info = info;
 	}
@@ -480,7 +480,6 @@ public class NovoProdutoController {
 	 * @param action
 	 * @throws IOException
 	 */
-	@SuppressWarnings("exports")
 	public void mostrarTelaMarkup(ActionEvent action) throws IOException {
 		Stage stage = new Stage();
 		Parent painel = FXMLLoader.load(App.class.getResource("ProdutoViews/MarkupPadrao.fxml"));
@@ -844,7 +843,6 @@ public class NovoProdutoController {
 	 * @return BorderPane
 	 * @throws Exception
 	 */
-	@SuppressWarnings("exports")
 	public static BorderPane criarCheckBoxMarkup() throws Exception {
 		setCheckBox(new CheckBox());
 		getCheckBox().setSelected(MarkupPadraoController.buscarMarkup().isUtilizar() ? true : false);
@@ -1020,7 +1018,6 @@ public class NovoProdutoController {
 		}
 	}
 
-	@SuppressWarnings("exports")
 	public void calcularValorVendaAutomatico(ActionEvent action) {
 		calcularValorVenda();
 	}

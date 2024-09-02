@@ -51,6 +51,17 @@ public class ProductService {
 				.findById(product.getId())).withSelfRel()));
 		return entity;
 	}
+	
+	//FindByDesc
+		public List<Product> findByCod(String cod){
+			var entity = repository.findByCod(cod).stream()
+					.map(product -> mapper.map(product, Product.class))
+					.collect(Collectors.toList());
+			//LINK HATEOAS
+			entity.stream().forEach(product -> product.add(linkTo(methodOn(ProductController.class)
+					.findById(product.getId())).withSelfRel()));
+			return entity;
+		}
 
 	// FindById
 	public Product findById(Long id) {

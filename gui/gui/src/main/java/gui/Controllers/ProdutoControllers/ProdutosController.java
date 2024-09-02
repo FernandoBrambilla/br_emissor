@@ -36,7 +36,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
@@ -83,42 +82,34 @@ public class ProdutosController {
 		ProdutosController.observableList = observableList;
 	}
 
-	@SuppressWarnings("exports")
 	public BorderPane getTelaBase() {
 		return telaBase;
 	}
 
-	@SuppressWarnings("exports")
 	public void setTelaBase(BorderPane telaBase) {
 		this.telaBase = telaBase;
 	}
 
-	@SuppressWarnings("exports")
 	public Button getBtnNovo() {
 		return btnNovo;
 	}
 
-	@SuppressWarnings("exports")
 	public Button getBtnEditar() {
 		return btnEditar;
 	}
 
-	@SuppressWarnings("exports")
 	public Button getBtnApagar() {
 		return btnApagar;
 	}
 
-	@SuppressWarnings("exports")
 	public void setBtnNovo(Button btnNovo) {
 		this.btnNovo = btnNovo;
 	}
 
-	@SuppressWarnings("exports")
 	public void setBtnEditar(Button btnEditar) {
 		this.btnEditar = btnEditar;
 	}
 
-	@SuppressWarnings("exports")
 	public void setBtnApagar(Button btnApagar) {
 		this.btnApagar = btnApagar;
 	}
@@ -329,6 +320,94 @@ public class ProdutosController {
 	public static List<ProdutoDto> pesquisarProdutoByDescricao(String descricao) throws Exception {
 		try {
 			String endpoint = url + "products/descricao?desc=" + descricao;
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(endpoint))
+					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			JSONArray responseJson = new JSONArray(response.body());
+			DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+			List<ProdutoDto> produtos = new ArrayList<>();
+			ProdutoDto produto;
+			UnidadeProdutoDto unidadeProduto;
+			CategoriaProdutoDto categoriaProduto;
+			MarkupDto markup;
+			NcmDto ncm;
+
+			// DateTimeFormatter parser = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+			for (int i = 0; i < responseJson.length(); i++) {
+				produto = new ProdutoDto();
+				unidadeProduto = new UnidadeProdutoDto();
+				categoriaProduto = new CategoriaProdutoDto();
+				markup = new MarkupDto();
+				ncm = new NcmDto();
+
+				JSONObject jsonObj = responseJson.getJSONObject(i);
+				JSONObject unidadeJson = (JSONObject) jsonObj.get("unidadeProduto");
+				JSONObject categoriaJson = (JSONObject) jsonObj.get("categoria");
+				JSONObject markupJson = (JSONObject) jsonObj.get("markup");
+				JSONObject ncmJson = jsonObj.getJSONObject("ncm");
+
+				String dataInclusao = jsonObj.getString("dataInclusao").substring(0, 19).replaceAll("T", " ");
+
+				// PRECHE UNIDADE PRODUTO
+				unidadeProduto.setId(unidadeJson.getInt("id"));
+				unidadeProduto.setDescricao(unidadeJson.getString("descricao"));
+
+				// PRENCHE CATEGORIA PRODUTO
+				categoriaProduto.setId(categoriaJson.getInt("id"));
+				categoriaProduto.setDescricao(categoriaJson.getString("descricao"));
+
+				// PRENCHE MARKUP PRODUTO
+				markup.setId(markupJson.getInt("id"));
+				markup.setMarkup(new BigDecimal(markupJson.getBigInteger("markup")));
+				markup.setUtilizar(markupJson.getBoolean("utilizar"));
+
+				// PRENCHE NCM PRODUTO
+				ncm.setId(ncmJson.getLong("id"));
+				ncm.setNcm(ncmJson.getLong("ncm"));
+				ncm.setEx(ncmJson.getString("ex"));
+				ncm.setTipo(ncmJson.getString("tipo"));
+				ncm.setDescricao(ncmJson.getString("descricao"));
+				ncm.setNacionalfederal(ncmJson.getDouble("nacionalfederal"));
+				ncm.setImportadosfederal(ncmJson.getDouble("importadosfederal"));
+				ncm.setEstadual(ncmJson.getDouble("estadual"));
+				ncm.setMunicipal(ncmJson.getDouble("municipal"));
+				ncm.setDataInicio(LocalDate.parse(ncmJson.getString("vigenciainicio")));
+				ncm.setDataFim(LocalDate.parse(ncmJson.getString("vigenciafim")));
+				ncm.setChave(ncmJson.getString("chave"));
+				ncm.setVersao(ncmJson.getString("versao"));
+				ncm.setFonte(ncmJson.getString("fonte"));
+
+				// PRENCHE O PRODUTO EM SI
+				produto.setId(jsonObj.getLong("id"));
+				produto.setDescricao(jsonObj.getString("descricao").toUpperCase());
+				produto.setCodigo(jsonObj.getString("codigo"));
+				produto.setValorVenda(jsonObj.getDouble("valorVenda"));
+				produto.setCusto(jsonObj.getDouble("custo"));
+				produto.setEstoque(jsonObj.getInt("estoque"));
+				produto.setUnidadeProduto(unidadeProduto);
+				produto.setCategoria(categoriaProduto);
+				produto.setMarkup(markup);
+				produto.setTributacao(jsonObj.getString("tributacao"));
+				produto.setNcm(ncm);
+				produto.setCest(jsonObj.getString("cest"));
+				produto.setDataInclusao(LocalDateTime.parse(dataInclusao, format));
+				produto.setEAN_GTIN(jsonObj.getString("ean_GTIN"));
+				produto.setObs(jsonObj.getString("obs"));
+				produtos.add(produto);
+			}
+
+			return produtos;
+		} catch (Exception e) {
+			throw new Exception(e.getMessage() + e.getCause());
+		}
+
+	}
+	
+	public static List<ProdutoDto> pesquisarProdutoByCodigo(String codigo) throws Exception {
+		try {
+			String endpoint = url + "products/codigo?ean_gtin=" + codigo;
 			HttpClient client = HttpClient.newHttpClient();
 			HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(endpoint))
 					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();

@@ -71,7 +71,7 @@ public class Product extends RepresentationModel<Product> implements Serializabl
 
 	private LocalDateTime dataInclusao;
 
-	private String EAN_GTIN;
+	private String ean_gtin;
 	
 	private String obs;
 
@@ -142,7 +142,7 @@ public class Product extends RepresentationModel<Product> implements Serializabl
 	}
 
 	public String getEAN_GTIN() {
-		return EAN_GTIN;
+		return ean_gtin;
 	}
 
 	public boolean isStatus() {
@@ -206,7 +206,7 @@ public class Product extends RepresentationModel<Product> implements Serializabl
 	}
 
 	public void setEAN_GTIN(String eAN_GTIN) {
-		EAN_GTIN = eAN_GTIN;
+		ean_gtin = eAN_GTIN;
 	}
 
 	public void setStatus(boolean status) {

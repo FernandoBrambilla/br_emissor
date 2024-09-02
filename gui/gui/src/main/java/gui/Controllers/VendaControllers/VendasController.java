@@ -316,7 +316,7 @@ public class VendasController {
 
 					// PRENCHE O ITEM DA VENDA EM SI
 					iten_da_venda = new ItensVendaDto();
-					iten_da_venda.setId(produtoSJson.getLong("id"));
+					iten_da_venda.setId(produtoSJson.getInt("id"));
 					iten_da_venda.setProduto(produto);
 					iten_da_venda.setQuantidade(produtoSJson.getInt("quantidade"));
 					iten_da_venda.setTotalIten(produtoSJson.getDouble("totalIten"));

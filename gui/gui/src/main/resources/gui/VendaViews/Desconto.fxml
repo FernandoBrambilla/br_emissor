@@ -45,5 +45,10 @@
             <Font name="Calibri" size="17.0" />
          </font>
       </Label>
+      <Label fx:id="info" alignment="CENTER" layoutY="11.0" prefHeight="17.0" prefWidth="400.0" textFill="RED">
+         <font>
+            <Font name="Calibri" size="14.0" />
+         </font>
+      </Label>
    </children>
 </Pane>

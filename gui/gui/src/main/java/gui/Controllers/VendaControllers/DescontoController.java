@@ -1,17 +1,22 @@
 package gui.Controllers.VendaControllers;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 
 import gui.Utilities.Mascaras;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 public class DescontoController {
+	
+	DecimalFormat realFormato = new DecimalFormat("¤ #,###,##0.00");
+
+	@FXML
+	private Label info;
 
 	@FXML
 	private TextField descontoValor;
@@ -24,6 +29,12 @@ public class DescontoController {
 
 	@FXML
 	private Button btnCancelar;
+	
+	private Double totalVenda = PdvController.getPdvController().getVenda().getTotalFinalDouble();
+
+	public Label getInfo() {
+		return info;
+	}
 
 	public TextField getDescontoValor() {
 		return descontoValor;
@@ -41,6 +52,10 @@ public class DescontoController {
 		return btnCancelar;
 	}
 
+	public void setInfo(Label info) {
+		this.info = info;
+	}
+
 	public void setDescontoValor(TextField descontoValor) {
 		this.descontoValor = descontoValor;
 	}
@@ -56,12 +71,20 @@ public class DescontoController {
 	public void setBtnCancelar(Button btnCancelar) {
 		this.btnCancelar = btnCancelar;
 	}
+	
 
 	public void initialize() {
 		Mascaras.percentualField(getDescontoPercentual());
-
+		getInfo().setText("");
 		getDescontoPercentual().setText("");
 		getDescontoValor().setText("");
+		
+		
+		if(PdvController.getPdvController().getVenda().getDescontoDouble() != null) {
+			Double descontoValor = PdvController.getPdvController().getVenda().getDescontoDouble();
+			getDescontoValor().setText(realFormato.format(Double.valueOf(PdvController.getPdvController().getVenda().getDescontoDouble())));
+			getDescontoPercentual().setText(Mascaras.percentual((descontoValor * 100) / (totalVenda + descontoValor)) + " %");
+		}
 
 		// PRENCHE O PERCENTUAL DE DESCONTO CASO FOR INFORMADO O VALOR DO DESCONTO
 		getDescontoValor().setOnKeyReleased((keyEvent) -> {
@@ -85,13 +108,23 @@ public class DescontoController {
 
 	}
 
+	public Double getTotalVenda() {
+		return totalVenda;
+	}
+
+	public void setTotalVenda(Double totalVenda) {
+		this.totalVenda = totalVenda;
+	}
+
 	private void calcularPercentual() {
-		Double totalVenda = PdvController.getPdvController().getSomaTotalVenda();
+		
+		
 		Double descontoValor = Double.parseDouble(getDescontoValor().getText().isEmpty() ? "0D"
 				: getDescontoValor().getText().replace("R$ ", "").replace(".", "").replace(",", "."));
 		if (descontoValor > totalVenda) {
 			getDescontoValor().setText("");
 			getDescontoPercentual().setText("");
+			getInfo().setText("O desconto não pode ser maior que " + realFormato.format(totalVenda) + "!");
 		} else {
 			getDescontoPercentual().setText(Mascaras.percentual((descontoValor * 100) / totalVenda) + " %");
 
@@ -100,44 +133,42 @@ public class DescontoController {
 	}
 
 	private void calcularValorDesconto() {
-		DecimalFormat realFormato = new DecimalFormat("¤ #,###,##0.00");
-		Double totalVenda = PdvController.getPdvController().getSomaTotalVenda();
 		Double descontoPercentual = Double.parseDouble(getDescontoPercentual().getText().isEmpty() ? "0D"
 				: getDescontoPercentual().getText().replace(",", ".").replace(" %", ""));
 
 		if (descontoPercentual > 100) {
 			getDescontoPercentual().setText("");
 			getDescontoValor().setText("");
+			getInfo().setText("O percentual de desconto não pode ser maior que 100 %!");
 		} else {
 			getDescontoValor().setText(realFormato.format((totalVenda * descontoPercentual) / 100));
 		}
 
 	}
 
-	@SuppressWarnings("exports")
 	public void btnSalvar(ActionEvent action) {
-		DecimalFormat realFormato = new DecimalFormat("¤ #,###,##0.00");
 		// SETA VALOR DE DESCONTO NA VENDA
 		PdvController.getPdvController().getVenda().setDesconto(
 				Double.parseDouble(getDescontoValor().getText().replace("R$", "").replace(".", "").replace(",", ".")));
 
-		Double totalVenda = PdvController.getPdvController().getSomaTotalVenda();
 		Double descontoValor = PdvController.getPdvController().getVenda().getDescontoDouble();
+		PdvController.getPdvController().getVenda().setDesconto(descontoValor);
+		PdvController.getPdvController().getVenda().setTotalFinal(totalVenda - descontoValor);
 
 		// SETA O TEXTO SUBTOTAL
 		PdvController.getPdvController().getLabelSubtotal()
-				.setText("SubTotal = " + String.valueOf(realFormato.format(totalVenda - descontoValor)));
+				.setText("SubTotal = " + String.valueOf(realFormato.format(totalVenda)));
 
 		// SETA O TEXTO DESCONTO
 		PdvController.getPdvController().getLabelDesconto()
 				.setText("Desconto (" + (Mascaras.percentual((descontoValor * 100) / totalVenda) + " %") + ")" + " = "
 						+ "R$ " + realFormato.format(descontoValor));
-		
-		PdvController.getPdvController().setarValorTotalVenda();
-		
+
+		PdvController.getPdvController().atualizarTotalVenda();
+
 		Stage stage = (Stage) getBtnSalvar().getScene().getWindow();
 		stage.close();
-		
+
 	}
 
 	/**

@@ -86,22 +86,18 @@ public class ClientesController {
 		return novoClient;
 	}
 
-	@SuppressWarnings("exports")
 	public BorderPane getTelaBase() {
 		return telaBase;
 	}
 
-	@SuppressWarnings("exports")
 	public Button getBtnNovo() {
 		return btnNovo;
 	}
 
-	@SuppressWarnings("exports")
 	public Button getBtnEditar() {
 		return btnEditar;
 	}
 
-	@SuppressWarnings("exports")
 	public Button getBtnApagar() {
 		return btnApagar;
 	}
@@ -122,22 +118,18 @@ public class ClientesController {
 		ClientesController.novoClient = novoClient;
 	}
 
-	@SuppressWarnings("exports")
 	public void setTelaBase(BorderPane telaBase) {
 		this.telaBase = telaBase;
 	}
 
-	@SuppressWarnings("exports")
 	public void setBtnNovo(Button btnNovo) {
 		this.btnNovo = btnNovo;
 	}
 
-	@SuppressWarnings("exports")
 	public void setBtnEditar(Button btnEditar) {
 		this.btnEditar = btnEditar;
 	}
 
-	@SuppressWarnings("exports")
 	public void setBtnApagar(Button btnApagar) {
 		this.btnApagar = btnApagar;
 	}
@@ -305,7 +297,6 @@ public class ClientesController {
 				JSONObject jsonObj = responseJson.getJSONObject(i);
 				String dateNasc_const = jsonObj.getString("dateNasc_const");
 				String dateExp = jsonObj.getString("dateExp");
-
 				cliente = new ClienteDto();
 				cliente.setId(jsonObj.getLong("id"));
 				cliente.setTipo(jsonObj.getString("tipo"));
@@ -330,6 +321,42 @@ public class ClientesController {
 		} catch (Exception e) {
 			throw new Exception(e.getMessage() + e.getCause());
 		}
+	}
+
+	public static ClienteDto pesquisarClienteById(int id) throws Exception {
+		
+			// BUSCA TODOS CLIENTES
+			String endpoint = getUrl() + "clients/" + id;
+			HttpClient client = HttpClient.newHttpClient();
+			HttpRequest request = HttpRequest.newBuilder().GET().uri(URI.create(endpoint))
+					.header("Authorization", "Bearer " + token).header("Accept", "application/json").build();
+			HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+			JSONObject jsonObj = new JSONObject(response.body());
+			ClienteDto cliente = new ClienteDto();
+			DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+			if(response.statusCode()== 200) {
+			cliente = new ClienteDto();
+			cliente.setId(jsonObj.getLong("id"));
+			cliente.setTipo(jsonObj.getString("tipo"));
+			cliente.setName(jsonObj.getString("name"));
+			cliente.setPhone(jsonObj.getString("phone"));
+			cliente.setEmail(jsonObj.getString("email"));
+			cliente.setCpf_cnpj(jsonObj.getString("cpf_cnpj"));
+			cliente.setRg_ie(jsonObj.getString("rg_ie"));
+			cliente.setDateNasc_const(LocalDate.parse(jsonObj.getString("dateNasc_const"), format));
+			cliente.setDateExp(LocalDate.parse(jsonObj.getString("dateExp"), format));
+			cliente.setAddress(jsonObj.getString("address"));
+			cliente.setAddressNumber(jsonObj.getString("addressNumber"));
+			cliente.setAddressComplement(jsonObj.getString("addressComplement"));
+			cliente.setBairro(jsonObj.getString("bairro"));
+			cliente.setCity(jsonObj.getString("city"));
+			cliente.setUf(jsonObj.getString("uf"));
+			cliente.setCep(jsonObj.getString("cep"));
+			cliente.setObs(jsonObj.getString("obs"));
+			return cliente;
+			}
+			return null;
+		
 	}
 
 	public void novo(ActionEvent action) throws IOException {

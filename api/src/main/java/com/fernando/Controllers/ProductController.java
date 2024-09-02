@@ -40,6 +40,12 @@ public class ProductController {
 		return new ResponseEntity<List<Product>> (service.findByName(desc),HttpStatus.OK);
 	}
 	
+	//FindByCod Controller
+		@GetMapping(value= "/codigo", produces = MediaType.APPLICATION_JSON_VALUE)
+		public ResponseEntity<List<Product>> findByCod(@RequestParam String ean_gtin){
+			return new ResponseEntity<List<Product>> (service.findByCod(ean_gtin),HttpStatus.OK);
+		}
+	
 	//FindById Controller
 	@GetMapping(value = "/{id}",produces = MediaType.APPLICATION_JSON_VALUE)
 	public Product findById(@PathVariable(value = "id") Long id) {

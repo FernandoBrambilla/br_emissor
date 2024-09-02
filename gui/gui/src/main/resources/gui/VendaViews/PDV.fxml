@@ -51,7 +51,7 @@
                         <Font name="Calibri Bold" size="20.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="clienteText" layoutX="210.0" layoutY="17.0" onKeyPressed="#pesquisarCliente" prefHeight="40.0" prefWidth="196.0" promptText="Digite código ou nome do cliente" visible="false">
+                  <TextField fx:id="clienteText" layoutX="210.0" layoutY="17.0" onKeyReleased="#pesquisarCliente" prefHeight="40.0" prefWidth="196.0" promptText="Digite código ou nome do cliente" visible="false">
                      <font>
                         <Font name="Calibri Bold" size="20.0" />
                      </font>
